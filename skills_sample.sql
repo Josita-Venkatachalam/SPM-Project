@@ -13,8 +13,8 @@ SET time_zone = "+00:00";
 --
 -- Database: 'is212_example'
 --
-CREATE DATABASE IF NOT EXISTS 'spmProj' DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE 'spmProj';
+CREATE DATABASE IF NOT EXISTS `spmProj` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `spmProj`;
 
 -- --------------------------------------------------------
 
@@ -22,17 +22,18 @@ USE 'spmProj';
 -- Table structure for table 'skill'
 --
 
-CREATE TABLE 'skill' (
-  'id' int NOT NULL AUTO INCREMENT,
-  'name' varchar(50) DEFAULT NULL UNIQUE,
-  'description'  varchar(100)  DEFAULT NULL
+CREATE TABLE `skill` (
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `name` varchar(50) DEFAULT NULL UNIQUE,
+  `description`  varchar(100)  DEFAULT NULL
+  
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table 'skill'
 --
 
-INSERT INTO 'skill' ('name', 'description') VALUES
+INSERT INTO `skill` (`name`, `description`) VALUES
 ('Communication', 'Learn to ommunicate Well in a team.' ),
 ('Leadership', 'Learn to lead the team well'),
 ('Project Management', 'Learn to manage projects well');
