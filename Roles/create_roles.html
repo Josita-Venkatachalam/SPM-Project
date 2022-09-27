@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width">
 
-    <title>Create a Consultation Record</title>
+    <title>Create Role</title>
 
     <link rel="stylesheet" href="">
     <!--[if lt IE 9]>
@@ -32,52 +32,54 @@
 
 <body>
 
-    <nav class="navbar" style="background-color: #e3f2fd;">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <img src="logo.png" alt="Logo" width="30" height="30" class="d-inline-block align-text-top"> Home
+            <a class="navbar-brand" href="../home-HR.html">
+                <img src="../Resources/Images/logo.png" alt="" width="120" height="55" class="d-inline-block align-text-middle">   
             </a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <a class="nav-link active" style="font-size: 20px !important;" aria-current="page" href="../home-HR.html">Home</a>
+                  </li>
+                </ul>
+            </div>
+            <div class="d-flex">
+                <a class="btn btn-outline-primary btn-md" href="login.html" role="button">Logout</a>
+            </div> 
         </div>
     </nav>
+
     <br><br>
-    <div id="main-container" class="container">
-
+    <div id="" class="container">
         <form>
-            <h2>Create Skills</h2>
-
-            <div class="input-group mb-3">
-                <span class="input-group-text">Skill ID</span>
-                <input type="number" class="form-control" name="skillId" id="skillId" v-model="skillId">
-            </div>
+            <h2>Create Role</h2>
 
             <br>
 
-            <div class="input-group mb-3">
-                <span class="input-group-text">Skill Name</span>
-                <input type="text" class="form-control" name="skillname" id="skillname" v-model="skillname">
+            <div class="mb-3">
+                <label for="roleName" class="form-label">Role Name</label>
+                <input type="text" class="form-control" id="roleName" placeholder="Enter role name here">
             </div>
 
-            <br>
-
-            <div class="input-group mb-3">
-                <span class="input-group-text">Skill Description</span>
-                <input type="text" class="form-control" name="skilldesc" id="skilldesc" v-model="skilldesc">
+            <div class="mb-3">
+                <label for="roleDesc" class="form-label">Role Description</label>
+                <textarea class="form-control" id="roleDesc" rows="3" placeholder="Enter role description here"></textarea>
             </div>
 
-            <br>
-
-            <button id="addSkillBtn" class="btn btn-primary" v-on:click="submitForm">Create</button>
-            <p><label id="sucess" class="text-success">{{ success }}</label></p>
-            <p><label id="error" class="text-danger">{{ error }}</label></p>
-
-
+            <div>
+                <a class="btn btn-secondary" href="../home-HR.html" role="button">Cancel</a>
+                <button id="addRoleBtn" class="btn btn-primary" v-on:click="submitForm">Create</button>
+            </div>
+            
+            <!-- <p><label id="sucess" class="text-success">{{ success }}</label></p>
+            <p><label id="error" class="text-danger">{{ error }}</label></p> -->
         </form>
-
     </div>
 
 </body>
 
-<script>
+<!-- <script>
     const vm = new Vue({
         el: '#main-container',
         data: {
@@ -108,6 +110,6 @@
         }
 
     });
-</script>
+</script> -->
 
 </html>
