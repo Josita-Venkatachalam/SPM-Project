@@ -46,34 +46,68 @@
             <h2>Create Skills</h2>
 
             <div class="input-group mb-3">
-                <span class="input-group-text" id="inputGroup-sizing-default">Skill ID</span>
-                <input type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                <span class="input-group-text">Skill ID</span>
+                <input type="number" class="form-control" name="skillId" id="skillId" v-model="skillId">
             </div>
 
             <br>
 
             <div class="input-group mb-3">
-                <span class="input-group-text" id="inputGroup-sizing-default">Skill Name</span>
-                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                <span class="input-group-text">Skill Name</span>
+                <input type="text" class="form-control" name="skillname" id="skillname" v-model="skillname">
             </div>
 
             <br>
 
             <div class="input-group mb-3">
-                <span class="input-group-text" id="inputGroup-sizing-default">Skill Description</span>
-                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                <span class="input-group-text">Skill Description</span>
+                <input type="text" class="form-control" name="skilldesc" id="skilldesc" v-model="skilldesc">
             </div>
 
             <br>
 
-            <div class="d-grid gap-2">
-                <button class="btn btn-primary" type="button">Create</button>
-            </div>
+            <button id="addSkillBtn" class="btn btn-primary" v-on:click="submitForm">Create</button>
+            <p><label id="sucess" class="text-success">{{ success }}</label></p>
+            <p><label id="error" class="text-danger">{{ error }}</label></p>
+
 
         </form>
 
     </div>
 
 </body>
+
+<script>
+    const vm = new Vue({
+        el: '#main-container',
+        data: {
+            skillId: 0,
+            skillname: '',
+            skilldesc: '',
+            success: '',
+            error: ''
+        },
+        methods: {
+            submitForm: function() {
+                event.preventDefault();
+                axios.post('http://192.168.18.28:5000/skills_add', {
+                        id: this.skillId,
+                        name: this.skillname,
+                        description: this.skilldesc
+                    })
+                    .then(response => {
+                        this.success = "Successfully Added"
+
+                        //window.location.replace("./view-skills.html");
+                        return false;
+                    })
+                    .catch(error => {
+                        this.error = error.response.data.message
+                    });
+            }
+        }
+
+    });
+</script>
 
 </html>
