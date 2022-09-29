@@ -26,7 +26,8 @@ CREATE TABLE `skill` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` varchar(50) DEFAULT NULL UNIQUE,
   `description`  varchar(100)  DEFAULT NULL
-  
+  --  FOREIGN KEY (id) REFERENCES Roles(skillId)
+  --  FOREIGN KEY (id) REFERENCES Courses(skillId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --

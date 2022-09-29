@@ -75,13 +75,23 @@ def create_skill():
 
 @app.route("/skills")
 def skills():
-    skills_list = Skill.query.all()
+    search_name = request.args.get('name')
+    if search_name:
+        skills_list = Skill.query.filter(Skill.name.contains(search_name))
+    else:
+        skills_list = Skill.query.all()
     return jsonify(
         {
-            "data": [skill.to_dict()
-                     for skill in skills_list]
+            "data": [skill.to_dict() for skill in skills_list]
         }
     ), 200
+    # skills_list = Skill.query.all()
+    # return jsonify(
+    #     {
+    #         "data": [skill.to_dict()
+    #                  for skill in skills_list]
+    #     }
+    # ), 200
 
 
 if __name__ == '__main__':
