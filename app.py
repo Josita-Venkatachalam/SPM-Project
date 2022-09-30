@@ -53,15 +53,19 @@ def skill_by_id(skill_id):
 def create_skill():
     data = request.get_json()
     #Validate if name and description input is filled , if not display error msg
-    #id autoincrement?
-    #check if skill alr exist in the DB , if yes don't allow it to add and display error (check by id or name?)
+    #check if skill alr exist in the DB , if yes don't allow it to add and display error ( name)
     if not all(key in data.keys() for
-               key in ('id', 'name',
+               key in ('name',
                        'description')):
         return jsonify({
             "message": "Incorrect JSON object provided."
         }), 500
     skill = Skill(**data)
+    
+    print(data)
+    skill_name = data["name"].lowercase()
+    skill_description = data["description"].lowercase()
+    
     try:
         db.session.add(skill)
         db.session.commit()
