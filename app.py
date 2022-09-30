@@ -75,7 +75,7 @@ def create_skill():
 
 @app.route("/skills")
 def skills():
-    search_name = request.args.get('name')
+    search_name = request.args.get('skill')
     if search_name:
         skills_list = Skill.query.filter(Skill.name.contains(search_name))
     else:

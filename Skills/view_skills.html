@@ -46,7 +46,16 @@
         </div>
     </nav>
     <div id="app">
-        
+        <form class="row g-3 mt-5 mx-5">
+            
+            <div class="col-auto">
+              <!-- <label for="inputPassword2" class="visually-hidden">Password</label> -->
+              <input type="text" class="form-control" id="inputSkill" placeholder="Search a skill..." v-model="searchSkill">
+            </div>
+            <div class="col-auto">
+              <button type="submit" class="btn btn-primary mb-3" v-on:click="searchSkill()">Search</button>  <!--may not need button trying out watch from vue -->
+            </div>
+          </form>
         <table class="table table-striped table-hover mt-5 mx-5">
             <thead>
                 <tr>
@@ -93,7 +102,8 @@
             return{
                 success: '',
                 error: '',
-                allSkills: []
+                allSkills: [],
+                searchSkill : ""
                 // skillId: 0,
                 // skillname: '',
                 // skilldesc: '',
@@ -118,24 +128,56 @@
                     })
                     .catch(error => {
                         this.error = error.response.data.message
-                        console.log('not working')
+                       
                     });
             },
             editSkill(skill){
-                this.$router.push({
-                    path: '/update_skills.html', 
-                    params: {
-                        chosen_skill: skill
+                // this.$router.push({
+                //     path: '/update_skills.html', 
+                //     params: {
+                //         chosen_skill: skill
                         
+                //     }
+                // });
+                console.log(skill) 
+                window.location.href = "./update_skills.html?skillid=" + skill.id + "&skillname=" + skill.name + "&skilldesc=" + skill.description
+
+
+
+
+            },
+            skillSearch(){
+                    console.log("search called")
+                    if (this.searchSkill !== '') {
+                    
+                        axios.get('http://192.168.68.106:5000/skills?skill=' + this.searchSkill)
+                        .then(response => {
+                            this.allSkills = response.data.data;
+                        })
+                        .catch(error => alert(error));
                     }
-                });
 
             }
+            
+            
         },
-        beforeMount: function(){
+        mounted: function(){
             console.log("im inside b4 mount")
             this.getSkills()
         }
+        // watch: {
+        //         skillSearch: function() {
+        //             console.log("search called")
+        //             if (this.searchSkill !== '') {
+                    
+        //                 axios.get('http://192.168.68.106:5000/skills?skill=' + this.searchSkill)
+        //                 .then(response => {
+        //                     this.allSkills = response.data.data;
+        //                 })
+        //                 .catch(error => alert(error));
+        //             }
+        //         }
+        // }
 
     }).mount("#app")
 </script>
