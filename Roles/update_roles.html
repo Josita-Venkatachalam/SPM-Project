@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width">
     
-        <title>Update Skill</title>
+        <title>Update Role</title>
     
         <link rel="stylesheet" href="">
         <!--[if lt IE 9]>
@@ -46,17 +46,17 @@
         </div>
     </nav>
     <div id="app" class="container mt-5">
-        <div class=""><h2>Update Skill</h2></div>
+        <div class=""><h2>Update Role</h2></div>
         <div class="mb-3 mt-5">
-            <label for="exampleFormControlInput1" class="form-label">Update Skill Name</label>
+            <label for="exampleFormControlInput1" class="form-label">Update Role Name</label>
             <input type="text" class="form-control" id="exampleFormControlInput1" placeholder={{updated_name}} v-model="updated_name">
           </div>
         <div class="mb-3">
-            <label for="exampleFormControlTextarea1" class="form-label">Update Skill Description</label>
+            <label for="exampleFormControlTextarea1" class="form-label">Update Role Description</label>
             <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder={{updated_desc}} v-model="updated_desc"></textarea>
         </div>
         <div class="mb-3">
-            <button type="button" class="btn btn-secondary" v-on:click="">Cancel</button>&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-primary" v-on:click="updateskill()">Update</button> 
+            <button type="button" class="btn btn-secondary" v-on:click="">Cancel</button>&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-primary" v-on:click="updaterole()">Update</button> 
         </div>
 
     </div>
@@ -66,9 +66,9 @@
 <script>
     var url_string = window.location;
     var url = new URL(url_string);
-    var skill_id = url.searchParams.get("skillid");
-    var skill_name = url.searchParams.get("skillname");
-    var skill_desc = url.searchParams.get("skilldesc");
+    var role_id = url.searchParams.get("roleid");
+    var role_name = url.searchParams.get("rolename");
+    var role_desc = url.searchParams.get("roledesc");
 
     
      Vue.createApp({
@@ -78,19 +78,19 @@
                success: '',
                error: '',
               
-               updated_name: skill_name,
-               updated_desc: skill_desc
-               // skillId: 0,
-               // skillname: '',
-               // skilldesc: '',
-
+               updated_name: role_name,
+               updated_desc: role_desc
+               // roleId: 0,
+               // rolename: '',
+               // roledesc: '',
+               //Roleskill:''
            }
            
            
           
        },
        methods: {
-        updateskill(){
+        updaterole(){
             // console.log(this.updated_desc)
             // console.log(this.updated_name)
         }
@@ -98,13 +98,13 @@
        },
        
        // watch: {
-       //         skillSearch: function() {
+       //         roleSearch: function() {
        //             console.log("search called")
-       //             if (this.searchSkill !== '') {
+       //             if (this.searchRole !== '') {
                    
-       //                 axios.get('http://192.168.68.106:5000/skills?skill=' + this.searchSkill)
+       //                 axios.get('http://192.168.68.106:5000/roles?role=' + this.searchRole)
        //                 .then(response => {
-       //                     this.allSkills = response.data.data;
+       //                     this.allRoles = response.data.data;
        //                 })
        //                 .catch(error => alert(error));
        //             }
