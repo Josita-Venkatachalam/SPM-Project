@@ -49,14 +49,14 @@
         <div class=""><h2>Update Skill</h2></div>
         <div class="mb-3 mt-5">
             <label for="exampleFormControlInput1" class="form-label">Update Skill Name</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder={{updated_name}} v-model="updated_name">
+            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder= "Type updated name here..." v-model="updated_name">
           </div>
         <div class="mb-3">
             <label for="exampleFormControlTextarea1" class="form-label">Update Skill Description</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder={{updated_desc}} v-model="updated_desc"></textarea>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Type updated description here..." v-model="updated_desc"></textarea>
         </div>
         <div class="mb-3">
-            <button type="button" class="btn btn-secondary" v-on:click="">Cancel</button>&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-primary" v-on:click="updateskill()">Update</button> 
+            <button type="button" class="btn btn-secondary" v-on:click="cancel()">Cancel</button>&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-primary" v-on:click="updateskill()">Update</button> 
         </div>
 
     </div>
@@ -91,9 +91,16 @@
        },
        methods: {
         updateskill(){
-            // console.log(this.updated_desc)
-            // console.log(this.updated_name)
+            console.log(this.updated_desc)
+            console.log(this.updated_name)
+            
+
+        },
+        cancel(){
+            window.location.href = "./view_skills.html"
+
         }
+    
            
        },
        
