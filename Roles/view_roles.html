@@ -60,11 +60,11 @@
                     <input type="text" class="form-control" id="inputRole" placeholder="Search a role..." v-model="searchRole">
                     </div>
                     <div class="col-auto">
-                    <button type="submit" class="btn btn-primary mb-3" v-on:click="searchRole()">Search</button>  <!--may not need button trying out watch from vue -->
+                    <button type="submit" class="btn btn-primary mb-3" v-on:click="searchRole()">Search</button>
                     </div>
                 </form>
                 <div class="col-sm-4 mt-5 text-right">
-                    <button type="button" class="btn btn-info" id="createRole" >Create Role</button>
+                    <button type="button" class="btn btn-info" v-on:click="create()">Create Role</button>
                 </div>
             </div>   
                 
@@ -96,13 +96,6 @@
     </div>
 </body>
 <script>
-    document.getElementById("createRole").onclick = function () {
-        location.href = "create_roles.html";
-    };
-    
-
-
-    
     Vue.createApp({
        
        data() {
@@ -178,7 +171,11 @@
                                 console.log(error);
                             })
                 }
-            }
+            },
+        create(){
+        window.location.href = "./create_roles.html"
+
+        } 
        },
        mounted: function(){
            console.log("im inside b4 mount")
