@@ -47,6 +47,7 @@
             <div class="d-flex">
                 <a class="btn btn-outline-primary btn-md" href="../login.html" role="button">Logout</a>
             </div>
+
         </div>
     </nav>
 
@@ -72,8 +73,12 @@
             </div>
 
             <br>
+            <div v-for="issue in missing_datas" class="alert alert-danger" role="alert">
+                {{issue}}
+            </div>
             <p><label id="sucess" class="text-success">{{ success }}</label></p>
             <p><label id="error" class="text-danger">{{ error }}</label></p>
+
         </form>
 
     </div>
@@ -87,26 +92,36 @@
             skillname: '',
             skilldesc: '',
             success: '',
-            error: ''
+            error: '',
+            missing_datas: []
+
         },
         methods: {
             submitForm: function() {
                 event.preventDefault();
-                axios.post('http://10.124.2.38:5000/skills_add', {
+                if (this.skilldesc == "") {
+                    this.missing_datas.push("Please fill in the Skill Description.")
+                }
+                if (this.skillname == "") {
+                    this.missing_datas.push("Please fill in the Skill Name.")
+                } else {
+                    axios.post('http://192.168.18.28:5000/skills_add', {
 
-                        name: this.skillname,
-                        description: this.skilldesc
-                    })
-                    .then(response => {
-                        this.success = "Successfully Added"
+                            name: this.skillname,
+                            description: this.skilldesc
+                        })
+                        .then(response => {
+                            this.success = "Successfully Added"
 
-                        //window.location.replace("./view-skills.html");
-                        return false;
-                    })
-                    .catch(error => {
-                        this.error = error.response.data.message
-                    });
+                            //window.location.replace("./view-skills.html");
+                            return false;
+                        })
+                        .catch(error => {
+                            this.error = error.response.data.message
+                        });
+                }
             }
+
         }
 
     });

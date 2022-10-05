@@ -64,10 +64,23 @@ def create_skill():
     
     print(data)
     skill_name = data["name"].lowercase()
-  
+    skill_description = data["description"].lowercase()
     
     try:
         db.session.add(skill)
+        db.session.commit()
+        return jsonify(skill.to_dict()), 201
+    except Exception:
+        return jsonify({
+            "message": "Unable to commit to database."
+        }), 500
+
+@app.route("/skill_delete/<int:skill_id>", methods=['DELETE'])
+def delete_skill(skill_id):
+   
+    skill = Skill.query.filter_by(id=skill_id).first()
+    try:
+        db.session.delete(skill)
         db.session.commit()
         return jsonify(skill.to_dict()), 201
     except Exception:
@@ -97,10 +110,6 @@ def skills():
     #     }
     # ), 200
 
-@app.route("/delete_skill/<int:skill_id>")
-def delete_skill():
-     #how to set to null
-     return jsonify()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
