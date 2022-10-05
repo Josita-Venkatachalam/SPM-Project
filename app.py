@@ -64,7 +64,7 @@ def create_skill():
     
     print(data)
     skill_name = data["name"].lowercase()
-    skill_description = data["description"].lowercase()
+  
     
     try:
         db.session.add(skill)
@@ -97,6 +97,10 @@ def skills():
     #     }
     # ), 200
 
+@app.route("/delete_skill/<int:skill_id>")
+def delete_skill():
+     #how to set to null
+     return jsonify()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
