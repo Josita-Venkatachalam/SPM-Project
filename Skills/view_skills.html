@@ -105,7 +105,8 @@
                 <th scope="row">{{skill.id}}</th>
                 <td>{{skill.name}}</td>
                 <td>{{skill.description}}</td>
-                <td><button type="button" class="btn btn-warning" v-on:click="editSkill(skill)">Edit</button>&nbsp;&nbsp;<button type="button" class="btn btn-danger" id='myModal' data-bs-toggle="modal" data-bs-target="#staticBackdrop" v-on:click="deleteSkill_1(skill)">Delete</button></td>
+                <td><button type="button" class="btn btn-warning" v-on:click="editSkill(skill)">Edit</button>&nbsp;&nbsp;<button type="button" class="btn btn-danger" v-on:click="deleteSkill(skill)">Delete</button>
+
 
             </tr>
             <!-- <tr>
@@ -152,114 +153,123 @@
 <script>
     Vue.createApp({
 
-                data() {
-                    return {
-                        success: '',
-                        error: '',
-                        allSkills: [],
-                        searchSkill: " "
-                            // skillId: 0,
-                            // skillname: '',
-                            // skilldesc: '',
+        data() {
+            return {
+                success: '',
+                error: '',
+                allSkills: [],
+                searchSkill: " "
+                    // skillId: 0,
+                    // skillname: '',
+                    // skilldesc: '',
 
-                    }
-
-
-
-                },
-                methods: {
-                    getSkills() {
-                        // event.preventDefault();
-                        console.log('get skill called')
-                        axios.get('http://192.168.18.28:5000/skills')
-                            .then(response => {
-                                // this.success = "Successfully Retrieved "
-                                // allSkills = response.data
-                                this.allSkills = response.data.data
+            }
 
 
-                                return false;
-                            })
-                            .catch(error => {
-                                this.error = error.response.data.message
 
-                            });
-                    },
-                    editSkill(skill) {
-                        // this.$router.push({
-                        //     path: '/update_skills.html', 
-                        //     params: {
-                        //         chosen_skill: skill
+        },
+        methods: {
+            getSkills() {
+                // event.preventDefault();
+                console.log('get skill called')
+                axios.get('http://192.168.18.28:5000/skills')
+                    .then(response => {
+                        // this.success = "Successfully Retrieved "
+                        // allSkills = response.data
+                        this.allSkills = response.data.data
 
-                        //     }
-                        // });
-                        console.log(skill)
-                        window.location.href = "./update_skills.html?skillid=" + skill.id + " &skillname=" + skill.name + " &skilldesc=" + skill.description
 
-                    },
-                    deleteSkill_1(skill) {
+                        return false;
+                    })
+                    .catch(error => {
+                        this.error = error.response.data.message
 
-                        const myModal = document.getElementById('myModal')
-                        const myInput = document.getElementById('myInput')
+                    });
+            },
+            editSkill(skill) {
+                // this.$router.push({
+                //     path: '/update_skills.html', 
+                //     params: {
+                //         chosen_skill: skill
 
-                        myModal.addEventListener('shown.bs.modal', () => {
-                            myInput.focus()
+                //     }
+                // });
+                console.log(skill)
+                window.location.href = "./update_skills.html?skillid=" + skill.id + " &skillname=" + skill.name + " &skilldesc=" + skill.description
+
+            },
+            deleteSkill_1(skill) {
+
+                const myModal = document.getElementById('myModal')
+                const myInput = document.getElementById('myInput')
+
+                myModal.addEventListener('shown.bs.modal', () => {
+                    myInput.focus()
+                })
+
+
+            },
+            deleteSkill(Skill) {
+
+                if (confirm("Confirm deletion?")) {
+
+                    axios.delete(' http://192.168.18.28:5000/skills?skill=' + skill.id)
+                        .then(response => {
+                            this.allSkills.splice(index, 1);
                         })
+                        .catch(error => {
+                            console.log(error);
+                        })
+                }
+            },
+            deleteSkill_2(skill) {
 
+                axios.get('http://192.168.18.28:5000/delete_skill')
+                    .then(response => {
 
-                    },
-                    deleteSkill_2(skill) {
+                        return false;
+                    })
+                    .catch(error => {
+                        this.error = error.response.data.message
 
-                        axios.get('http://192.168.18.28:5000/delete_skill')
-                            .then(response => {
+                    });
+            },
+            skillSearch() {
+                console.log(" search called ")
+                if (this.searchSkill !== '') {
 
-                                return false;
-                            })
-                            .catch(error => {
-                                this.error = error.response.data.message
+                    axios.get('http://192.168.68.106:5000/skills?skill=' + this.searchSkill)
+                        .then(response => {
+                            this.allSkills = response.data.data;
+                        })
+                        .catch(error => alert(error));
+                }
 
-                            });
-                    },
-                    skillSearch() {
-                        console.log(" search called ")
-                        if (this.searchSkill !== '') {
+            },
+            create() {
+                window.location.href = "./create_skills.html"
 
-                            axios.get('http://192.168.68.106:5000/skills?skill=' + this.searchSkill)
-                                .then(response => {
-                                    this.allSkills = response.data.data;
-                                })
-                                .catch(error => alert(error));
-                        }
+            },
+        },
+        mounted: function() {
+                console.log("im inside b4 mount ")
+                this.getSkills()
+            }
+            // watch: {
+            //         skillSearch: function() {
+            //             console.log("search called ")
+            //             if (this.searchSkill !== '') {
 
-                        <<
-                        <<
-                        << < Updated upstream
-                    },
-                    create() {
-                        window.location.href = "./create_skills.html"
+        //                 axios.get('http://192.168.68.106:5000/skills?skill=' + this.searchSkill)
+        //                 .then(response => {
+        //                     this.allSkills = response.data.data;
+        //                 })
+        //                 .catch(error => alert(error));
+        //             }
+        //         }
+        // }
 
-                    }
-
-
-                    mounted: function() {
-                            console.log("im inside b4 mount ")
-                            this.getSkills()
-                        }
-                        // watch: {
-                        //         skillSearch: function() {
-                        //             console.log("search called ")
-                        //             if (this.searchSkill !== '') {
-
-                    //                 axios.get('http://192.168.68.106:5000/skills?skill=' + this.searchSkill)
-                    //                 .then(response => {
-                    //                     this.allSkills = response.data.data;
-                    //                 })
-                    //                 .catch(error => alert(error));
-                    //             }
-                    //         }
-                    // }
-
-                }).mount("#app ")
+    }).mount("#app ")
 </script>
 
 </html>
