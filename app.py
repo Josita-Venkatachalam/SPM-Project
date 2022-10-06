@@ -31,7 +31,24 @@ class Skill(db.Model):
         for column in columns:
             result[column] = getattr(self, column)
         return result
+        
+class Role(db.Model):
+    __tablename__ = 'role'
 
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50))
+    description = db.Column(db.String(100))
+
+    def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
 
 db.create_all()
 
@@ -107,6 +124,84 @@ def skills():
     #     {
     #         "data": [skill.to_dict()
     #                  for skill in skills_list]
+    #     }
+    # ), 200
+
+
+
+
+
+@app.route("/roles/<int:role_id>")
+def role_by_id(role_id):
+    role = Role.query.filter_by(id=role_id).first()
+    if role:
+        return jsonify({
+            "data": role.to_dict()
+        }), 200
+    else:
+        return jsonify({
+            "message": "Role not found."
+        }), 404
+
+
+@app.route("/roles_add", methods=['POST'])
+def create_role():
+    data = request.get_json()
+    #Validate if name and description input is filled , if not display error msg
+    #check if role alr exist in the DB , if yes don't allow it to add and display error ( name)
+    if not all(key in data.keys() for
+               key in ('name',
+                       'description')):
+        return jsonify({
+            "message": "Incorrect JSON object provided."
+        }), 500
+    role = Role(**data)
+    
+    print(data)
+    role_name = data["name"].lowercase()
+    role_description = data["description"].lowercase()
+    
+    try:
+        db.session.add(role)
+        db.session.commit()
+        return jsonify(role.to_dict()), 201
+    except Exception:
+        return jsonify({
+            "message": "Unable to commit to database."
+        }), 500
+
+@app.route("/role_delete/<int:role_id>", methods=['DELETE'])
+def delete_role(role_id):
+   
+    role = Role.query.filter_by(id=role_id).first()
+    try:
+        db.session.delete(role)
+        db.session.commit()
+        return jsonify(role.to_dict()), 201
+    except Exception:
+        return jsonify({
+            "message": "Unable to commit to database."
+        }), 500
+
+
+
+@app.route("/roles")
+def roles():
+    search_name = request.args.get('role')
+    if search_name:
+        roles_list = Role.query.filter(Role.name.contains(search_name))
+    else:
+        roles_list = Role.query.all()
+    return jsonify(
+        {
+            "data": [role.to_dict() for role in roles_list]
+        }
+    ), 200
+    # roles_list = Role.query.all()
+    # return jsonify(
+    #     {
+    #         "data": [role.to_dict()
+    #                  for role in roles_list]
     #     }
     # ), 200
 

@@ -88,7 +88,8 @@
                     <th scope="row">{{role.id}}</th>
                     <td>{{role.name}}</td>
                     <td>{{role.description}}</td>
-                    <td>{{role.skills}}</td>
+                    <td></td>
+                    <!-- <td>{{role.skills}}</td> -->
                     <td><button type="button" class="btn btn-warning" v-on:click="editRole(role)">Edit</button>&nbsp;&nbsp;<button type="button" class="btn btn-danger"  v-on:click="deleteRole(role)">Delete</button></td>
                 </tr>
             </tbody>
@@ -119,7 +120,7 @@
            getRoles(){
                // event.preventDefault();
                console.log('get role called')
-               axios.get('http://192.168.68.106:5000/roles')
+               axios.get('http://127.0.0.1:5000/roles')
                    .then(response => {
                        // this.success = "Successfully Retrieved"
                        // allRoles = response.data
@@ -133,7 +134,7 @@
                       
                    });
            },
-           editRole(rolel){
+           editRole(role){
                // this.$router.push({
                //     path: '/update_roles.html', 
                //     params: {
@@ -148,31 +149,41 @@
 
 
            },
-           roleSearch(){
-                   console.log("search called")
-                   if (this.searchRole !== '') {
-                   
-                       axios.get('http://192.168.68.106:5000/roles?role=' + this.searchRole)
-                       .then(response => {
-                           this.allRoles = response.data.data;
-                       })
-                       .catch(error => alert(error));
-                   }
+           searchRole() {
+                // event.preventDefault
+                console.log("search called")
+                console.log(this.roleSearch)
+                if (this.roleSearch !== '') {
+                    url = 'http://127.0.0.1:5000/roles?role=' + this.roleSearch
 
-           },
-           deleteRole(role1) {
+                    axios.get(url)
+                        .then(response => {
+                            console.log("i got data")
+                            console.log(response.data.data)
+                            this.allRoles = response.data.data;
+                            return false;
 
-                if(confirm("Confirm deletion?")){
-
-                            axios.delete('http://192.168.68.106:5000/roles?role='+ role.id)
-                            .then(response => {
-                                this.allRoles.splice(index, 1);
-                            })
-                            .catch(error => {
-                                console.log(error);
-                            })
+                        })
+                        .catch(error => {
+                            alert(error)
+                        });
                 }
+
             },
+            deleteRole(role) {
+
+                if (confirm("Would you like to delete " + role.name + " ?")) {
+                    console.log(role.id)
+                    axios.delete('http://127.0.0.1:5000/role_delete/' + role.id)
+                        .then(response => {
+                            console.log("Successfully Deleted");
+                        })
+                        .catch(error => {
+                            alert(error)
+                        });
+                }
+
+                },
         create(){
         window.location.href = "./create_roles.html"
 
@@ -187,7 +198,7 @@
        //             console.log("search called")
        //             if (this.searchRole !== '') {
                    
-       //                 axios.get('http://192.168.68.106:5000/roles?role=' + this.searchRole)
+       //                 axios.get('http://127.0.0.1:5000/roles?role=' + this.searchRole)
        //                 .then(response => {
        //                     this.allRoles = response.data.data;
        //                 })

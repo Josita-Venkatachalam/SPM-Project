@@ -120,7 +120,7 @@
             getSkills() {
                 // event.preventDefault();
                 console.log('get skill called')
-                axios.get('http://192.168.18.28:5000/skills')
+                axios.get('http://127.0.0.1:5000/skills')
                     .then(response => {
                         // this.success = "Successfully Retrieved"
                         // allSkills = response.data
@@ -152,7 +152,7 @@
                 console.log("search called")
                 console.log(this.skillSearch)
                 if (this.skillSearch !== '') {
-                    url = 'http://192.168.68.106:5000/skills?skill=' + this.skillSearch
+                    url = 'http://127.0.0.1:5000/skills?skill=' + this.skillSearch
 
                     axios.get(url)
                         .then(response => {
@@ -173,7 +173,7 @@
 
                 if (confirm("Would you like to delete " + skill.name + " ?")) {
                     console.log(skill.id)
-                    axios.delete('http://192.168.18.28:5000/skill_delete/' + skill.id)
+                    axios.delete('http://127.0.0.1:5000/skill_delete/' + skill.id)
                         .then(response => {
                             console.log("Successfully Deleted");
                         })
