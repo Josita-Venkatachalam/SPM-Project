@@ -177,6 +177,8 @@
                     axios.delete('http://127.0.0.1:5000/role_delete/' + role.id)
                         .then(response => {
                             console.log("Successfully Deleted");
+                            this.getRoles();
+                            // auto reload remaining roles
                         })
                         .catch(error => {
                             alert(error)
