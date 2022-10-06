@@ -35,6 +35,6 @@ CREATE TABLE `skill` (
 --
 
 INSERT INTO `skill` (`name`, `description`) VALUES
-('Communication', 'Learn to ommunicate Well in a team.' ),
+('Communication', 'Learn to communicate Well in a team.' ),
 ('Leadership', 'Learn to lead the team well'),
 ('Project Management', 'Learn to manage projects well');

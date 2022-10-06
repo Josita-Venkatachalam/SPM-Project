@@ -63,7 +63,7 @@
                     <button type="submit" class="btn btn-secondary mb-3 ml-2" v-on:click="clearSkill()">Clear</button>
                     </div>
                 </form>
-                <div class="col-sm-4 mt-5 text-right">
+                <div class="col-sm-4 mt-5 px-0 text-right">
                     <button type="button" class="btn btn-info" v-on:click="create()">Create Skill</button>
                 </div>
             </div>   
@@ -84,7 +84,7 @@
                     <th scope="row">{{skill.id}}</th>
                     <td>{{skill.name}}</td>
                     <td>{{skill.description}}</td>
-                    <td><button type="button" class="btn btn-warning" v-on:click="editSkill(skill)">Edit</button>&nbsp;&nbsp;<button type="button" class="btn btn-danger" v-on:click="deleteSkill(skill)">Delete</button></td>
+                    <td class = "text-right"><button type="button" class="btn btn-warning" v-on:click="editSkill(skill)">Edit</button>&nbsp;&nbsp;<button type="button" class="btn btn-danger" v-on:click="deleteSkill(skill)">Delete</button></td>
 
 
                 </tr>

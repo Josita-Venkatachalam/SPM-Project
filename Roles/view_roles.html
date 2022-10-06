@@ -64,7 +64,7 @@
                     <button type="submit" class="btn btn-secondary mb-3 ml-2" v-on:click="clearRole()">Clear</button>
                     </div>
                 </form>
-                <div class="col-sm-4 mt-5 text-right">
+                <div class="col-sm-4 mt-5 px-0 text-right">
                     <button type="button" class="btn btn-info" v-on:click="create()">Create Role</button>
                 </div>
             </div>   
@@ -90,7 +90,8 @@
                     <td>{{role.description}}</td>
                     <td></td>
                     <!-- <td>{{role.skills}}</td> -->
-                    <td><button type="button" class="btn btn-warning" v-on:click="editRole(role)">Edit</button>&nbsp;&nbsp;<button type="button" class="btn btn-danger"  v-on:click="deleteRole(role)">Delete</button></td>
+                    <td class = "text-right">
+                        <button type="button" class="btn btn-warning" v-on:click="editRole(role)">Edit</button>&nbsp;&nbsp;<button type="button" class="btn btn-danger"  v-on:click="deleteRole(role)">Delete</button></td>
                 </tr>
             </tbody>
         </table>
