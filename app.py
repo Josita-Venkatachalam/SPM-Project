@@ -69,7 +69,6 @@ def skill_by_id(skill_id):
 @app.route("/skills_add", methods=['POST'])
 def create_skill():
     data = request.get_json()
-    #Validate if name and description input is filled , if not display error msg
     #check if skill alr exist in the DB , if yes don't allow it to add and display error ( name)
     if not all(key in data.keys() for
                key in ('name',
@@ -120,15 +119,6 @@ def skills():
             "data": [skill.to_dict() for skill in skills_list]
         }
     ), 200
-    # skills_list = Skill.query.all()
-    # return jsonify(
-    #     {
-    #         "data": [skill.to_dict()
-    #                  for skill in skills_list]
-    #     }
-    # ), 200
-
-
 
 
 
@@ -159,8 +149,8 @@ def create_role():
     role = Role(**data)
     
     print(data)
-    role_name = data["name"].lowercase()
-    role_description = data["description"].lowercase()
+    role_name = data["name"].lower()
+    role_description = data["description"].lower()
     
     try:
         db.session.add(role)

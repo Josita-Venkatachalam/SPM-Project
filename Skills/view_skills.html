@@ -49,25 +49,30 @@
         </div>
     </nav>
     <div id="app" class="container mt-5">
+        <div v-if="deleteSuccess !=''" class="alert alert-success" role="alert">
+            {{deleteSuccess}}
+        </div>
         <div class="table-title">
-            <div class=""><h2>View All Skills</h2></div>
+            <div class="">
+                <h2>View All Skills</h2>
+            </div>
             <div class="row">
                 <form class="row col-sm-8 g-3 mt-5">
-            
+
                     <div class="col-auto">
-                    <!-- <label for="inputPassword2" class="visually-hidden">Password</label> -->
-                    <input type="text" class="form-control" id="inputSkill" placeholder="Search a skill..." v-model="searchSkill">
+                        <!-- <label for="inputPassword2" class="visually-hidden">Password</label> -->
+                        <input type="text" class="form-control" id="inputSkill" placeholder="Search a skill..." v-model="searchSkill">
                     </div>
                     <div class="col-auto">
-                    <button type="submit" class="btn btn-primary mb-3" v-on:click="searchSkill()">Search</button>
-                    <button type="submit" class="btn btn-secondary mb-3 ml-2" v-on:click="clearSkill()">Clear</button>
+                        <button type="submit" class="btn btn-primary mb-3" v-on:click="searchSkill()">Search</button>
+                        <button type="submit" class="btn btn-secondary mb-3 ml-2" v-on:click="clearSkill()">Clear</button>
                     </div>
                 </form>
                 <div class="col-sm-4 mt-5 px-0 text-right">
                     <button type="button" class="btn btn-info" v-on:click="create()">Create Skill</button>
                 </div>
-            </div>   
-                
+            </div>
+
         </div>
         <table class="table table-striped table-hover mt-5">
             <thead>
@@ -84,7 +89,7 @@
                     <th scope="row">{{skill.id}}</th>
                     <td>{{skill.name}}</td>
                     <td>{{skill.description}}</td>
-                    <td class = "text-right"><button type="button" class="btn btn-warning" v-on:click="editSkill(skill)">Edit</button>&nbsp;&nbsp;<button type="button" class="btn btn-danger" v-on:click="deleteSkill(skill)">Delete</button></td>
+                    <td class="text-right"><button type="button" class="btn btn-warning" v-on:click="editSkill(skill)">Edit</button>&nbsp;&nbsp;<button type="button" class="btn btn-danger" v-on:click="deleteSkill(skill)">Delete</button></td>
 
 
                 </tr>
@@ -117,7 +122,8 @@
                 success: '',
                 error: '',
                 allSkills: [],
-                searchSkill: ""
+                searchSkill: "",
+                deleteSuccess: ""
                     // skillId: 0,
                     // skillname: '',
                     // skilldesc: '',
@@ -177,7 +183,6 @@
                 }
 
             },
-
             deleteSkill(skill) {
 
                 if (confirm("Would you like to delete " + skill.name + " ?")) {
@@ -185,8 +190,9 @@
                     axios.delete('http://127.0.0.1:5000/skill_delete/' + skill.id)
                         .then(response => {
                             console.log("Successfully Deleted");
-                            this.getSkills(); 
+                            this.getSkills();
                             // auto reload remaining skills
+                            this.deleteSuccess = skill.name + " sucessfully deleted!"
                         })
                         .catch(error => {
                             alert(error)

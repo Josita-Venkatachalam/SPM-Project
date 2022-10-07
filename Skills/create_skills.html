@@ -76,7 +76,9 @@
             <div v-for="issue in missing_datas" class="alert alert-danger" role="alert">
                 {{issue}}
             </div>
-            <p><label id="sucess" class="text-success">{{ success }}</label></p>
+            <div v-if="success != ''" class="alert alert-success" role="alert">
+                {{ success }}
+            </div>
             <p><label id="error" class="text-danger">{{ error }}</label></p>
 
         </form>
@@ -112,7 +114,8 @@
                             description: this.skilldesc
                         })
                         .then(response => {
-                            this.success = "Successfully Added"
+                            this.success = this.skillname + " is successfully created"
+                            window.location.href = "./view_skills.html"
 
                             //window.location.replace("./view-skills.html");
                             return false;
