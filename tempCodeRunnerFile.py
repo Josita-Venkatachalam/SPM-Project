@@ -1,0 +1,1 @@
+@app.route("/skills/<int:skill_id>")

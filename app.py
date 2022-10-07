@@ -1,6 +1,8 @@
+from token import DOUBLESLASH
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root' + \
@@ -32,7 +34,41 @@ class Skill(db.Model):
             result[column] = getattr(self, column)
         return result
 
+class Role(db.Model):
+    __tablename__ = 'roles'
 
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50))
+    description = db.Column(db.String(100))
+
+    def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
+
+class Role_Skill(db.Model):
+    __tablename__ = 'roles_skills'
+
+    roleID = db.Column(db.Integer, primary_key=True)
+    SkillID = db.Column(db.Integer, primary_key=True)
+
+
+    def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
 db.create_all()
 
 
@@ -100,3 +136,34 @@ def skills():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
+
+@app.route("/roles/<int:RoleID>")
+def searchRole():
+    search_name = request.args.get('RoleID')
+    if search_name:
+        role_list = Skill.query(Role.id).filter(Role.id.contains(search_name))
+        return jsonify(
+        {
+            "data": [role.to_dict() for role in role_list]
+        }
+    ), 200
+
+
+
+@app.route("/roles_skills/<int:RoleID>")
+def get_skills():
+    search_role = request.args.get('RoleID')
+    if search_role != '':
+        skill_list = Role_Skill.query.filter(Role_Skill.roleID == search_role) 
+    else:
+        skill_list = Role_Skill.query.all()
+    skillIDs = [skill.to_dict() for skill in skill_list]
+    result = Skill.query.filter(Skill.id.in_(skillIDs))
+    jsonify(
+        {
+            "data": [skill.to_dict() for skill in result]
+        }
+    ), 200
+
+
+
