@@ -183,7 +183,30 @@ def delete_role(role_id):
             "message": "Unable to commit to database."
         }), 500
 
+@app.route("/roles_update/<string:id>/<string:name>/<string:description>", methods=['PUT'])
+def update_role(id, name ,description):
+        # name = request.args.get('name')
+        # description = request.args.get('description')
+        # role_id = request.args.get('id')
+        print(name)
+        print(id)
+        role = Role.query.filter_by(id=int(id)).first()
+        # data=request.get_json()
+        
+        print(role)
+        
+        role.name = name
+        role.description = description
+        db.session.commit()
+        #retrive the data from the request to update the data in the database
+        return jsonify(
+            {
+                "code":200,
+                # "data":role
 
+            }  
+               
+        )
 
 @app.route("/roles")
 def roles():

@@ -51,15 +51,15 @@
     </nav>
 
     <br><br>
-    <div id="" class="container">
+    <div id="main-container" class="container">
         <form>
             <h2>Create Role</h2>
 
             <br>
 
             <div class="mb-3">
-                <label for="roleName" class="form-label">Role Name</label>
-                <input type="text" class="form-control" id="roleName" placeholder="Enter role name here">
+                <label for="rolename" class="form-label">Role Name</label>
+                <input type="text" class="form-control" id="rolename" placeholder="Enter role name here">
             </div>
 
             <div class="mb-3">
@@ -79,37 +79,46 @@
 
 </body>
 
-<!-- <script>
+<script>
     const vm = new Vue({
         el: '#main-container',
         data: {
-            skillId: 0,
-            skillname: '',
-            skilldesc: '',
+            rolename: '',
+            roledesc: '',
             success: '',
-            error: ''
+            error: '',
+            missing_datas: []
+
         },
         methods: {
             submitForm: function() {
                 event.preventDefault();
-                axios.post('http://192.168.18.28:5000/skills_add', {
-                        id: this.skillId,
-                        name: this.skillname,
-                        description: this.skilldesc
-                    })
-                    .then(response => {
-                        this.success = "Successfully Added"
+                if (this.roledesc == "") {
+                    this.missing_datas.push("Please fill in the Role Description.")
+                }
+                if (this.rolename == "") {
+                    this.missing_datas.push("Please fill in the Role Name.")
+                } else {
+                    axios.post('http://127.0.0.1:5000/roles_add', {
 
-                        //window.location.replace("./view-skills.html");
-                        return false;
-                    })
-                    .catch(error => {
-                        this.error = error.response.data.message
-                    });
+                            name: this.rolename,
+                            description: this.roledesc
+                        })
+                        .then(response => {
+                            this.success = "Successfully Added"
+
+                            //window.location.replace("./view-roles.html");
+                            return false;
+                        })
+                        .catch(error => {
+                            this.error = error.response.data.message
+                        });
+                }
             }
+
         }
 
     });
-</script> -->
+</script>
 
 </html>
