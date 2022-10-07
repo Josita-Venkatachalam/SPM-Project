@@ -104,14 +104,9 @@
                 }
                 if (this.skillname == "") {
                     this.missing_datas.push("Please fill in the Skill Name.")
-<<<<<<< Updated upstream
-                } else {
-                    axios.post('http://127.0.0.1:5000/skills_add', {
-=======
 
                 } else if (this.skillname != "" && this.skilldesc != "") {
                     axios.post('http://192.168.18.28:5000/skills_add', {
->>>>>>> Stashed changes
 
                             name: this.skillname,
                             description: this.skilldesc
