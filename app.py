@@ -79,9 +79,10 @@ def create_skill():
         }), 500
     skill = Skill(**data)
     
+    print(skill)
     print(data)
-    skill_name = data["name"].lowercase()
-    skill_description = data["description"].lowercase()
+    skill_name = data["name"].lower()
+    skill_description = data["description"].lower()
     
     try:
         db.session.add(skill)
