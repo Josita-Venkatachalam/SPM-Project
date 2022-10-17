@@ -21,7 +21,7 @@ USE `spmProj`;
 --
 -- Table structure for table 'skill'
 --
-
+DROP TABLE IF EXISTS `skill`;
 CREATE TABLE `skill` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` varchar(50) DEFAULT NULL UNIQUE,

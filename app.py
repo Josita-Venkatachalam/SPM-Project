@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root' + \
                                         '@localhost:3306/spmProj'
@@ -49,6 +50,25 @@ class Role(db.Model):
         for column in columns:
             result[column] = getattr(self, column)
         return result
+
+class Role_Skill(db.Model):
+    __tablename__ = 'roles_skills'
+
+    roleID = db.Column(db.Integer)
+    SkillID = db.Column(db.Integer)
+    role_skill_id = db.Column(db.Integer, primary_key = True)
+
+    def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
+
 
 db.create_all()
 
@@ -218,6 +238,22 @@ def roles():
     #                  for role in roles_list]
     #     }
     # ), 200
+
+
+@app.route("/roles_skills/<int:RoleID>")
+def get_skills():
+    search_role = request.args.get('RoleID')
+    if search_role != '':
+        skill_list = Role_Skill.query.filter(Role_Skill.roleID == search_role) 
+    else:
+        skill_list = Role_Skill.query.all()
+    skillIDs = [skill.to_dict() for skill in skill_list]
+    result = Skill.query.filter(Skill.id.in_(skillIDs))
+    jsonify(
+        {
+            "data": [skill.to_dict() for skill in result]
+        }
+    ), 200
 
 
 if __name__ == '__main__':
