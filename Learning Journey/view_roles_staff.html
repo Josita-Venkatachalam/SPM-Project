@@ -86,7 +86,7 @@
                     <td>{{role.name}}</td>
                     <td>{{role.description}}</td>
                     <td class = "select-role-list">
-                        <button type="button" class="select-role-btn">Select</button>
+                        <button type="button" class="select-role-btn" v-on:click="select_role(role)">Select</button>
                     </td>
                 </tr>
             </tbody>
@@ -109,8 +109,7 @@
                //Roleskill:''
 
            }
-           
-           
+            
           
        },
        methods: {
@@ -131,21 +130,7 @@
                       
                    });
            },
-           editRole(role){
-               // this.$router.push({
-               //     path: '/update_roles.html', 
-               //     params: {
-               //         chosen_role: role
-                       
-               //     }
-               // });
-               console.log(role) 
-               window.location.href = "./update_roles.html?roleid=" + role.id + "&rolename=" + role.name + "&roledesc=" + role.description
 
-
-
-
-           },
            searchRole() {
                 // event.preventDefault
                 console.log("search called")
@@ -167,26 +152,19 @@
                 }
 
             },
-            deleteRole(role) {
 
-                if (confirm("Would you like to delete " + role.name + " ?")) {
-                    console.log(role.id)
-                    axios.delete('http://127.0.0.1:5000/role_delete/' + role.id)
-                        .then(response => {
-                            console.log("Successfully Deleted");
-                            this.getRoles();
-                            // auto reload remaining roles
-                        })
-                        .catch(error => {
-                            alert(error)
-                        });
-                }
+            select_role(role) {
+           
+                // axios.post('view_skills.html', {
+                //     roleID: role.id,
+                //     roleName: role.name,
+                //     roleDescription: role.description
+                // })
+                // .then(res)
 
-                },
-        create(){
-        window.location.href = "./create_roles.html"
+                window.location.href = "./view_skills.html?roleid=" + role.id + "&rolename=" + role.name + "&roledesc=" + role.description
+            }
 
-        } 
        },
        mounted: function(){
            console.log("im inside b4 mount")
