@@ -86,7 +86,7 @@
                     <td>{{role.name}}</td>
                     <td>{{role.description}}</td>
                     <td class = "select-role-list">
-                        <button type="button" class="select-role-btn" v-on:click="select_role(role)">Select</button>
+                        <button type="button" class="select-role-btn btn btn-success" v-on:click="select_role(role)">Select</button>
                     </td>
                 </tr>
             </tbody>
@@ -121,8 +121,6 @@
                        // this.success = "Successfully Retrieved"
                        // allRoles = response.data
                        this.allRoles= response.data.data
-
-                       
                        return false;
                    })
                    .catch(error => {
@@ -162,7 +160,7 @@
                 // })
                 // .then(res)
 
-                window.location.href = "./view_skills.html?roleid=" + role.id + "&rolename=" + role.name + "&roledesc=" + role.description
+                window.location.href = "./view_skills_for_role.html?roleid=" + role.id + "&rolename=" + role.name + "&roledesc=" + role.description
             }
 
        },

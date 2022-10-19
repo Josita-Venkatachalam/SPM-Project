@@ -51,48 +51,44 @@
     <div id="app" class="container mt-5">
 
         <div class="table-title">
-            <div class=""><h2>Skills required for {{role_name}} </h2></div>
+            <div class="">
+                <h2>Skills required for <span id="role_name_span" style="font-weight: bold;"></span></h2>
+            </div>
             <div class="row">
                 <form class="row col-sm-8 g-3 mt-5">
             
                     <div class="col-auto">
-                    <!-- <label for="inputPassword2" class="visually-hidden">Password</label> -->
-                    <input type="text" class="form-control" id="inputRole" placeholder="Search a role..." v-model="searchRole">
+                    <input type="text" class="form-control" id="inputRole" placeholder="Search a skill..." v-model="searchSkill">
                     </div>
                     <div class="col-auto">
-                    <button type="submit" class="btn btn-primary mb-3" v-on:click="searchRole()">Search</button>
-                    <button type="submit" class="btn btn-secondary mb-3 ml-2" v-on:click="clearRole()">Clear</button>
+                    <button type="submit" class="btn btn-primary mb-3" v-on:click="searchSkill()">Search</button>
+                    <button type="submit" class="btn btn-secondary mb-3 ml-2" v-on:click="clearSkill()">Clear</button>
                     </div>
                 </form>
-                <div class="col-sm-4 mt-5 px-0 text-right">
+                <!-- <div class="col-sm-4 mt-5 px-0 text-right">
                     <button type="button" class="btn btn-info" v-on:click="create()">Create Role</button>
-                </div>
+                </div> -->
             </div>   
-                
         </div>
         
-        <table class="table table-striped table-hover mt-5">
-            
+        <table class="table table-striped table-hover mt-5">    
             <thead>
                 <tr>
-                <th scope="col">Skill Name</th>
-                <th scope="col">Skill Description</th>
-                <th scope="col"></th>
-                
+                    <th scope="col">Skill Name</th>
+                    <th scope="col">Skill Description</th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="skill in allSkills ">
                     <th scope="row">{{skill.name}}</th>
                     <td>{{skill.description}}</td>
-                    <td></td>
-                    
                     <td class = "text-right">
-                        <button type="button" class="btn btn-warning" v-on:click="editRole(role)">Edit</button>&nbsp;&nbsp;<button type="button" class="btn btn-danger"  v-on:click="deleteRole(role)">Delete</button></td>
+                        <button type="button" class="btn btn-success" v-on:click="">Look for Course</button>&nbsp;&nbsp;
+                    </td>
                 </tr>
             </tbody>
         </table>
-
     </div>
 
 </body>
@@ -104,6 +100,7 @@
     var role_desc = url.searchParams.get("roledesc");
     console.log(rolesid)
     console.log(role_name)
+    document.getElementById("role_name_span").innerHTML = role_name;
 
     Vue.createApp({
 
@@ -114,11 +111,9 @@
                 roles_id : rolesid,
                 allSkills: [],
                 
-                
                     // skillId: 0,
                     // skillname: '',
                     // skilldesc: '',
-
             }
 
         },
@@ -131,15 +126,17 @@
                         // allSkills = response.data
                         
                         console.log('get roleskill successful')
-                        console.log(response.data)
-                        this.RoleSkill = response.data.data
-                        console.log(this.RoleSkill)
+                        console.log(response.data.data)
+                        this.allSkills = response.data.data
+                        //this.RoleSkill = response.data.data
+                        //console.log(this.RoleSkill)
 
                         return false;
                     })
                     .catch(error => {
                         this.error = error.response.data.message
-
+                        console.log("fail!")
+                        console.log(this.error)
                     });
             },
         //     getSkills() {
@@ -219,6 +216,7 @@
         },
         mounted: function() {
                 console.log("im inside b4 mount")
+                console.log(rolesid)
                 this.get_skills_id(rolesid)
             }
         //     // watch: {
