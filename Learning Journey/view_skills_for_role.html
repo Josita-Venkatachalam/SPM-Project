@@ -65,9 +65,6 @@
                     <button type="submit" class="btn btn-secondary mb-3 ml-2" v-on:click="clearSkill()">Clear</button>
                     </div>
                 </form>
-                <!-- <div class="col-sm-4 mt-5 px-0 text-right">
-                    <button type="button" class="btn btn-info" v-on:click="create()">Create Role</button>
-                </div> -->
             </div>   
         </div>
         
@@ -110,10 +107,6 @@
                 error: '',
                 roles_id : rolesid,
                 allSkills: [],
-                
-                    // skillId: 0,
-                    // skillname: '',
-                    // skilldesc: '',
             }
 
         },
@@ -122,14 +115,11 @@
                 console.log('get roleskill by rolesid')
                 axios.get('http://127.0.0.1:5000/rolesskills/' + roles_id)
                     .then(response => {
-                        // this.success = "Successfully Retrieved"
-                        // allSkills = response.data
                         
                         console.log('get roleskill successful')
                         console.log(response.data.data)
                         this.allSkills = response.data.data
-                        //this.RoleSkill = response.data.data
-                        //console.log(this.RoleSkill)
+                        
 
                         return false;
                     })
@@ -139,79 +129,6 @@
                         console.log(this.error)
                     });
             },
-        //     getSkills() {
-        //         // event.preventDefault();
-        //         console.log('get skill called')
-        //         axios.get('http://127.0.0.1:5000/skills')
-        //             .then(response => {
-        //                 // this.success = "Successfully Retrieved"
-        //                 // allSkills = response.data
-        //                 this.allSkills = response.data.data
-
-
-        //                 return false;
-        //             })
-        //             .catch(error => {
-        //                 this.error = error.response.data.message
-
-        //             });
-        //     },
-        //     editSkill(skill) {
-        //         // this.$router.push({
-        //         //     path: '/update_skills.html', 
-        //         //     params: {
-        //         //         chosen_skill: skill
-
-        //         //     }
-        //         // });
-        //         console.log(skill)
-        //         window.location.href = "./update_skills.html?skillid=" + skill.id + "&skillname=" + skill.name + "&skilldesc=" + skill.description
-
-
-        //     },
-        //     searchSkill() {
-        //         // event.preventDefault
-        //         console.log("search called")
-        //         console.log(this.skillSearch)
-        //         if (this.skillSearch !== '') {
-        //             url = 'http://127.0.0.1:5000/skills?skill=' + this.skillSearch
-
-        //             axios.get(url)
-        //                 .then(response => {
-        //                     console.log("i got data")
-        //                     console.log(response.data.data)
-        //                     this.allSkills = response.data.data;
-        //                     return false;
-
-        //                 })
-        //                 .catch(error => {
-        //                     alert(error)
-        //                 });
-        //         }
-
-        //     },
-        //     deleteSkill(skill) {
-
-        //         if (confirm("Would you like to delete " + skill.name + " ?")) {
-        //             console.log(skill.id)
-        //             axios.delete('http://127.0.0.1:5000/skill_delete/' + skill.id)
-        //                 .then(response => {
-        //                     console.log("Successfully Deleted");
-        //                     this.getSkills();
-        //                     // auto reload remaining skills
-        //                     this.deleteSuccess = skill.name + " sucessfully deleted!"
-        //                 })
-        //                 .catch(error => {
-        //                     alert(error)
-        //                 });
-        //         }
-
-        //     },
-
-        //     create() {
-        //         window.location.href = "./create_skills.html"
-
-        //     }
 
         },
         mounted: function() {

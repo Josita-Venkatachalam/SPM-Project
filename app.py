@@ -283,17 +283,5 @@ def get_roleskill(rolesid):
             "message": "Role not found."
         }), 404
 
-def get_skillid(roleskillid):
-    #not sure about this method
-    roleskill = Role_Skill.query.filter_by(role_skill_id = roleskillid).first()
-    if roleskill:
-        return jsonify({
-            "data": roleskill.to_dict()
-        }), 200
-    else:
-        return jsonify({
-            "message": "Role not found."
-        }), 404
-
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

@@ -80,15 +80,16 @@
                 <th scope="col">Description</th>
                 <th scope="col">Role's Skills</th>
                 <th scope="col"></th>
-                
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="role in allRoles ">
-                    <th scope="row">{{role.id}}</th>
+                    <td scope="row" id = "rolesid">{{role.id}}</td>
                     <td>{{role.name}}</td>
                     <td>{{role.description}}</td>
-                    <td></td>
+                    <td v-for="skill in allSkills ">
+                        {{skill.name}}
+                    </td>
                     <!-- <td>{{role.skills}}</td> -->
                     <td class = "text-right">
                         <button type="button" class="btn btn-warning" v-on:click="editRole(role)">Edit</button>&nbsp;&nbsp;<button type="button" class="btn btn-danger"  v-on:click="deleteRole(role)">Delete</button></td>
@@ -99,6 +100,8 @@
     </div>
 </body>
 <script>
+    //var roles_id = document.getElementById("rolesid").innerText;
+
     Vue.createApp({
        
        data() {
@@ -106,7 +109,9 @@
                success: '',
                error: '',
                allRoles: [],
-               searchRole : ""
+               searchRole : "",
+               allSkills: [],
+               //roles_id = 
                // RoleId: 0,
                // Rolename: '',
                // Roledesc: '',
@@ -118,6 +123,7 @@
           
        },
        methods: {
+        
            getRoles(){
                // event.preventDefault();
                console.log('get role called')
@@ -190,11 +196,31 @@
         create(){
         window.location.href = "./create_roles.html"
 
-        } 
+        },
+        get_skills_id(role){
+                    console.log('get roleskill by rolesid')
+                    axios.get('http://127.0.0.1:5000/rolesskills/' + role.id)
+                        .then(response => {
+                            
+                            console.log('get roleskill successful')
+                            console.log(response.data.data)
+                            this.allSkills = response.data.data
+                            
+
+                            return false;
+                        })
+                        .catch(error => {
+                            this.error = error.response.data.message
+                            console.log("fail!")
+                            console.log(this.error)
+                        });
+                },
        },
        mounted: function(){
            console.log("im inside b4 mount")
            this.getRoles()
+           
+           this.get_skills_id(role.id)
        }
        // watch: {
        //         roleSearch: function() {
