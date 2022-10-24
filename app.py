@@ -71,6 +71,25 @@ class Role_Skill(db.Model):
             result[column] = getattr(self, column)
         return result
 
+class LearningJourney(db.Model):
+    __tablename__ = 'LearningJourney'
+
+    id = db.Column(db.Integer, primary_key = True)
+    completion_status = db.Column(db.String(45))
+    Role_id = db.Column(db.Integer)
+    Staff_id = db.Column(db.Integer)
+    
+    
+    def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
 
 db.create_all()
 
@@ -278,6 +297,18 @@ def get_roleskill(rolesid):
                 "data": [item.to_dict() for item in result]
             }
         ), 200
+    else:
+        return jsonify({
+            "message": "Role not found."
+        }), 404
+
+@app.route("/LearningJourney/<int:LearningJourneyID>")
+def LJ_by_id(LearningJourneyID):
+    LJ = LearningJourney.query.filter_by(id=LearningJourneyID).first()
+    if LJ:
+        return jsonify({
+            "data": LJ.to_dict()
+        }), 200
     else:
         return jsonify({
             "message": "Role not found."
