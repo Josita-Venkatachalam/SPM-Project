@@ -51,7 +51,7 @@
 
             </div>   
                 
-        </div>
+            </div>
         
         <table class="table table-striped table-hover mt-5">
             
@@ -73,6 +73,10 @@
                 </tr>
             </tbody>
         </table>
+
+        </div>
+            <button id="CreateLJBtn" class="btn btn-primary" v-on:click="create_LJ()">Create New Learning Journey</button>
+        <div>
 
     </div>
 
@@ -144,7 +148,11 @@
               // })
               // .then(res)
 
-              window.location.href = "./view_roles_staff.html?LJid=" + LearningJourney.id
+              window.location.href = "./view_courses_LJ.html?LJid=" + LearningJourney.id
+          },
+
+          create_LJ(){
+            window.location.href = "./view_roles_staff_LJ.html"
           }
 
      },
