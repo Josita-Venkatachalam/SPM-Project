@@ -48,6 +48,25 @@ INSERT INTO `skill` (`name`, `description`) VALUES
 ('Leadership', 'Learn to lead the team well'),
 ('Project Management', 'Learn to manage projects well');
 
+-- ROLES
+DROP TABLE IF EXISTS `role`;
+CREATE TABLE `role` (
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `name` varchar(50) DEFAULT NULL UNIQUE,
+  `description`  varchar(100)  DEFAULT NULL
+  --  FOREIGN KEY (id) REFERENCES Roles(skillId)
+  --  FOREIGN KEY (id) REFERENCES Courses(skillId)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table 'role'
+--
+
+INSERT INTO `role` (`name`, `description`) VALUES
+('Project Manager', 'A Project Manager manages a team of people.' ),
+('Data analyst', 'A Data Analyst reviews data to identify key insights.'),
+('Data Scientist', 'A Data Scientist analyze data for actionable insights.');
+
 -- STAFF
 
 DROP TABLE IF EXISTS `staff`;

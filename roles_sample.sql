@@ -31,7 +31,7 @@ CREATE TABLE `role` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table 'skill'
+-- Dumping data for table 'role'
 --
 
 INSERT INTO `role` (`name`, `description`) VALUES
