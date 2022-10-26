@@ -104,9 +104,9 @@ class LearningJourney(db.Model):
     __tablename__ = 'LearningJourney'
 
     id = db.Column(db.Integer, primary_key = True)
-    completion_status = db.Column(db.String(45))
-    Role_id = db.Column(db.Integer)
-    Staff_id = db.Column(db.Integer)
+    Completion_status = db.Column(db.String(45))
+    Roles_id = db.Column(db.Integer)
+    Staff_ID = db.Column(db.Integer)
     
     
     def to_dict(self):
@@ -320,6 +320,24 @@ def roles():
     #                  for role in roles_list]
     #     }
     # ), 200
+@app.route("/roles/<int:role_id>")
+def get_role_by_id(role_id):
+    role = Role.query.filter(Role.id == role_id).first()
+   
+    if role:
+         return jsonify(
+        {
+            "data": role.to_dict()
+        }
+    ), 200
+    else:
+        return jsonify({
+            "message": "Role not found."
+        }), 404
+
+
+   
+    
 
 @app.route("/skillsearch/<string:searchname>")
 def search_skill(searchname):
@@ -487,6 +505,21 @@ def LJ_by_id(LearningJourneyID):
     else:
         return jsonify({
             "message": "Role not found."
+        }), 404
+
+
+@app.route("/LearningJourney/")
+def getLJ():
+    learning_journeys= LearningJourney.query.filter_by(Staff_ID = 130001)
+    print(learning_journeys)
+    if learning_journeys:
+        return jsonify(
+        {
+            "data": [lj.to_dict() for lj in learning_journeys]
+        }), 200
+    else:
+        return jsonify({
+            "message": "LJ not found."
         }), 404
 
 if __name__ == '__main__':
