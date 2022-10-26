@@ -1,7 +1,7 @@
 # from crypt import methods
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 
 app = Flask(__name__)
@@ -14,7 +14,7 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_size': 100,
 db = SQLAlchemy(app)
 
 CORS(app)
-
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 class Skill(db.Model):
     __tablename__ = 'skill'
@@ -76,10 +76,12 @@ class Role(db.Model):
 class Role_Skill(db.Model):
     __tablename__ = 'roles_skills'
 
-    roleID = db.Column(db.Integer)
-    SkillID = db.Column(db.Integer)
-    role_skill_id = db.Column(db.Integer, primary_key = True)
+    roles_id = db.Column(db.Integer)
+    skills_id = db.Column(db.Integer)
+    id = db.Column(db.Integer, primary_key = True)
 
+    
+    
     def to_dict(self):
         """
         'to_dict' converts the object into a dictionary,
@@ -98,6 +100,15 @@ class Course_Skill(db.Model):
     Skill_id = db.Column(db.Integer)
     ID = db.Column(db.Integer, primary_key = True)
 
+class LearningJourney(db.Model):
+    __tablename__ = 'LearningJourney'
+
+    id = db.Column(db.Integer, primary_key = True)
+    completion_status = db.Column(db.String(45))
+    Role_id = db.Column(db.Integer)
+    Staff_id = db.Column(db.Integer)
+    
+    
     def to_dict(self):
         """
         'to_dict' converts the object into a dictionary,
@@ -417,6 +428,43 @@ def skills_of_course(course_id):
 
 
 
+@app.route("/rolesskills/<int:rolesid>")
+def get_roleskill(rolesid):
+    # roleskill_list = Role_Skill.query.filter_by(roles_id = rolesid)
+
+    subquery = (
+        db.session.query(Role_Skill.skills_id)
+        .filter(Role_Skill.roles_id == rolesid)
+    )
+
+    result = (
+        db.session.query(Skill)
+        .filter(Skill.id.in_(subquery))
+        .all()
+    )
+
+    if result:
+        return jsonify(
+            {
+                "data": [item.to_dict() for item in result]
+            }
+        ), 200
+    else:
+        return jsonify({
+            "message": "Role not found."
+        }), 404
+
+@app.route("/LearningJourney/<int:LearningJourneyID>")
+def LJ_by_id(LearningJourneyID):
+    LJ = LearningJourney.query.filter_by(id=LearningJourneyID).first()
+    if LJ:
+        return jsonify({
+            "data": LJ.to_dict()
+        }), 200
+    else:
+        return jsonify({
+            "message": "Role not found."
+        }), 404
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

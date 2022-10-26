@@ -59,12 +59,12 @@
 
             <div class="mb-3">
                 <label for="rolename" class="form-label">Role Name</label>
-                <input type="text" class="form-control" id="rolename" placeholder="Enter role name here">
+                <input type="text" class="form-control" name="rolename" id="rolename" v-model="rolename" placeholder="Enter role name here">
             </div>
 
             <div class="mb-3">
-                <label for="roleDesc" class="form-label">Role Description</label>
-                <textarea class="form-control" id="roleDesc" rows="3" placeholder="Enter role description here"></textarea>
+                <label for="roledesc" class="form-label">Role Description</label>
+                <textarea class="form-control" name="roledesc" id="roledesc" v-model="roledesc" rows="3" placeholder="Enter role description here"></textarea>
             </div>
 
             <div>
@@ -72,8 +72,14 @@
                 <button id="addRoleBtn" class="btn btn-primary" v-on:click="submitForm">Create</button>
             </div>
             
-            <!-- <p><label id="sucess" class="text-success">{{ success }}</label></p>
-            <p><label id="error" class="text-danger">{{ error }}</label></p> -->
+            <br>
+            <div v-for="issue in missing_datas" class="alert alert-danger" role="alert">
+                {{issue}}
+            </div>
+            <div v-if="success != ''" class="alert alert-success" role="alert">
+                {{ success }}
+            </div>
+            <p><label id="error" class="text-danger">{{ error }}</label></p>       
         </form>
     </div>
 
@@ -105,7 +111,8 @@
                             description: this.roledesc
                         })
                         .then(response => {
-                            this.success = "Successfully Added"
+                            this.success = this.rolename + " is successfully created"
+                            window.location.href = "./view_roles.html"
 
                             //window.location.replace("./view-roles.html");
                             return false;
