@@ -425,9 +425,6 @@ def skills_of_course(course_id):
     
 
 
-
-
-
 @app.route("/rolesskills/<int:rolesid>")
 def get_roleskill(rolesid):
     # roleskill_list = Role_Skill.query.filter_by(roles_id = rolesid)
