@@ -83,7 +83,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="role in allRoles ">
+                <tr v-for="role in allRoles">
                     <td scope="row" id = "rolesid">{{role.id}}</td>
                     <td>{{role.name}}</td>
                     <td>{{role.description}}</td>
@@ -100,7 +100,8 @@
     </div>
 </body>
 <script>
-    //var roles_id = document.getElementById("rolesid").innerText;
+    var rolesid = document.getElementById("rolesid").innerText.value
+    console.log(rolesid)
 
     Vue.createApp({
        
@@ -111,7 +112,7 @@
                allRoles: [],
                searchRole : "",
                allSkills: [],
-               //roles_id = 
+               roles_id : rolesid,
                // RoleId: 0,
                // Rolename: '',
                // Roledesc: '',
@@ -197,9 +198,9 @@
         window.location.href = "./create_roles.html"
 
         },
-        get_skills_id(role){
+        get_skills_id(roles_id){
                     console.log('get roleskill by rolesid')
-                    axios.get('http://127.0.0.1:5000/rolesskills/' + role.id)
+                    axios.get('http://127.0.0.1:5000/rolesskills/' + roles_id)
                         .then(response => {
                             
                             console.log('get roleskill successful')
@@ -220,7 +221,7 @@
            console.log("im inside b4 mount")
            this.getRoles()
            
-           this.get_skills_id(role.id)
+           this.get_skills_id(rolesid)
        }
        // watch: {
        //         roleSearch: function() {
