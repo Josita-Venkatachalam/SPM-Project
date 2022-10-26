@@ -16,17 +16,17 @@ DROP DATABASE IF EXISTS `spmProj`;
 CREATE DATABASE IF NOT EXISTS `spmProj` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `spmProj`;
 
--- ROLES
+-- STAFF_GROUP
 
-DROP TABLE IF EXISTS `role`;
-CREATE TABLE `role` (
+DROP TABLE IF EXISTS `staff_group`;
+CREATE TABLE `staff_group` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` varchar(50) DEFAULT NULL UNIQUE
   --  FOREIGN KEY (id) REFERENCES Roles(skillId)
   --  FOREIGN KEY (id) REFERENCES Courses(skillId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `role` (`name`) VALUES
+INSERT INTO `staff_group` (`name`) VALUES
 ('Admin'),
 ('User'),
 ('Manager'),
@@ -83,6 +83,23 @@ INSERT INTO `staff` (`Staff_ID`,`Staff_FName`,`Staff_LName`,`Dept`,`Email`,`Role
 (140001,'Derek','Tan','Sales','Derek.Tan@allinone.com.sg',3),
 (140002, 'Susan', 'Goh', 'Sales', 'Susan.Goh@allinone.com.sg', 2);
 
+-- COURSES
+DROP TABLE IF EXISTS `courses`;
+CREATE TABLE `courses` (
+  `id` varchar(50) NOT NULL PRIMARY KEY,
+  `name` varchar(50) DEFAULT NULL UNIQUE,
+  `description`  varchar(100)  DEFAULT NULL,
+  `status` varchar(50) DEFAULT NULL,
+  `type`  varchar(50) DEFAULT NULL,
+  `category`varchar(50) DEFAULT NULL
+
+  --  FOREIGN KEY (id) REFERENCES Roles(skillId)
+  --  FOREIGN KEY (id) REFERENCES Courses(skillId)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
 -- ROLE-SKILLS
 
 DROP TABLE IF EXISTS `roles_skills`;
@@ -138,3 +155,27 @@ INSERT INTO `LearningJourney` ( `Completion_Status`,`Roles_id`,`Staff_ID`) VALUE
 ('In progress', 3, 130002);
 
 
+-- COURSE-SKILL
+DROP TABLE IF EXISTS `courses_skills`;
+
+CREATE TABLE IF NOT EXISTS `courses_skills` (
+  `Course_id` varchar(50) ,
+  `Skill_id` INT,
+  `ID` INT NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`ID`),
+  INDEX `fk_Courses_has_Skills_Skills1_idx` (`Skill_id` ASC) VISIBLE,
+  INDEX `fk_Courses_has_Skills_Courses1_idx` (`Course_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Courses_has_Skills_Courses1`
+    FOREIGN KEY (`Course_id`)
+    REFERENCES `spmproj`.`courses` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE SET NULL,
+  CONSTRAINT `fk_Courses_has_Skills_Skills1`
+    FOREIGN KEY (`Skill_id`)
+    REFERENCES `spmproj`.`skill` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE SET NULL)
+ENGINE = InnoDB;
+
+INSERT INTO `courses_skills` (`Course_id`,`Skill_id`) VALUES ("COR001", 1);
+INSERT INTO `courses_skills` (`Course_id`,`Skill_id`) VALUES ("COR001", 3);
