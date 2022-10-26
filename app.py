@@ -1,3 +1,4 @@
+# from crypt import methods
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
@@ -21,6 +22,27 @@ class Skill(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
     description = db.Column(db.String(100))
+
+    def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
+
+class Course(db.Model):
+    __tablename__ = 'courses'
+
+    id = db.Column(db.String(50), primary_key=True)
+    name = db.Column(db.String(50))
+    description = db.Column(db.String(100))
+    status = db.Column(db.String(50))
+    type = db.Column(db.String(50))
+    category = db.Column(db.String(50))
 
     def to_dict(self):
         """
@@ -57,6 +79,24 @@ class Role_Skill(db.Model):
     roleID = db.Column(db.Integer)
     SkillID = db.Column(db.Integer)
     role_skill_id = db.Column(db.Integer, primary_key = True)
+
+    def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
+
+class Course_Skill(db.Model):
+    __tablename__ = 'courses_skills'
+
+    Course_id = db.Column(db.String(50))
+    Skill_id = db.Column(db.Integer)
+    ID = db.Column(db.Integer, primary_key = True)
 
     def to_dict(self):
         """
@@ -124,16 +164,47 @@ def delete_skill(skill_id):
         return jsonify({
             "message": "Unable to commit to database."
         }), 500
+@app.route("/skills_update/<string:id>/<string:name>/<string:description>", methods=['PUT'])
+def update_skill(id, name ,description):
+        # name = request.args.get('name')
+        # description = request.args.get('description')
+        # skill_id = request.args.get('id')
+        print(name)
+        print(id)
+        skill = Skill.query.filter_by(id=int(id)).first()
+        # data=request.get_json()
+        
+        print(skill)
+        
+        skill.name = name
+        skill.description = description
+        db.session.commit()
+        #retrive the data from the request to update the data in the database
+        return jsonify(
+            {
+                "code":200,
+                # "data":skill
+
+            }  
+               
+        )
 
 
 
-@app.route("/skills")
+@app.route("/skills/")
 def skills():
-    search_name = request.args.get('skill')
-    if search_name:
-        skills_list = Skill.query.filter(Skill.name.contains(search_name))
-    else:
-        skills_list = Skill.query.all()
+    # search_name = request.args.get('skill')
+    # print(searchname)
+    # if searchname:
+    #     # skills_list = Skill.query.filter(Skill.name.contains(search_name))
+    #     skill = Skill.query.filter_by(name=searchname).first()
+    #     print(skill.to_dict())
+    #     return jsonify({
+    #         "data": skill.to_dict()
+    #     }), 200
+        
+    # else:
+    skills_list = Skill.query.all()
     return jsonify(
         {
             "data": [skill.to_dict() for skill in skills_list]
@@ -239,6 +310,28 @@ def roles():
     #     }
     # ), 200
 
+@app.route("/skillsearch/<string:searchname>")
+def search_skill(searchname):
+    # search_name = request.args.get('skill')
+    print(searchname)
+    skill = Skill.query.filter_by(name=searchname).first()
+    if skill:
+        # skills_list = Skill.query.filter(Skill.name.contains(search_name))
+        
+        print(skill.to_dict())
+        return jsonify({
+            "data": [skill.to_dict()]
+        }), 200
+        
+    else:
+        # skills_list = Skill.query.all()
+        skills_list = []
+        return jsonify(
+            {
+                "data": []
+            }
+        ), 500
+    
 
 @app.route("/roles_skills/<int:RoleID>")
 def get_skills():
@@ -254,6 +347,75 @@ def get_skills():
             "data": [skill.to_dict() for skill in result]
         }
     ), 200
+@app.route("/courses/")
+def courses():
+    # search_name = request.args.get('skill')
+    # print(searchname)
+    # if searchname:
+    #     # skills_list = Skill.query.filter(Skill.name.contains(search_name))
+    #     skill = Skill.query.filter_by(name=searchname).first()
+    #     print(skill.to_dict())
+    #     return jsonify({
+    #         "data": skill.to_dict()
+    #     }), 200
+        
+    # else:
+    courses_list = Course.query.all()
+    return jsonify(
+        {
+            "data": [course.to_dict() for course in courses_list]
+        }
+    ), 200
+
+@app.route("/assignskilltocourse/", methods = ['POST'])
+def assignskilltocourse():
+    print('im in assign')
+    data = request.get_json()
+    print(data)
+    course_skill = Course_Skill(**data)
+
+    try:
+        db.session.add(course_skill)
+        db.session.commit()
+        return jsonify({"message":"added successfully"}), 201
+    except Exception:
+        return jsonify({
+            "message": "Unable to commit to database."
+        }), 500
+@app.route("/deassignskilltocourse/<string:course_id>/<int:skill_id>", methods = ['DELETE'])
+def deassignskilltocourse(course_id, skill_id):
+    print('im in deassign')
+    course_skill = Course_Skill.query.filter_by(Course_id = course_id , Skill_id = skill_id).first()
+
+    try:
+        db.session.delete(course_skill)
+        db.session.commit()
+        return jsonify({"message":"deleted successfully"}), 201
+    except Exception:
+        return jsonify({
+            "message": "Unable to delete from database."
+        }), 500
+
+@app.route("/skillsofcourse/<string:course_id>")
+def skills_of_course(course_id):
+    print("im in getting alr assigned skills")
+    print(course_id)
+    records = Course_Skill.query.filter(Course_Skill.Course_id == course_id)
+    print(records)
+    if records:
+        return jsonify({
+            "data": [record.to_dict() for record in records]
+        }), 200
+    else:
+        return jsonify({
+            "message": "cant retrieve records"
+        }), 404
+
+    
+
+
+
+
 
 
 if __name__ == '__main__':

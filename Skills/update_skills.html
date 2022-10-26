@@ -93,7 +93,26 @@
         updateskill(){
             console.log(this.updated_desc)
             console.log(this.updated_name)
-            
+            console.log(typeof skill_id)
+            url = "http://192.168.68.106:5000/skills_update/" + skill_id + "/" + this.updated_name + '/' + this.updated_desc
+            axios.put(url)
+                    .then(response => {
+                        this.success = "Successfully Retrieved"
+                        console.log("succesfully edited")
+                        // allSkills = response.data
+                        // this.allSkills= response.data.data
+                        window.location.href = "./view_skills.html"
+
+                        
+                        return false;
+                    })
+                    .catch(error => {
+                        console.log('update error')
+                        this.error = error.response.data.message
+                       
+                    });
+
+
 
         },
         cancel(){
