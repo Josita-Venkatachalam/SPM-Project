@@ -451,6 +451,32 @@ def get_roleskill(rolesid):
             "message": "Role not found."
         }), 404
 
+@app.route("/skillcourses/<int:skillsid>")
+def get_courseskill(skillsid):
+    # roleskill_list = Role_Skill.query.filter_by(roles_id = rolesid)
+    print(skillsid)
+    subquery = (
+        db.session.query(Course_Skill.Course_id)
+        .filter(Course_Skill.Skill_id == skillsid)
+    )
+
+    result = (
+        db.session.query(Course)
+        .filter(Course.id.in_(subquery))
+        .all()
+    )
+
+    if result:
+        return jsonify(
+            {
+                "data": [item.to_dict() for item in result]
+            }
+        ), 200
+    else:
+        return jsonify({
+            "message": "Skill not found."
+        }), 404
+
 @app.route("/LearningJourney/<int:LearningJourneyID>")
 def LJ_by_id(LearningJourneyID):
     LJ = LearningJourney.query.filter_by(id=LearningJourneyID).first()
