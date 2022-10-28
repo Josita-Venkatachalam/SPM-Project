@@ -82,12 +82,20 @@
                 <tr v-for="course in allCourses">
                     <th scope="row">{{course.name}}</th>
                     <td>{{course.description}}</td>
+                    <td class="text-right">
+                        <input type="checkbox" :value="course.id" v-model="chosenCourses" :id="course.id">
+                    </td>
+                </tr>
+                <!-- <tr v-for="course in allCourses">
+                    <th scope="row">{{course.name}}</th>
+                    <td>{{course.description}}</td>
 
                     <td v-if="course.id in chosenCourses" class="text-right"><button type="button" class="btn btn-warning" v-on:click="DropCourse(course.id)">Drop</button></td>
                     <td v-else class="text-right"><button type="button" class="btn btn-success" v-on:click="AddCourse(course.id)">Add</button></td>
-                </tr>
+                </tr> -->
             </tbody>
         </table>
+        <button class="btn btn-success" v-on:click="createLJ">Create Learning Journey</button>
     </div>
 
 </body>
@@ -97,6 +105,8 @@
     var skillsid = url.searchParams.get("skillid");
     var skill_name = url.searchParams.get("skillname");
     var skill_desc = url.searchParams.get("skilldesc");
+    var roles_id = url.searchParams.get("roleid");
+    console.log(roles_id)
     console.log(skillsid)
     console.log(skill_name)
     document.getElementById("skill_name_span").innerHTML = skill_name;
@@ -131,10 +141,13 @@
                         console.log(this.error)
                     });
             },
+
+
             AddCourse(id) {
                 axios.post("http://127.0.0.1:5000/addcoursetoLJ/", {
                         Skill_id: skill.id,
                         Course_id: this.courseId
+
                     })
                     .then(response => {
 
@@ -170,9 +183,29 @@
                         });
                 }
             },
+            createLJ() {
+                console.log(this.chosenCourses)
+                console.log(roles_id)
+                axios.post("http://127.0.0.1:5000/createLJ", {
+                        Roles_id: roles_id,
+                        Staff_ID: "130001",
+                        Completion_Status: "In Progress"
+                    })
+                    .then(response => {
 
+                        console.log('Added succesfully')
+                        console.log(this.response)
+                        console.log(this.response.data.message)
 
+                        //window.location.replace("./view-skills.html");
+                        return false;
+                    })
+                    .catch(error => {
+                        this.error = error.response.data.message
+                        console.log('cannot add')
+                    });
 
+            }
 
 
         },

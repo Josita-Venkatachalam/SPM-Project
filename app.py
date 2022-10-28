@@ -104,7 +104,7 @@ class LearningJourney(db.Model):
     __tablename__ = 'LearningJourney'
 
     id = db.Column(db.Integer, primary_key = True)
-    Completion_status = db.Column(db.String(45))
+    Completion_Status = db.Column(db.String(45))
     Roles_id = db.Column(db.Integer)
     Staff_ID = db.Column(db.Integer)
     
@@ -157,7 +157,7 @@ def create_skill():
     try:
         db.session.add(skill)
         db.session.commit()
-        return jsonify(skill.to_dict()), 201
+        return jsonify({"data": skill.to_dict()}), 201
     except Exception:
         return jsonify({
             "message": "Unable to commit to database."
@@ -521,6 +521,35 @@ def getLJ():
         return jsonify({
             "message": "LJ not found."
         }), 404
+        
+@app.route("/createLJ", methods=['POST'])
+def create_LJ():
+    data = request.get_json()
+    #check if skill alr exist in the DB , if yes don't allow it to add and display error ( name)
+    print("Hi I am inside")
+    if not all(key in data.keys() for
+               key in ('Completion_Status','Roles_id',
+                       'Staff_ID')):
+        return jsonify({
+            "message": "Incorrect JSON object provided."
+        }), 500
+    
+    LJ = LearningJourney(**data)
+    
+    print(LJ)
+    try:
+        db.session.add(LJ)
+        db.session.commit()
+        return jsonify(
+        {
+            "data": [LJ.to_dict()],
+            "message": "Hi there!"
+        }), 201
+    except Exception:
+        return jsonify({
+            "message": "Unable to commit to database."
+        }), 500
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
