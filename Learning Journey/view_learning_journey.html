@@ -64,11 +64,11 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="LJ in allLJ ">
-                    <th scope="row">{{LJ.Completion_status}}</th>
-                    <td>{{LJ.Roles_id}}</td>
+                <tr v-for="(lj, index) in allLJ" :key="lj.Roles_id">
+                    <th scope="row">{{lj.Completion_Status}}</th>
+                    <td>{{roleNameList[index]}}</td>
                     <td class = "select-LJ-list">
-                        <button type="button" class="select-role-btn btn btn-warning" v-on:click="">Update</button>&nbsp;&nbsp;<button type="button" class="select-role-btn btn btn-danger" v-on:click="">Delete</button>
+                        <button type="button" class="select-role-btn btn btn-warning" v-on:click="">Update</button>&nbsp;&nbsp;<button type="button" class="select-role-btn btn btn-danger" v-on:click="delete_LJ(lj.id)">Delete</button>
                     </td>
                 </tr>
             </tbody>
@@ -111,6 +111,7 @@
                      // allRoles = response.data
                      console.log(response.data.data)
                      this.allLJ= response.data.data
+                     console.log(this.allLJ)
                      
                      for (lj of this.allLJ){
                         url = 'http://127.0.01:5000/roles/' + lj.Roles_id
@@ -174,7 +175,24 @@
 
           create_LJ(){
             window.location.href = "./view_roles_staff_LJ.html"
+          },
+
+          delete_LJ(LJ_id){
+            url = 'http://127.0.0.1:5000/deleteLJ/' + LJ_id
+            axios.delete(url)
+                .then(response => {
+                           console.log('deleted success')
+                            return false;
+                           
+
+                        })
+                        .catch(error => {
+                            console.log('cant delete')
+                            alert(error)
+                        });
+            location.reload();
           }
+
 
      },
      mounted: function(){

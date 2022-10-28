@@ -96,6 +96,7 @@
             </tbody>
         </table>
         <button class="btn btn-success" v-on:click="createLJ">Create Learning Journey</button>
+        <button class="btn btn-warning" v-on:click="display()">Click</button>
     </div>
 
 </body>
@@ -119,7 +120,8 @@
                 error: '',
                 skills_id: skillsid,
                 allCourses: [],
-                chosenCourses: []
+                chosenCourses: [],
+                LJ_id : ''
             }
 
         },
@@ -140,6 +142,12 @@
                         console.log("fail! ")
                         console.log(this.error)
                     });
+            },
+
+            display(){
+                for( course of this.chosenCourses){
+                    console.log(course)
+                }
             },
 
 
@@ -186,6 +194,7 @@
             createLJ() {
                 console.log(this.chosenCourses)
                 console.log(roles_id)
+                var Learning_Journey_id;
                 axios.post("http://127.0.0.1:5000/createLJ", {
                         Roles_id: roles_id,
                         Staff_ID: "130001",
@@ -194,16 +203,48 @@
                     .then(response => {
 
                         console.log('Added succesfully')
-                        console.log(this.response)
-                        console.log(this.response.data.message)
+                        console.log(response)
+                        console.log(response.data.data)
+                        LJ_id = response.data.data[0].id
+                        console.log(LJ_id)
+                        Learning_Journey_id = LJ_id
+                        
+                        
 
                         //window.location.replace("./view-skills.html");
-                        return false;
+                        
                     })
                     .catch(error => {
                         this.error = error.response.data.message
                         console.log('cannot add')
                     });
+
+                    for (course of this.chosenCourses){
+                        console.log(course)
+                        console.log(Learning_Journey_id)
+                        console.log('end')
+                        axios.post("http://127.0.0.1:5000/create_LJ_course", {
+                        Course_id: course,
+                        Skill_id: skillsid,
+                        Learning_Journey_Id: Learning_Journey_id
+                        })
+                        .then(response => {
+
+                            console.log('Added LJ_course succesfully')
+                            console.log(response)
+                            console.log(response.data.data)
+
+                            //window.location.replace("./view-skills.html");
+                            return false;
+                        })
+                        .catch(error => {
+                            this.error = error.response.data.message
+                            console.log('cannot add lj course')
+                        });
+                
+                
+                    }
+                   
 
             }
 

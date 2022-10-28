@@ -119,6 +119,25 @@ class LearningJourney(db.Model):
         for column in columns:
             result[column] = getattr(self, column)
         return result
+class learning_jouney_courses(db.Model):
+    __tablename__ = 'learning_journey_courses'
+
+    id = db.Column(db.Integer, primary_key = True)
+    Course_id = db.Column(db.String(50))
+    Skill_id = db.Column(db.Integer)
+    Learning_Journey_Id = db.Column(db.Integer)
+    
+    
+    def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
 
 
 db.create_all()
@@ -535,20 +554,65 @@ def create_LJ():
         }), 500
     
     LJ = LearningJourney(**data)
+   
     
     print(LJ)
     try:
         db.session.add(LJ)
         db.session.commit()
+        print(LJ.to_dict())
         return jsonify(
-        {
-            "data": [LJ.to_dict()],
-            "message": "Hi there!"
+            {
+                "data": [LJ.to_dict()],
+                "message": "Hi there!"
         }), 201
     except Exception:
         return jsonify({
             "message": "Unable to commit to database."
         }), 500
+@app.route("/deleteLJ/<int:LJ_ID>", methods=['DELETE'])
+def delete_LJ(LJ_ID):
+   
+    LJ = LearningJourney.query.filter_by(id=LJ_ID).first()
+    try:
+        db.session.delete(LJ)
+        db.session.commit()
+        return jsonify(LJ.to_dict()), 201
+    except Exception:
+        return jsonify({
+            "message": "Unable to commit to database."
+        }), 500
+
+@app.route("/create_LJ_course", methods=['POST'])
+def create_LJ_course():
+    data = request.get_json()
+    #check if skill alr exist in the DB , if yes don't allow it to add and display error ( name)
+    print("Hi I am inside create lj course")
+    if not all(key in data.keys() for
+               key in ('Course_id','Skill_id',
+                       'Learning_Journey_Id')):
+        return jsonify({
+            "message": "Incorrect JSON object provided."
+        }), 500
+    
+    LJ_Course = learning_jouney_courses(**data)
+   
+    
+    print(LJ_Course)
+    try:
+        db.session.add(LJ_Course)
+        db.session.commit()
+        print(LJ_Course.to_dict())
+        return jsonify(
+            {
+                "data": [LJ_Course.to_dict()],
+                "message": "Hi there!"
+        }), 201
+    except Exception:
+        return jsonify({
+            "message": "Unable to commit to database."
+        }), 500
+
 
 
 if __name__ == '__main__':
