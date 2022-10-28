@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+
+    <title>Assign Skill to Role</title>
+
+    <link rel="stylesheet" href="">
+    <!--[if lt IE 9]>
+          <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+    <!-- Bootstrap libraries -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="../home-HR.html">
+                <img src="../Resources/Images/logo.png" alt="logo" width="120" height="55" class="d-inline-block align-text-middle">
+            </a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" style="font-size: 20px !important;" aria-current="page" href="../home-HR.html">Home</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="d-flex">
+                <a class="btn btn-outline-primary btn-md" href="login.html" role="button">Logout</a>
+            </div>
+        </div>
+    </nav>
+    <div id="app" class="container mt-5">
+        <!-- <div v-if="deleteSuccess !=''" class="alert alert-success" role="alert">
+            {{deleteSuccess}}
+        </div> -->
+        <div class="table-title">
+            <div class="">
+                <h2>Select Skills to Assign to Role</h2>
+            </div>
+            <div class="row">
+                <form class="row col-sm-8 g-3 mt-5">
+
+                    <div class="col-auto">
+                    <!-- <label for="inputPassword2" class="visually-hidden">Password</label> -->
+                    <input type="text" class="form-control" id="inputRole" placeholder="Search a skill..." v-model="skillSearch">
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-primary mb-3" v-on:click="searchSkill()">Search</button>
+                        <button type="submit" class="btn btn-secondary mb-3 ml-2" v-on:click="clearSkill()">Clear</button>
+                    </div>
+                </form>
+                <div class="col-sm-4 mt-5 px-0 text-right">
+                    <p  class="display-5">Role Name : {{roleName}}</p>
+                    <!-- <button  class="btn btn-primary mb-3" v-on:click = 'getStatus()'></button> -->
+                </div>
+            </div>
+
+        </div>
+        <table class="table table-striped table-hover mt-5">
+            <thead>
+                <tr>
+                    <th scope="col">Skill ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col"></th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="skill in allSkills">
+                    <th scope="row">{{skill.id}}</th>
+                    <td>{{skill.name}}</td>
+                    <td>{{skill.description}}</td>
+                         
+                    <td v-if = "skill.id in alreadyAssignedSkills"  class="text-right">
+                        <button type="button" class="btn btn-warning" v-on:click="deassignSkill(skill)">De-Assign</button>
+                    </td>
+
+                    <td v-else class="text-right">
+                        <button type="button" class="btn btn-success" v-on:click="assignSkill(skill)">Assign</button>
+                    </td>
+                </tr>
+                
+            </tbody>
+        </table>
+
+    </div>
+
+
+</body>
+
+<script>
+    Vue.createApp({
+
+        data() {
+            return {
+                success: '',
+                error: '',
+                allSkills: undefined,
+                // skillSearch: "",
+                // deleteSuccess: ""
+                assigned_status: true,
+                alreadyAssignedSkills : [],
+                roleName : '',
+                roleId : ''
+            }
+
+        },
+        methods: {
+            getSkills() {
+                // event.preventDefault();
+                console.log('get skill called!')
+                axios.get('http://127.0.0.1:5000/skills')
+                    .then(response => {
+                        this.success = "Successfully Retrieved"
+                        allSkills = response.data
+                        this.allSkills= response.data.data
+                        console.log(allSkills)
+                        console.log(this.allSkills)
+                        return false;
+                    })
+                    .catch(error => {
+                        this.error = error.response.data.message
+                        console.log(this.error)
+                    });
+            },
+            assignSkill(skill) {
+                console.log(skill)
+                axios.post("http://127.0.0.1:5000/assignskilltorole/", 
+                            {skills_id: skill.id,
+                            roles_id: this.roleId})
+                            .then(response => {
+                                
+                                console.log('assigned succesfully')
+                                this.getSkills()
+
+                                //window.location.replace("./view-skills.html");
+                                return false;
+                            })
+                            .catch(error => {
+                                this.error = error.response.data.message
+                                console.log('cannot assign')
+                            });
+
+                // this.assigned_status = TRUE
+
+            },
+            deassignSkill(skill) {
+
+                if (confirm("Would you like to deassign " + skill.name + " ?")) {
+                    console.log(skill.id)
+                    url = 'http://127.0.0.1:5000/deassignskilltorole/' + this.roleId + "/" + skill.id
+                    axios.delete(url)
+                        .then(response => {
+                            console.log("Successfully Deleted");
+                            this.getSkills();
+                            // auto reload remaining skills
+                            // this.deleteSuccess = skill.name + " sucessfully deleted!"
+                        })
+                        .catch(error => {
+                            alert(error)
+                            console.log('error in deletion')
+                        });
+                }
+            },
+            searchSkill(){
+                    event.preventDefault
+                    console.log("search called")
+                    console.log(this.skillSearch)
+                    if (this.skillSearch !== '') {
+                        url = 'http://127.0.0.1:5000/skillsearch/' + this.skillSearch
+                    
+                        axios.get(url)
+                            .then(response => {
+                                console.log("i got data")
+                                console.log(response.data.data)
+                                this.allSkills = response.data.data;
+                                return false;
+                                
+                            })
+                            .catch(error => {alert(error)
+                                console.log("error in seach skill")
+                            });
+                    }
+
+            },
+            getChosenRole(){
+                console.log("chosen role")
+                urlstring = window.location.search
+                url = new URLSearchParams(urlstring);
+                name = url.get('name')
+                id = url.get('id')
+
+                this.roleName = name
+                this.roleId = id
+            },
+            getStatus(){
+                console.log(this.courseId)
+                url = "http://127.0.0.1:5000/skillsofrole/" + this.courseId
+                axios.get(url)
+                .then(response => {
+                        console.log(response.data.data)
+                        records = response.data.data
+                        already_assigned_skills = []
+                        for (record of records){
+                            console.log(record.Skill_id)
+                            already_assigned_skills.push(record.Skill_id)
+
+                        }
+                        console.log(already_assigned_skills)
+                        this.alreadyAssignedSkills = already_assigned_skills
+
+                      
+                        // for
+                        // allSkills = response.data
+                        // this.allSkills= response.data.data
+
+                        return false;
+                    })
+                    .catch(error => {
+                        this.error = error.response.data.message
+                        console.log('unable to get already assigned skills')
+
+                    });
+                
+
+            },
+            create() {
+                window.location.href = "./create_skills.html"
+
+            }
+
+        },
+        mounted: function(){
+            this.getSkills()
+            this.getChosenRole()
+        }
+        
+
+    }).mount("#app")
+</script>
+
+</html>
