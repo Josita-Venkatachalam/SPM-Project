@@ -22,8 +22,11 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+        
     
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.18/vue.min.js"></script>
         <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         
@@ -91,7 +94,10 @@
                     <td>{{role.name}}</td>
                     <td>{{role.description}}</td>
                     <td class = "text-right">
-                        <button type="button" class="btn btn-warning" v-on:click="editRole(role)">Edit</button>&nbsp;&nbsp;<button type="button" class="btn btn-danger"  v-on:click="deleteRole(role)">Delete</button></td>
+                        <button type="button" class="btn btn-success" v-on:click="assignRole(role)">Assign Skill</button>&nbsp;&nbsp;
+                        <button type="button" class="btn btn-warning" v-on:click="editRole(role)">Edit</button>&nbsp;&nbsp;
+                        <button type="button" class="btn btn-danger"  v-on:click="deleteRole(role)">Delete</button>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -111,7 +117,6 @@
                searchRole : "",
                deleteSuccess: "",
                
-
            }
            
            
@@ -147,10 +152,6 @@
                console.log(role) 
                window.location.href = "./update_roles.html?roleid=" + role.id + "&rolename=" + role.name + "&roledesc=" + role.description
                
-
-
-
-
            },
            searchRole() {
                 // event.preventDefault
@@ -188,13 +189,17 @@
                             alert(error)
                         });
                 }
-
-                },
-        create(){
-        window.location.href = "./create_roles.html"
-
-        },
-        
+            },
+            assignRole(role){
+                console.log("assign role called")
+                console.log(role.name)
+                console.log(role.id)
+                url = "./assign_skills_to_role.html" + "?name=" + role.name + "&id=" + role.id
+                window.location.href = url
+            },
+            create(){
+                window.location.href = "./create_roles.html"
+            },     
        },
        mounted: function(){
            console.log("im inside b4 mount")

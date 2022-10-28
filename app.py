@@ -398,7 +398,7 @@ def courses():
 
 @app.route("/assignskilltocourse/", methods = ['POST'])
 def assignskilltocourse():
-    print('im in assign')
+    print('im in assign course')
     data = request.get_json()
     print(data)
     course_skill = Course_Skill(**data)
@@ -411,6 +411,7 @@ def assignskilltocourse():
         return jsonify({
             "message": "Unable to commit to database."
         }), 500
+
 @app.route("/deassignskilltocourse/<string:course_id>/<int:skill_id>", methods = ['DELETE'])
 def deassignskilltocourse(course_id, skill_id):
     print('im in deassign')
@@ -440,8 +441,50 @@ def skills_of_course(course_id):
             "message": "cant retrieve records"
         }), 404
 
-    
+@app.route("/assignskilltorole/", methods = ['POST'])
+def assignskilltorole():
+    print('im in assign role')
+    data = request.get_json()
+    print(data)
+    role_skill = Role_Skill(**data)
 
+    try:
+        db.session.add(role_skill)
+        db.session.commit()
+        return jsonify({"message":"added successfully"}), 201
+    except Exception:
+        return jsonify({
+            "message": "Unable to commit to database."
+        }), 500
+
+@app.route("/deassignskilltorole/<string:role_id>/<int:skill_id>", methods = ['DELETE'])
+def deassignskilltorole(role_id, skill_id):
+    print('im in deassign')
+    role_skill = Role_Skill.query.filter_by(Roles_id = role_id , Skills_id = skill_id).first()
+
+    try:
+        db.session.delete(role_skill)
+        db.session.commit()
+        return jsonify({"message":"deleted successfully"}), 201
+    except Exception:
+        return jsonify({
+            "message": "Unable to delete from database."
+        }), 500
+
+@app.route("/skillsofrole/<string:role_id>")
+def skills_of_role(role_id):
+    print("im in getting alr assigned skills")
+    print(role_id)
+    records = Role_Skill.query.filter(Role_Skill.Roles_id == role_id)
+    print(records)
+    if records:
+        return jsonify({
+            "data": [record.to_dict() for record in records]
+        }), 200
+    else:
+        return jsonify({
+            "message": "cant retrieve records"
+        }), 404
 
 @app.route("/rolesskills/<int:rolesid>")
 def get_roleskill(rolesid):

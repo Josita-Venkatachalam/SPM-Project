@@ -54,7 +54,7 @@
         </div> -->
         <div class="table-title">
             <div class="">
-                <h2>View All Skills</h2>
+                <h2>Select Skills to Assign to Course</h2>
             </div>
             <div class="row">
                 <form class="row col-sm-8 g-3 mt-5">
@@ -69,7 +69,7 @@
                     </div>
                 </form>
                 <div class="col-sm-4 mt-5 px-0 text-right">
-                    <p  class="display-5" v-on:click="create()">Course Name : {{courseName}}</p>
+                    <p  class="display-5">Course Name : {{courseName}}</p>
                     <!-- <button  class="btn btn-primary mb-3" v-on:click = 'getStatus()'></button> -->
                 </div>
             </div>
@@ -133,12 +133,13 @@
                         this.success = "Successfully Retrieved"
                         allSkills = response.data
                         this.allSkills= response.data.data
-
+                        console.log(allSkills)
+                        console.log(this.allSkills)
                         return false;
                     })
                     .catch(error => {
                         this.error = error.response.data.message
-
+                        
                     });
             },
             getStatus(){
