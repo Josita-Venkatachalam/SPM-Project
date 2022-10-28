@@ -82,21 +82,12 @@
                 <tr v-for="course in allCourses">
                     <th scope="row">{{course.name}}</th>
                     <td>{{course.description}}</td>
-                    <td class="text-right">
-                        <input type="checkbox" :value="course.id" v-model="chosenCourses" :id="course.id">
-                    </td>
+
+                    <td v-if="course.id in chosenCourses" class="text-right"><button type="button" class="btn btn-warning" v-on:click="DropCourse(course.id)">Drop</button></td>
+                    <td v-else class="text-right"><button type="button" class="btn btn-success" v-on:click="AddCourse(course.id)">Add</button></td>
                 </tr>
             </tbody>
         </table>
-
-        <div class="row">
-            <form class="row col-sm-8 g-3 mt-3">
-
-                <div class="col-auto">
-                    <button type="submit" class="btn btn-success mb-3" v-on:click="submitForm">Create Learning Journey</button>
-                </div>
-            </form>
-        </div>
     </div>
 
 </body>
@@ -125,15 +116,12 @@
         methods: {
             get_courses_id(skillsid) {
                 console.log('get skillcourses by skillid')
-                axios.get(' http://10.124.2.38:5000/skillcourses/' + skillsid)
+                axios.get(' http://127.0.0.1:5000/skillcourses/' + skillsid)
                     .then(response => {
 
                         console.log('get skillcourses successful')
                         console.log(response.data.data)
                         this.allCourses = response.data.data
-
-
-
 
                         return false;
                     })
@@ -143,11 +131,48 @@
                         console.log(this.error)
                     });
             },
+            AddCourse(id) {
+                axios.post("http://127.0.0.1:5000/addcoursetoLJ/", {
+                        Skill_id: skill.id,
+                        Course_id: this.courseId
+                    })
+                    .then(response => {
 
-            submitForm: function() {
+                        console.log('Added succesfuly')
+                        this.getCourses()
 
-                window.location.href = "./view_learning_journey.html"
-            }
+                        //window.location.replace("./view-skills.html");
+                        return false;
+                    })
+                    .catch(error => {
+                        this.error = error.response.data.message
+                        console.log('cannot add')
+                    });
+
+
+            },
+
+            DropCourse(id) {
+
+                if (confirm("Would you like to drop" + course.name + " ?")) {
+                    console.log(course.id)
+                    url = 'http://127.0.0.1:5000/deleteCourse/' + this.courseId + "/" + skill.id
+                    axios.delete(url)
+                        .then(response => {
+                            console.log("Successfully Dropped");
+                            this.getCourses();
+                            // auto reload remaining skills
+                            // this.deleteSuccess = skill.name + " sucessfully deleted!"
+                        })
+                        .catch(error => {
+                            alert(error)
+                            console.log('error in dropping')
+                        });
+                }
+            },
+
+
+
 
 
         },
@@ -158,20 +183,6 @@
         }
 
     }).mount("#app")
-
-    //     // watch: {
-    //     //         skillSearch: function() {
-    //     //             console.log("search called ")
-    //     //             if (this.searchSkill !== '') {
-
-    // //                 axios.get('http://192.168.68.106:5000/skills?skill=' + this.searchSkill)
-    // //                 .then(response => {
-    // //                     this.allSkills = response.data.data;
-    // //                 })
-    // //                 .catch(error => alert(error));
-    // //             }
-    // //         }
-    // // }
 </script>
 
 </html>

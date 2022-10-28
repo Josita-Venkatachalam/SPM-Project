@@ -486,7 +486,7 @@ def LJ_by_id(LearningJourneyID):
         }), 200
     else:
         return jsonify({
-            "message": "Role not found."
+            "message": "Learning Journey not found."
         }), 404
 
 if __name__ == '__main__':
