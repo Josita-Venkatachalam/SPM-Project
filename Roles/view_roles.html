@@ -49,6 +49,10 @@
     </nav>
     
     <div id="app" class="container mt-5">
+        <div v-if="deleteSuccess !=''" class="alert alert-success" role="alert">
+            {{deleteSuccess}}
+        </div>
+        
 
         <div class="table-title">
             <div class=""><h2>View All Roles</h2></div>
@@ -78,7 +82,6 @@
                 <th scope="col">Role ID</th>
                 <th scope="col">Name</th>
                 <th scope="col">Description</th>
-                <th scope="col">Role's Skills</th>
                 <th scope="col"></th>
                 </tr>
             </thead>
@@ -87,10 +90,6 @@
                     <td scope="row" id = "rolesid">{{role.id}}</td>
                     <td>{{role.name}}</td>
                     <td>{{role.description}}</td>
-                    <td v-for="skill in allSkills ">
-                        {{skill.name}}
-                    </td>
-                    <!-- <td>{{role.skills}}</td> -->
                     <td class = "text-right">
                         <button type="button" class="btn btn-warning" v-on:click="editRole(role)">Edit</button>&nbsp;&nbsp;<button type="button" class="btn btn-danger"  v-on:click="deleteRole(role)">Delete</button></td>
                 </tr>
@@ -100,8 +99,7 @@
     </div>
 </body>
 <script>
-    var rolesid = document.getElementById("rolesid").innerText.value
-    console.log(rolesid)
+
 
     Vue.createApp({
        
@@ -111,12 +109,8 @@
                error: '',
                allRoles: [],
                searchRole : "",
-               allSkills: [],
-               roles_id : rolesid,
-               // RoleId: 0,
-               // Rolename: '',
-               // Roledesc: '',
-               //Roleskill:''
+               deleteSuccess: "",
+               
 
            }
            
@@ -152,6 +146,7 @@
                // });
                console.log(role) 
                window.location.href = "./update_roles.html?roleid=" + role.id + "&rolename=" + role.name + "&roledesc=" + role.description
+               
 
 
 
@@ -187,6 +182,7 @@
                             console.log("Successfully Deleted");
                             this.getRoles();
                             // auto reload remaining roles
+                            this.deleteSuccess = role.name + " sucessfully deleted!"
                         })
                         .catch(error => {
                             alert(error)
@@ -198,30 +194,11 @@
         window.location.href = "./create_roles.html"
 
         },
-        get_skills_id(roles_id){
-                    console.log('get roleskill by rolesid')
-                    axios.get('http://127.0.0.1:5000/rolesskills/' + roles_id)
-                        .then(response => {
-                            
-                            console.log('get roleskill successful')
-                            console.log(response.data.data)
-                            this.allSkills = response.data.data
-                            
-
-                            return false;
-                        })
-                        .catch(error => {
-                            this.error = error.response.data.message
-                            console.log("fail!")
-                            console.log(this.error)
-                        });
-                },
+        
        },
        mounted: function(){
            console.log("im inside b4 mount")
            this.getRoles()
-           
-           this.get_skills_id(rolesid)
        }
        // watch: {
        //         roleSearch: function() {
