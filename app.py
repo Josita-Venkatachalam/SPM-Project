@@ -558,12 +558,15 @@ def get_courseskill(skillsid):
         }), 404
 
 @app.route("/LearningJourney/<int:LearningJourneyID>")
-def LJ_by_id(LearningJourneyID):
-    LJ = LearningJourney.query.filter_by(id=LearningJourneyID).first()
-    if LJ:
-        return jsonify({
-            "data": LJ.to_dict()
-        }), 200
+def get_LJ_by_Id(LearningJourneyID):
+    lj = LearningJourney.query.filter(LearningJourney.id == LearningJourneyID).first()
+   
+    if lj:
+         return jsonify(
+        {
+            "data": lj.to_dict()
+        }
+    ), 200
     else:
         return jsonify({
             "message": "Learning Journey not found."
@@ -613,6 +616,7 @@ def create_LJ():
         return jsonify({
             "message": "Unable to commit to database."
         }), 500
+
 @app.route("/deleteLJ/<int:LJ_ID>", methods=['DELETE'])
 def delete_LJ(LJ_ID):
    
@@ -625,7 +629,7 @@ def delete_LJ(LJ_ID):
         return jsonify({
             "message": "Unable to commit to database."
         }), 500
-
+    
 @app.route("/create_LJ_course", methods=['POST'])
 def create_LJ_course():
     data = request.get_json()
@@ -655,8 +659,47 @@ def create_LJ_course():
         return jsonify({
             "message": "Unable to commit to database."
         }), 500
-
-
+        
+@app.route("/get_skills_LJ/<int:LearningJourneyID>")
+def get_skills_by_Id(LearningJourneyID):
+   lj = learning_jouney_courses.query.filter(learning_jouney_courses.Learning_Journey_Id == LearningJourneyID)
+   if lj:
+    return jsonify(
+        {
+            "data": [ljs.to_dict() for ljs in lj]
+        }
+    ), 200
+   else:
+    return jsonify({
+     "message": "Role not found."
+    }), 404
+    
+@app.route("/roles_add", methods=['POST'])
+def create_role():
+    data = request.get_json()
+    #Validate if name and description input is filled , if not display error msg
+    #check if role alr exist in the DB , if yes don't allow it to add and display error ( name)
+    if not all(key in data.keys() for
+               key in ('name',
+                       'description')):
+        return jsonify({
+            "message": "Incorrect JSON object provided."
+        }), 500
+    role = Role(**data)
+    
+    print(data)
+    role_name = data["name"].lower()
+    role_description = data["description"].lower()
+    
+    try:
+        db.session.add(role)
+        db.session.commit()
+        return jsonify(role.to_dict()), 201
+    except Exception:
+        return jsonify({
+            "message": "Unable to commit to database."
+        }), 500
+    
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

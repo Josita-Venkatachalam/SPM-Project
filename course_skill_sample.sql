@@ -29,8 +29,8 @@ CREATE TABLE IF NOT EXISTS `courses_skills` (
   `Skill_id` INT,
   `ID` INT NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`ID`),
-  INDEX `fk_Courses_has_Skills_Skills1_idx` (`Skill_id` ASC) VISIBLE,
-  INDEX `fk_Courses_has_Skills_Courses1_idx` (`Course_id` ASC) VISIBLE,
+  INDEX `fk_Courses_has_Skills_Skills1_idx` (`Skill_id` ASC) ,
+  INDEX `fk_Courses_has_Skills_Courses1_idx` (`Course_id` ASC) ,
   CONSTRAINT `fk_Courses_has_Skills_Courses1`
     FOREIGN KEY (`Course_id`)
     REFERENCES `spmproj`.`courses` (`id`)

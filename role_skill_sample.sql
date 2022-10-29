@@ -44,4 +44,5 @@ CREATE TABLE IF NOT EXISTS `roles_skills` (
 ENGINE = InnoDB;
 
 INSERT INTO `roles_skills` (`Roles_id`,`Skills_id`) VALUES (1, 1);
+INSERT INTO `roles_skills` (`Roles_id`,`Skills_id`) VALUES (1, 4);
 INSERT INTO `roles_skills` (`Roles_id`,`Skills_id`) VALUES (2, 2);
