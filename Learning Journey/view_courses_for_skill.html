@@ -96,10 +96,15 @@
 
             </tbody>
         </table>
-        <br>
-        <button class="btn btn-success" v-on:click="createLJ">Create Learning Journey</button>
-    </div>
+        <div></div>
 
+        <br>
+        <button v-if="!chosenCourses.length" class="btn btn-success" v-on:click="createLJ" disabled>Create Learning Journey</button>
+        <button v-else class="btn btn-success" v-on:click="createLJ">Create Learning Journey</button>
+        <br>
+        <div v-if="success != ''" class="alert alert-success" role="alert">
+            {{ success }}
+        </div>
 </body>
 <script>
     var url_string = window.location;
@@ -148,70 +153,6 @@
             createLJ() {
                 console.log(this.chosenCourses)
                 console.log(roles_id)
-                axios.post("http://127.0.0.1:5000/createLJ", {
-                        Roles_id: roles_id,
-                        Staff_ID: "130001",
-                        Completion_Status: "In Progress"
-                    })
-                    .then(response => {
-
-                        console.log('Added succesfully')
-                        console.log(response.data.data.id)
-                        this.lj_id = response.data.data.id
-
-
-                        //window.location.replace("./view-skills.html");
-                        return false;
-                    })
-                    .catch(error => {
-                        this.error = error.response.data.message
-                        console.log('cannot add')
-                    });
-
-            },
-
-            AddCourse(id) {
-                axios.post("http://127.0.0.1:5000/addcoursetoLJ/" + this.courseId, {
-                        Learning_Journey_Id: this.lj_id,
-                        Skill_id: skill.id
-                    })
-                    .then(response => {
-
-                        console.log('Added succesfuly')
-                        this.getCourses()
-
-                        return false;
-                    })
-                    .catch(error => {
-                        this.error = error.response.data.message
-                        console.log('cannot add')
-                    });
-
-
-            },
-
-            DropCourse(id) {
-
-                if (confirm("Would you like to drop" + course.name + " ?")) {
-                    console.log(course.id)
-                    url = 'http://127.0.0.1:5000/deleteCourse/' + this.courseId + "/" + skill.id
-                    axios.delete(url)
-                        .then(response => {
-                            console.log("Successfully Dropped");
-                            this.getCourses();
-                            // auto reload remaining skills
-                            // this.deleteSuccess = skill.name + " sucessfully deleted!"
-                        })
-                        .catch(error => {
-                            alert(error)
-                            console.log('error in dropping')
-                        });
-                }
-            },
-
-            createLJ() {
-                console.log(this.chosenCourses)
-                console.log(roles_id)
                 var Learning_Journey_id;
                 axios.post("http://127.0.0.1:5000/createLJ", {
                         Roles_id: roles_id,
@@ -241,8 +182,10 @@
                                     console.log('Added LJ_course succesfully')
                                     console.log(response)
                                     console.log(response.data.data)
+                                    this.success = "Learning Journey is successfully created"
+                                    window.location.href = "./view_learning_journey.html"
 
-                                    //window.location.replace("./view-skills.html");
+
                                     return false;
                                 })
                                 .catch(error => {
@@ -252,7 +195,7 @@
 
 
 
-                            //window.location.replace("./view-skills.html");
+
 
                         }
                     })

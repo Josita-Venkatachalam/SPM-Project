@@ -674,31 +674,31 @@ def get_skills_by_Id(LearningJourneyID):
      "message": "Role not found."
     }), 404
     
-@app.route("/roles_add", methods=['POST'])
-def create_role():
-    data = request.get_json()
-    #Validate if name and description input is filled , if not display error msg
-    #check if role alr exist in the DB , if yes don't allow it to add and display error ( name)
-    if not all(key in data.keys() for
-               key in ('name',
-                       'description')):
-        return jsonify({
-            "message": "Incorrect JSON object provided."
-        }), 500
-    role = Role(**data)
+# @app.route("/roles_add", methods=['POST'])
+# def create_role():
+#     data = request.get_json()
+#     #Validate if name and description input is filled , if not display error msg
+#     #check if role alr exist in the DB , if yes don't allow it to add and display error ( name)
+#     if not all(key in data.keys() for
+#                key in ('name',
+#                        'description')):
+#         return jsonify({
+#             "message": "Incorrect JSON object provided."
+#         }), 500
+#     role = Role(**data)
     
-    print(data)
-    role_name = data["name"].lower()
-    role_description = data["description"].lower()
+#     print(data)
+#     role_name = data["name"].lower()
+#     role_description = data["description"].lower()
     
-    try:
-        db.session.add(role)
-        db.session.commit()
-        return jsonify(role.to_dict()), 201
-    except Exception:
-        return jsonify({
-            "message": "Unable to commit to database."
-        }), 500
+#     try:
+#         db.session.add(role)
+#         db.session.commit()
+#         return jsonify(role.to_dict()), 201
+#     except Exception:
+#         return jsonify({
+#             "message": "Unable to commit to database."
+#         }), 500
     
 
 if __name__ == '__main__':
