@@ -69,8 +69,11 @@
                 </form>
             </div>
         </div>
+        <div v-if="!allCourses.length">
+            No courses available for this skill!
+        </div>
 
-        <table class="table table-striped table-hover mt-5">
+        <table v-else class="table table-striped table-hover mt-5">
             <thead>
                 <tr>
                     <th scope="col">Course Name</th>
@@ -79,13 +82,7 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- <tr v-for="course in allCourses">
-                    <th scope="row">{{course.name}}</th>
-                    <td>{{course.description}}</td>
 
-                    <td v-if="course.id in chosenCourses" class="text-right"><button type="button" class="btn btn-warning" v-on:click="DropCourse(course.id)">Drop</button></td>
-                    <td v-else class="text-right"><button type="button" class="btn btn-success" v-on:click="AddCourse(course.id)">Add</button></td>
-                </tr> -->
                 <tr v-for="course in allCourses">
                     <th scope="row">{{course.name}}</th>
                     <td>{{course.description}}</td>
