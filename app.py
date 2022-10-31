@@ -644,6 +644,31 @@ def delete_LJ(LJ_ID):
         return jsonify({
             "message": "Unable to commit to database."
         }), 500
+@app.route("/delete_All_LJ_Courses/<int:LJ_ID>", methods=['DELETE'])
+def delete_All_LJ_Courses(LJ_ID):
+   
+
+    # LJ_query= Learning_Journey_Courses.query.filter()
+    # print(LJ_query)
+    delete_q = Learning_Journey_Courses.__table__.delete().where(Learning_Journey_Courses.Learning_Journey_Id == LJ_ID)
+    try:
+        db.session.execute(delete_q)
+        db.session.commit()
+        return jsonify({"Message":"deleted"}), 201
+    except Exception:
+        return jsonify({
+            "message": "Unable to commit to database."
+        }), 500
+
+
+    # try:
+    #     db.session.delete(LJ_query)
+    #     db.session.commit()
+    #     return jsonify(LJ.to_dict()), 201
+    # except Exception:
+    #     return jsonify({
+    #         "message": "Unable to commit to database."
+    #     }), 500
     
 @app.route("/create_LJ_course", methods=['POST'])
 def create_LJ_course():

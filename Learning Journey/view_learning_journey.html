@@ -43,14 +43,8 @@
             <div class="row">
                 <form class="row col-sm-8 g-3 mt-5">
 
-                    <div class="col-auto">
-                        <!-- <label for="inputPassword2" class="visually-hidden">Password</label> -->
-                        <input type="text" class="form-control" id="inputLJ" placeholder="Search a learning journey..." v-model="searchLearningJourney">
-                    </div>
-                    <!-- <div class="col-auto">
-                        <button type="submit" class="btn btn-primary mb-3" v-on:click="searchLJ()">Search</button>
-                        <button type="submit" class="btn btn-secondary mb-3 ml-2" v-on:click="clearLJ()">Clear</button>
-                    </div> -->
+                    
+                    
                 </form>
 
             </div>
@@ -184,18 +178,32 @@
             },
 
             delete_LJ(LJ_id) {
-                url = 'http://127.0.0.1:5000/deleteLJ/' + LJ_id
-                axios.delete(url)
+                url1= 'http://127.0.0.1:5000/delete_All_LJ_Courses/' + LJ_id
+                axios.delete(url1)
                     .then(response => {
-                        console.log('deleted success')
+                        console.log('deleted success for LJ_Courses DB')
                         return false;
 
 
                     })
                     .catch(error => {
-                        console.log('cant delete')
+                        console.log('cant delete from LJ_Courses DB')
                         alert(error)
                     });
+                url2= 'http://127.0.0.1:5000/deleteLJ/' + LJ_id
+                axios.delete(url2)
+                    .then(response => {
+                        console.log('deleted from LJ DB success')
+                        return false;
+
+
+                    })
+                    .catch(error => {
+                        console.log('cant delete from LJ DB')
+                        alert(error)
+                    });
+                
+                
                 location.reload();
             },
             Update_LJ(LJ_id) {
