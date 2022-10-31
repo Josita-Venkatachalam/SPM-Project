@@ -63,10 +63,10 @@
                     <!-- <label for="inputPassword2" class="visually-hidden">Password</label> -->
                     <input type="text" class="form-control" id="inputRole" placeholder="Search a skill..." v-model="skillSearch">
                     </div>
-                    <div class="col-auto">
+                    <!-- <div class="col-auto">
                         <button type="submit" class="btn btn-primary mb-3" v-on:click="searchSkill()">Search</button>
                         <button type="submit" class="btn btn-secondary mb-3 ml-2" v-on:click="clearSkill()">Clear</button>
-                    </div>
+                    </div> -->
                 </form>
                 <div class="col-sm-4 mt-5 px-0 text-right">
                     <button type="button" class="btn btn-info" v-on:click="create()">Create Skill</button>
@@ -149,27 +149,27 @@
 
 
             },
-            searchSkill() {
-                // event.preventDefault
-                console.log("search called")
-                console.log(this.skillSearch)
-                if (this.skillSearch !== '') {
-                    url = 'http://127.0.0.1:5000/skills?skill=' + this.skillSearch
+            // searchSkill() {
+            //     // event.preventDefault
+            //     console.log("search called")
+            //     console.log(this.skillSearch)
+            //     if (this.skillSearch !== '') {
+            //         url = 'http://127.0.0.1:5000/skills?skill=' + this.skillSearch
 
-                    axios.get(url)
-                        .then(response => {
-                            console.log("i got data")
-                            console.log(response.data.data)
-                            this.allSkills = response.data.data;
-                            return false;
+            //         axios.get(url)
+            //             .then(response => {
+            //                 console.log("i got data")
+            //                 console.log(response.data.data)
+            //                 this.allSkills = response.data.data;
+            //                 return false;
 
-                        })
-                        .catch(error => {
-                            alert(error)
-                        });
-                }
+            //             })
+            //             .catch(error => {
+            //                 alert(error)
+            //             });
+            //     }
 
-            },
+            // },
             deleteSkill(skill) {
 
                 if (confirm("Would you like to delete " + skill.name + " ?")) {

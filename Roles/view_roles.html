@@ -66,10 +66,10 @@
                     <!-- <label for="inputPassword2" class="visually-hidden">Password</label> -->
                     <input type="text" class="form-control" id="inputRole" placeholder="Search a role..." v-model="searchRole">
                     </div>
-                    <div class="col-auto">
+                    <!-- <div class="col-auto">
                     <button type="submit" class="btn btn-primary mb-3" v-on:click="searchRole()">Search</button>
                     <button type="submit" class="btn btn-secondary mb-3 ml-2" v-on:click="clearRole()">Clear</button>
-                    </div>
+                    </div> -->
                 </form>
                 <div class="col-sm-4 mt-5 px-0 text-right">
                     <button type="button" class="btn btn-info" v-on:click="create()">Create Role</button>
@@ -153,27 +153,27 @@
                window.location.href = "./update_roles.html?roleid=" + role.id + "&rolename=" + role.name + "&roledesc=" + role.description
                
            },
-           searchRole() {
-                // event.preventDefault
-                console.log("search called")
-                console.log(this.roleSearch)
-                if (this.roleSearch !== '') {
-                    url = 'http://127.0.0.1:5000/roles?role=' + this.roleSearch
+        //    searchRole() {
+        //         // event.preventDefault
+        //         console.log("search called")
+        //         console.log(this.roleSearch)
+        //         if (this.roleSearch !== '') {
+        //             url = 'http://127.0.0.1:5000/roles?role=' + this.roleSearch
 
-                    axios.get(url)
-                        .then(response => {
-                            console.log("i got data")
-                            console.log(response.data.data)
-                            this.allRoles = response.data.data;
-                            return false;
+        //             axios.get(url)
+        //                 .then(response => {
+        //                     console.log("i got data")
+        //                     console.log(response.data.data)
+        //                     this.allRoles = response.data.data;
+        //                     return false;
 
-                        })
-                        .catch(error => {
-                            alert(error)
-                        });
-                }
+        //                 })
+        //                 .catch(error => {
+        //                     alert(error)
+        //                 });
+        //         }
 
-            },
+        //     },
             deleteRole(role) {
 
                 if (confirm("Would you like to delete " + role.name + " ?")) {
