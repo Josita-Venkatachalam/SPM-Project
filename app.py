@@ -119,7 +119,7 @@ class LearningJourney(db.Model):
         for column in columns:
             result[column] = getattr(self, column)
         return result
-class learning_jouney_courses(db.Model):
+class Learning_Journey_Courses(db.Model):
     __tablename__ = 'learning_journey_courses'
 
     id = db.Column(db.Integer, primary_key = True)
@@ -388,13 +388,28 @@ def get_skills():
         skill_list = Role_Skill.query.filter(Role_Skill.roleID == search_role) 
     else:
         skill_list = Role_Skill.query.all()
-    skillIDs = [skill.to_dict() for skill in skill_list]
-    result = Skill.query.filter(Skill.id.in_(skillIDs))
-    jsonify(
-        {
-            "data": [skill.to_dict() for skill in result]
-        }
-    ), 200
+        skillIDs = [skill.to_dict() for skill in skill_list]
+        result = Skill.query.filter(Skill.id.in_(skillIDs))
+        jsonify(
+            {
+                "data": [skill.to_dict() for skill in result]
+            }
+        ), 200
+@app.route("/roles_skills_LJ/<int:RoleID>")
+def get_skills_for_chosenLJ(RoleID):
+    
+    skill_list = Role_Skill.query.filter(Role_Skill.roles_id == RoleID) 
+    if skill_list:
+        return jsonify(
+            {
+                "data": [skill.to_dict() for skill in skill_list]
+            }
+        ), 200
+    else:
+        return jsonify({
+            "message": "cant retrieve skills for chosen LJ"
+        }), 404
+
 @app.route("/courses/")
 def courses():
     # search_name = request.args.get('skill')
@@ -642,7 +657,7 @@ def create_LJ_course():
             "message": "Incorrect JSON object provided."
         }), 500
     
-    LJ_Course = learning_jouney_courses(**data)
+    LJ_Course = Learning_Journey_Courses(**data)
    
     
     print(LJ_Course)
@@ -662,7 +677,7 @@ def create_LJ_course():
         
 @app.route("/get_skills_LJ/<int:LearningJourneyID>")
 def get_skills_by_Id(LearningJourneyID):
-   lj = learning_jouney_courses.query.filter(learning_jouney_courses.Learning_Journey_Id == LearningJourneyID)
+   lj = Learning_Journey_Courses.query.filter(Learning_Journey_Courses.Learning_Journey_Id == LearningJourneyID)
    if lj:
     return jsonify(
         {
@@ -699,7 +714,36 @@ def get_skills_by_Id(LearningJourneyID):
 #         return jsonify({
 #             "message": "Unable to commit to database."
 #         }), 500
-    
+@app.route("/get_courses_skill_LJ/<int:LearningJourneyID>/<int:SkillID>/")
+def get_courses_skill_LJ(LearningJourneyID,SkillID):
+   records = Learning_Journey_Courses.query.filter(Learning_Journey_Courses.Learning_Journey_Id == LearningJourneyID, Learning_Journey_Courses.Skill_id == SkillID)
+   if records:
+    return jsonify(
+        {
+            "data": [record.to_dict() for record in records]
+        }
+    ), 200
+   else:
+    return jsonify({
+     "message": "chosen courses not found."
+    }), 404
+@app.route("/get_roleid_LJ/<int:LearningJourneyID>")
+def get_roleid_LJ(LearningJourneyID):
+   print(LearningJourneyID)
+   record = LearningJourney.query.filter(LearningJourney.id == LearningJourneyID).first()
+   print(record)
+   if record:
+    return jsonify(
+        {
+            "data": [record.to_dict()]
+        }
+    ), 200
+   else:
+        return jsonify({
+        "message": "Role not found."
+        }), 404
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

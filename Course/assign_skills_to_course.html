@@ -209,27 +209,27 @@
 
 
             },
-            searchSkill() {
-                // event.preventDefault
-                console.log("search called")
-                console.log(this.skillSearch)
-                if (this.skillSearch !== '') {
-                    url = 'http://127.0.0.1:5000/skills?skill=' + this.skillSearch
+            // searchSkill() {
+            //     // event.preventDefault
+            //     console.log("search called")
+            //     console.log(this.skillSearch)
+            //     if (this.skillSearch !== '') {
+            //         url = 'http://127.0.0.1:5000/skills?skill=' + this.skillSearch
 
-                    axios.get(url)
-                        .then(response => {
-                            console.log("i got data")
-                            console.log(response.data.data)
-                            this.allSkills = response.data.data;
-                            return false;
+            //         axios.get(url)
+            //             .then(response => {
+            //                 console.log("i got data")
+            //                 console.log(response.data.data)
+            //                 this.allSkills = response.data.data;
+            //                 return false;
 
-                        })
-                        .catch(error => {
-                            alert(error)
-                        });
-                }
+            //             })
+            //             .catch(error => {
+            //                 alert(error)
+            //             });
+            //     }
 
-            },
+            // },
             deassignSkill(skill) {
 
                 if (confirm("Would you like to deassign " + skill.name + " ?")) {
@@ -249,27 +249,27 @@
                     location.reload()
                 }
             },
-            searchSkill(){
-                    event.preventDefault
-                    console.log("search called")
-                    console.log(this.skillSearch)
-                    if (this.skillSearch !== '') {
-                        url = 'http://127.0.0.1:5000/skillsearch/' + this.skillSearch
+            // searchSkill(){
+            //         event.preventDefault
+            //         console.log("search called")
+            //         console.log(this.skillSearch)
+            //         if (this.skillSearch !== '') {
+            //             url = 'http://127.0.0.1:5000/skillsearch/' + this.skillSearch
                     
-                        axios.get(url)
-                            .then(response => {
-                                console.log("i got data")
-                                console.log(response.data.data)
-                                this.allSkills = response.data.data;
-                                return false;
+            //             axios.get(url)
+            //                 .then(response => {
+            //                     console.log("i got data")
+            //                     console.log(response.data.data)
+            //                     this.allSkills = response.data.data;
+            //                     return false;
                                 
-                            })
-                            .catch(error => {alert(error)
-                                console.log("error in seach skill")
-                            });
-                    }
+            //                 })
+            //                 .catch(error => {alert(error)
+            //                     console.log("error in seach skill")
+            //                 });
+            //         }
 
-            },
+            // },
 
             create() {
                 window.location.href = "./create_skills.html"

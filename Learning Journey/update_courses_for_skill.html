@@ -59,9 +59,9 @@
             <div class="row">
                 <form class="row col-sm-8 g-3 mt-5">
 
-                    <div class="col-auto">
+                    <!-- <div class="col-auto">
                         <input type="text" class="form-control" id="inputSkill" placeholder="Search a course..." v-model="searchCourse">
-                    </div>
+                    </div> -->
                     <!-- <div class="col-auto">
                         <button type="submit" class="btn btn-primary mb-3" v-on:click="searchCourse()">Search</button>
                         <button type="submit" class="btn btn-secondary mb-3 ml-2" v-on:click="clearCourse()">Clear</button>
@@ -82,14 +82,16 @@
                 <tr v-for="course in allCourses">
                     <th scope="row">{{course.name}}</th>
                     <td>{{course.description}}</td>
+                   
+                    
 
-                    <td v-if="course.id in chosenCourses" class="text-right"><button type="button" class="btn btn-warning" v-on:click="DropCourse(course.id)">Drop</button></td>
+                    <td v-if = "chosenCourses.includes(course.id)" class="text-right"><button type="button" class="btn btn-warning" v-on:click="DropCourse(course.id)">Drop</button></td>
                     <td v-else class="text-right"><button type="button" class="btn btn-success" v-on:click="AddCourse(course.id)">Add</button></td>
                 </tr>
             </tbody>
         </table>
         <br>
-        <button class="btn btn-success" v-on:click="createLJ">Create Learning Journey</button>
+        <button class="btn btn-success" v-on:click="redirect()">Back to View All Learning Journeys</button>
     </div>
 
 </body>
@@ -118,7 +120,7 @@
 
         },
         methods: {
-            get_courses_id(skillsid) {
+            getAllCourses(skillsid) {
                 console.log('get skillcourses by skillid')
                 axios.get(' http://127.0.0.1:5000/skillcourses/' + skillsid)
                     .then(response => {
@@ -126,6 +128,11 @@
                         console.log('get skillcourses successful')
                         console.log(response.data.data)
                         this.allCourses = response.data.data
+                        // all_courses_rec = response.data.data
+                        // console.log(this.allCourses)
+                        // for(record in all_courses_rec){
+                        //     this.allCourses
+                        // }
 
                         return false;
                     })
@@ -134,6 +141,38 @@
                         console.log("fail! ")
                         console.log(this.error)
                     });
+            },
+            
+
+            getChosenCourses(){
+                axios.get(' http://127.0.0.1:5000/get_courses_skill_LJ/' + lj_id + "/" + skillsid)
+                    .then(response => {
+
+                        console.log('get chosen courses successful')
+                        console.log(response.data.data)
+                        chosenCourses_rec = response.data.data
+                        chosencourseslist = []
+                        for(rec of chosenCourses_rec){
+                            console.log(rec.Course_id)
+                            chosencourseslist.push(rec.Course_id)
+                        }
+                        console.log('im printing chosen courses list')
+                        console.log(chosencourseslist)
+                        this.chosenCourses = chosencourseslist
+                        console.log(this.chosenCourses)
+
+
+
+
+                        
+                    })
+                    .catch(error => {
+                        this.error = error.response.data.message
+                        console.log("fail! ")
+                        console.log(this.error)
+                    });
+
+
             },
 
             AddCourse(id) {
@@ -227,13 +266,21 @@
                         console.log('cannot add')
                     });
 
+            },
+            redirect(){
+                window.location.href = "./view_learning_journey.html"
+
             }
 
         },
         mounted: function() {
             console.log("im inside b4 mount ")
-            console.log(skillsid)
-            this.get_courses_id(skillsid)
+            // console.log(skillsid)
+            this.getAllCourses(skillsid)
+            this.getChosenCourses()
+
+            
+
         }
 
     }).mount("#app")
