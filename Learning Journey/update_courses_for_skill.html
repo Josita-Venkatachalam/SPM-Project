@@ -176,20 +176,39 @@
             },
 
             AddCourse(id) {
-                axios.post("http://127.0.0.1:5000/addcoursetoLJ/" + this.courseId, {
-                        Learning_Journey_Id: this.lj_id,
-                        Skill_id: skill.id
+                // axios.post("http://127.0.0.1:5000/addcoursetoLJ/" + this.courseId, {
+                //         Learning_Journey_Id: this.lj_id,
+                //         Skill_id: skill.id
+                //     })
+                //     .then(response => {
+
+                //         console.log('Added succesfuly')
+                //         // this.getCourses()
+                //         location.reload()
+
+                //         return false;
+                //     })
+                //     .catch(error => {
+                //         this.error = error.response.data.message
+                //         console.log('cannot add')
+                //     });
+
+                    axios.post("http://127.0.0.1:5000/create_LJ_course" , {
+                        Course_id: id,
+                        Learning_Journey_Id: lj_id,
+                        Skill_id: skillsid
                     })
                     .then(response => {
 
                         console.log('Added succesfuly')
-                        this.getCourses()
+                        // this.getCourses()
+                        location.reload()
 
                         return false;
                     })
                     .catch(error => {
                         this.error = error.response.data.message
-                        console.log('cannot add')
+                        console.log('cannot add course to LJ')
                     });
 
 
@@ -197,14 +216,14 @@
 
             DropCourse(id) {
 
-                if (confirm("Would you like to drop" + course.name + " ?")) {
-                    console.log(course.id)
-                    url = 'http://127.0.0.1:5000/deleteCourse/' + this.courseId + "/" + skill.id
+                if (confirm("Would you like to drop this course"  + " ?")) {
+                    // console.log(course.id)
+                    url = 'http://127.0.0.1:5000/delete_LJ_course/' + lj_id + "/" + skillsid + "/"+ id
                     axios.delete(url)
                         .then(response => {
                             console.log("Successfully Dropped");
-                            this.getCourses();
-                            // auto reload remaining skills
+                            // this.getCourses();
+                            location.reload()
                             // this.deleteSuccess = skill.name + " sucessfully deleted!"
                         })
                         .catch(error => {

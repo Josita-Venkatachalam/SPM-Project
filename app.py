@@ -647,9 +647,10 @@ def delete_LJ(LJ_ID):
     
 @app.route("/create_LJ_course", methods=['POST'])
 def create_LJ_course():
+    print("Hi I am inside create lj course")
     data = request.get_json()
     #check if skill alr exist in the DB , if yes don't allow it to add and display error ( name)
-    print("Hi I am inside create lj course")
+    
     if not all(key in data.keys() for
                key in ('Course_id','Skill_id',
                        'Learning_Journey_Id')):
@@ -670,6 +671,19 @@ def create_LJ_course():
                 "data": [LJ_Course.to_dict()],
                 "message": "Hi there!"
         }), 201
+    except Exception:
+        return jsonify({
+            "message": "Unable to commit to database."
+        }), 500
+@app.route("/delete_LJ_course/<int:LJ_ID>/<int:Skill_ID>/<string:Course_ID>", methods=['DELETE'])
+def delete_LJ_course(LJ_ID, Skill_ID, Course_ID):
+   
+    LJ = Learning_Journey_Courses.query.filter_by(Learning_Journey_Id = LJ_ID, Course_id = Course_ID, Skill_id = Skill_ID ).first()
+    print(LJ)
+    try:
+        db.session.delete(LJ)
+        db.session.commit()
+        return jsonify(LJ.to_dict()), 201
     except Exception:
         return jsonify({
             "message": "Unable to commit to database."
