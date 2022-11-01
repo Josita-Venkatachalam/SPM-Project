@@ -53,9 +53,10 @@
     <br><br>
     <div id="main-container" class="container">
         <form>
-            <h2>Create Role</h2>
-
-            <br>
+            <div>
+                <h2>Create Role</h2>
+                <p style="font-style: italic;">Enter a unique role name and it's description to create a new role</p>
+            </div>
 
             <div class="mb-3">
                 <label for="rolename" class="form-label">Role Name</label>
@@ -68,7 +69,7 @@
             </div>
 
             <div>
-                <a class="btn btn-secondary" href="../home-HR.html" role="button">Cancel</a>
+                <a class="btn btn-secondary" href="view_roles.html" role="button">Cancel</a>
                 <button id="addRoleBtn" class="btn btn-primary" v-on:click="submitForm">Create</button>
             </div>
             
@@ -104,7 +105,7 @@
                 }
                 if (this.rolename == "") {
                     this.missing_datas.push("Please fill in the Role Name.")
-                } else {
+                } else if (this.rolename != "" && this.roledesc != "") {
                     axios.post('http://127.0.0.1:5000/roles_add', {
 
                             name: this.rolename,
@@ -118,7 +119,8 @@
                             return false;
                         })
                         .catch(error => {
-                            this.error = error.response.data.message
+                            // this.error = error.response.data.message
+                            this.missing_datas.push("Role name already exists. Please input a unique role name.")
                         });
                 }
             }

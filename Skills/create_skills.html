@@ -55,8 +55,10 @@
     <div id="main-container" class="container">
 
         <form>
-            <h2>Create Skill</h2>
-            <br>
+            <div>
+                <h2>Create Skill</h2>
+                <p style="font-style: italic;">Enter a unique skill name and it's description to create a new skill</p>
+            </div>
             <div class="mb-3">
                 <label for="skillname" class="form-label">Skill Name</label>
                 <input type="text" class="form-control" name="skillname" id="skillname" v-model="skillname" placeholder="Enter skill name here">
@@ -68,7 +70,7 @@
             </div>
 
             <div>
-                <a class="btn btn-secondary" href="../home-HR.html" role="button">Cancel</a>
+                <a class="btn btn-secondary" href="view_skills.html" role="button">Cancel</a>
                 <button id="addSkillBtn" class="btn btn-primary" v-on:click="submitForm">Create</button>
             </div>
 
@@ -121,7 +123,8 @@
                             return false;
                         })
                         .catch(error => {
-                            this.error = error.response.data.message
+                            // this.error = error.response.data.message
+                            this.missing_datas.push("Skill name already exists. Please input a unique skill name.")
                         });
                 }
             }

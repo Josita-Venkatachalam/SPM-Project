@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width">
 
-    <title>View All Course for Skill</title>
+    <title>View All Courses for Skill</title>
 
     <link rel="stylesheet" href="">
     <!--[if lt IE 9]>
@@ -34,13 +34,13 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="../home-HR.html">
+            <a class="navbar-brand" href="../home-STAFF.html">
                 <img src="../Resources/Images/logo.png" alt="logo" width="120" height="55" class="d-inline-block align-text-middle">
             </a>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" style="font-size: 20px !important;" aria-current="page" href="../home-HR.html">Home</a>
+                        <a class="nav-link active" style="font-size: 20px !important;" aria-current="page" href="../home-STAFF.html">Home</a>
                     </li>
                 </ul>
             </div>
@@ -55,22 +55,11 @@
         <div class="table-title">
             <div class="">
                 <h2>Update Courses for <span id="skill_name_span" style="font-weight: bold;"></span></h2>
-            </div>
-            <div class="row">
-                <form class="row col-sm-8 g-3 mt-5">
-
-                    <!-- <div class="col-auto">
-                        <input type="text" class="form-control" id="inputSkill" placeholder="Search a course..." v-model="searchCourse">
-                    </div> -->
-                    <!-- <div class="col-auto">
-                        <button type="submit" class="btn btn-primary mb-3" v-on:click="searchCourse()">Search</button>
-                        <button type="submit" class="btn btn-secondary mb-3 ml-2" v-on:click="clearCourse()">Clear</button>
-                    </div> -->
-                </form>
+                <p style="font-style: italic;">Edit your courses here by selecting the Add/Remove button</p>
             </div>
         </div>
 
-        <table class="table table-striped table-hover mt-5">
+        <table class="table table-striped table-hover mt-3">
             <thead>
                 <tr>
                     <th scope="col">Course Name</th>
@@ -83,15 +72,16 @@
                     <th scope="row">{{course.name}}</th>
                     <td>{{course.description}}</td>
                    
-                    
 
-                    <td v-if = "chosenCourses.includes(course.id)" class="text-right"><button type="button" class="btn btn-warning" v-on:click="DropCourse(course.id)">Drop</button></td>
+                    <td v-if = "chosenCourses.includes(course.id)" class="text-right"><button type="button" class="btn btn-warning" v-on:click="DropCourse(course.id)">Remove</button></td>
                     <td v-else class="text-right"><button type="button" class="btn btn-success" v-on:click="AddCourse(course.id)">Add</button></td>
                 </tr>
             </tbody>
         </table>
-        <br>
-        <button class="btn btn-success" v-on:click="redirect()">Back to View All Learning Journeys</button>
+        <div class="text-center mt-5">
+            <button class="btn btn-success" v-on:click="redirect()">Back to View All Learning Journeys</button>
+        </div>
+
     </div>
 
 </body>
