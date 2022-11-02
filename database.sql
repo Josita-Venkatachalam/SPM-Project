@@ -116,9 +116,10 @@ CREATE TABLE `courses` (
   --  FOREIGN KEY (id) REFERENCES Courses(skillId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-
-
+INSERT INTO `courses` (`id`, `name` , `description`, `status`, `type`,   `category`) VALUES
+('COR001','Systems Thinking and Design','This foundation module aims to introduce students to the fundamental concepts and underlying principles of systems thinking','Active','Internal','Core'),
+('COR002','Lean Six Sigma Green Belt Certification','Apply Lean Six Sigma methodology and statistical tools such as Minitab to be used in process analytics','Active','Internal','Core')
+;
 -- ROLE-SKILLS
 
 DROP TABLE IF EXISTS `roles_skills`;
@@ -149,7 +150,7 @@ INSERT INTO `roles_skills` (`Roles_id`,`Skills_id`) VALUES (2, 2);
 DROP TABLE IF EXISTS `LearningJourney`;
 
 CREATE TABLE IF NOT EXISTS `LearningJourney` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `Completion_Status` VARCHAR(45) NULL,
   `Roles_id` INT,
   `Staff_ID` INT,
@@ -197,4 +198,32 @@ CREATE TABLE IF NOT EXISTS `courses_skills` (
 ENGINE = InnoDB;
 
 INSERT INTO `courses_skills` (`Course_id`,`Skill_id`) VALUES ("COR001", 1);
-INSERT INTO `courses_skills` (`Course_id`,`Skill_id`) VALUES ("COR001", 3);
+INSERT INTO `courses_skills` (`Course_id`,`Skill_id`) VALUES ("COR002", 2);
+
+-- LEARNING JOURNEY - COURSE
+
+DROP TABLE IF EXISTS `learning_journey_courses`;
+
+CREATE TABLE IF NOT EXISTS `learning_journey_courses` (
+  `Course_id` varchar(50) ,
+  `Skill_id` INT,
+  `Learning_Journey_Id` INT,
+  `ID` INT NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`ID`),
+  INDEX `fk_LJ_has_Courses_Courses1_idx` (`Learning_Journey_Id` ASC),
+  INDEX `fk_Courses_is_in_LJ1_idx` (`Course_id` ASC),
+  CONSTRAINT `fk_LJ_has_Courses_Courses1`
+    FOREIGN KEY (`Learning_Journey_Id`)
+    REFERENCES `spmproj`.`LearningJourney` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE SET NULL,
+  CONSTRAINT `fk_Courses_is_in_LJ1`
+    FOREIGN KEY (`Course_id`)
+    REFERENCES `spmproj`.`courses` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE SET NULL)
+ENGINE = InnoDB;
+
+
+INSERT INTO `learning_journey_courses` (`Course_id`,`Skill_id`,`Learning_Journey_Id`) VALUES ("COR001", 1,1);
+INSERT INTO `learning_journey_courses` (`Course_id`,`Skill_id`,`Learning_Journey_Id`) VALUES ("COR001", 3,1);
