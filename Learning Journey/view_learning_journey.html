@@ -69,8 +69,6 @@
             </tbody>
         </table>
 
-
-        
     </div>
 
 
@@ -78,6 +76,10 @@
 </body>
 
 <script>
+    var url_string = window.location;
+    var url = new URL(url_string);
+    var staff_id = url.searchParams.get("staffId")
+    console.log(staff_id)
     Vue.createApp({
 
         data() {
@@ -173,7 +175,7 @@
             },
 
             delete_LJ(LJ_id) {
-                url1= 'http://127.0.0.1:5000/delete_All_LJ_Courses/' + LJ_id
+                url1 = 'http://127.0.0.1:5000/delete_All_LJ_Courses/' + LJ_id
                 axios.delete(url1)
                     .then(response => {
                         console.log('deleted success for LJ_Courses DB')
@@ -185,7 +187,7 @@
                         console.log('cant delete from LJ_Courses DB')
                         alert(error)
                     });
-                url2= 'http://127.0.0.1:5000/deleteLJ/' + LJ_id
+                url2 = 'http://127.0.0.1:5000/deleteLJ/' + LJ_id
                 axios.delete(url2)
                     .then(response => {
                         console.log('deleted from LJ DB success')
@@ -197,8 +199,8 @@
                         console.log('cant delete from LJ DB')
                         alert(error)
                     });
-                
-                
+
+
                 location.reload();
             },
             Update_LJ(LJ_id) {
@@ -216,7 +218,5 @@
 
     }).mount("#app")
 </script>
-
-</html>
 
 </html>

@@ -138,6 +138,27 @@ class Learning_Journey_Courses(db.Model):
         for column in columns:
             result[column] = getattr(self, column)
         return result
+    
+class registration(db.Model):
+     __tablename__ = 'registration'
+     
+     id =db.Column(db.Integer, primary_key = True)
+     course_id = db.Column(db.String(50))
+     staff_id = db.Column(db.Integer)
+     reg_status = db.Column(db.String(10))
+     compeletion_status = db.Column(db.String(9))
+     
+     def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
+     
 
 
 db.create_all()
