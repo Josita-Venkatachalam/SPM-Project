@@ -23,11 +23,12 @@ class TestApp(flask_testing.TestCase):
 
 class TestCreateLearningJourney(TestApp):
     def test_create_learning_Journey(self):
-        lj1 = LearningJourney(Completion_Status="In progress" ,Roles_id=3 ,Staff_ID=13001)
+        lj1 = LearningJourney(Completion_Status="In progress" ,Roles_id=2 ,Staff_ID=130001)
         db.session.add(lj1)
         db.session.commit()
 
         request_body = {
+            'id': lj1.id,
             'Completion_Status': lj1.Completion_Status,
             'Roles_id': lj1.Roles_id,
             'Staff_ID': lj1.Staff_ID
@@ -37,9 +38,10 @@ class TestCreateLearningJourney(TestApp):
                                     data=json.dumps(request_body),
                                     content_type='application/json')
         self.assertEqual(response.json, {
+            'id': 8,
             'Completion_Status': "In Progress",
-            'Roles_id':1,
-            'Staff_ID': 13001
+            'Roles_id':2,
+            'Staff_ID': 130001
         })
 
     # def test_create_consultation_invalid_doctor(self):
