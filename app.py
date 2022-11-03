@@ -104,7 +104,7 @@ class LearningJourney(db.Model):
     __tablename__ = 'LearningJourney'
 
     id = db.Column(db.Integer, primary_key = True)
-    Completion_Status = db.Column(db.String(45))
+    Completion_Status = db.Column(db.String(100))
     Roles_id = db.Column(db.Integer)
     Staff_ID = db.Column(db.Integer)
     
@@ -642,11 +642,11 @@ def create_LJ():
     try:
         db.session.add(LJ)
         db.session.commit()
-        print(LJ.to_dict())
+        #print(LJ.to_dict())
         return jsonify(
             {
-                "data": [LJ.to_dict()],
-                "message": "Hi there!"
+                "data": LJ.to_dict(),
+                "message": "Learning Journey Created!"
         }), 201
     except Exception:
         return jsonify({

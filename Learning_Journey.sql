@@ -21,7 +21,7 @@ DROP TABLE IF EXISTS `LearningJourney`;
 
 CREATE TABLE IF NOT EXISTS `LearningJourney` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `Completion_Status` VARCHAR(45) NULL,
+  `Completion_Status` VARCHAR(100) NULL,
   `Roles_id` INT,
   `Staff_ID` INT,
   PRIMARY KEY (`id`),
@@ -43,7 +43,6 @@ INSERT INTO `LearningJourney` ( `Completion_Status`,`Roles_id`,`Staff_ID`) VALUE
 ('In progress', 1, 130001),
 ('In progress', 2, 140001),
 ('In progress', 3, 130002),
-('In progress', 2, 130001),
 ('In progress', 3, 130001);
 
 

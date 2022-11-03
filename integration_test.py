@@ -28,20 +28,25 @@ class TestCreateLearningJourney(TestApp):
         db.session.commit()
 
         request_body = {
-            'id': lj1.id,
             'Completion_Status': lj1.Completion_Status,
             'Roles_id': lj1.Roles_id,
             'Staff_ID': lj1.Staff_ID
         }
 
-        response = self.client.post("/create_LJ_course",
+        response = self.client.post("/createLJ",
                                     data=json.dumps(request_body),
                                     content_type='application/json')
+        print(response.json)
         self.assertEqual(response.json, {
-            'id': 8,
-            'Completion_Status': "In Progress",
-            'Roles_id':2,
-            'Staff_ID': 130001
+            
+            "data": {
+                "Completion_Status": "In Progress",
+                "Roles_id": 2,
+                "Staff_ID": 130001,
+                "id": 2
+            },
+            "message": "Learning Journey Created!"
+            
         })
 
     # def test_create_consultation_invalid_doctor(self):
