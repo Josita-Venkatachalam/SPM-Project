@@ -51,12 +51,14 @@ class TestCreateLearningJourney(TestApp):
 
 class TestCreateRole(TestApp):
     def test_create_role(self):
-        role1 = Role(name="Project Manager" ,description="A Project Manager manages a team of people.")
+        role1 = Role(id = 1, name='Project Manager' ,description='A Project Manager manages a team of people.')
         db.session.add(role1)
         db.session.commit()
 
         request_body = {
             'id': role1.id,
+            'name': role1.name,
+            'description': role1.description
         }
 
         response = self.client.post("/createRole",
@@ -66,10 +68,47 @@ class TestCreateRole(TestApp):
         self.assertEqual(response.json, {
             
             "data": {
-                "id": 1,
+                'id': 1,
+                'name': 'Project Manager',
+                'desciption': 'A Project Manager manages a team of people.'
+
             },
             "message": "Role Created!"
             
+        })
+    def test_reject_create_role(self):
+        role1 = Role(name='Project Manager' ,description='A Project Manager manages a team of people.')
+        db.session.add(role1)
+        db.session.commit()
+
+        request_body = {
+            'id': role1.id,
+            'name': role1.name,
+            'description': role1.description
+        }
+        response = self.client.post("/createRole",
+                                    data= json.dumps(request_body),
+                                    content_type='application/json')
+        
+        self.assertEqual(response.json, {
+            "code": 400,
+            "message": "Role already exists"
+        })
+
+    def test_reject_create_empty_role(self):
+
+        request_body = {
+            'id': 1,
+            'name': '',
+            'description': ''
+        }
+        response = self.client.post("/createRole",
+                                    data= json.dumps(request_body),
+                                    content_type='application/json')
+        
+        self.assertEqual(response.json, {
+            "code": 400,
+            "message": "There are empty fields, please enter the Role Name and Role Description."
         })
     # def test_create_consultation_invalid_doctor(self):
     #     p1 = Patient(name='Hyacinth Bucket', title='Mrs',
