@@ -51,12 +51,11 @@ class TestCreateLearningJourney(TestApp):
 
 class TestCreateRole(TestApp):
     def test_create_role(self):
-        role1 = Role(id = 1, name='Project Manager' ,description='A Project Manager manages a team of people.')
+        role1 = Role(name='Project Manager' ,description='A Project Manager manages a team of people.')
         db.session.add(role1)
         db.session.commit()
 
         request_body = {
-            'id': role1.id,
             'name': role1.name,
             'description': role1.description
         }

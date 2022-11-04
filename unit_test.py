@@ -10,7 +10,9 @@ class TestSkill(unittest.TestCase):
         self.assertEqual(s1.to_dict(), {
             'id': None,
             'name': 'Problem Solving',
-            'description': 'Solve the problems well!'}
+            'description': 'Solve the problems well!',
+            'isDeleted' : None
+            }
         )
 
 class TestCourse(unittest.TestCase):
@@ -21,7 +23,8 @@ class TestCourse(unittest.TestCase):
             'name': 'Problem Solving',
             'description': 'Solve the problems well by learning this coruse!',
             'status': 'Active',
-            'type': 'Internal'
+            'type': 'Internal',
+            'category': 'Core'
             }
         )
         
@@ -31,7 +34,9 @@ class TestRole(unittest.TestCase):
         self.assertEqual(r1.to_dict(), {
             'id': None,
             'name': 'Data Sicentist',
-            'description': 'A data scientist turns raw data into valuable insights that an organisation needs in order to grow and compete. They interpret and analyse data from multiple sources to come up with imaginative solutions to problems'}
+            'description': 'A data scientist turns raw data into valuable insights that an organisation needs in order to grow and compete. They interpret and analyse data from multiple sources to come up with imaginative solutions to problems',
+            'isDeleted' : None
+            }
         )
 
 class TestLearningJourney(unittest.TestCase):
