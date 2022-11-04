@@ -257,7 +257,7 @@ with app.app_context():
         #     }), 200
             
         # else:
-        skills_list = Skill.query.all()
+        skills_list = Skill.query.filter_by(isDeleted=0).all()
         return jsonify(
             {
                 "data": [skill.to_dict() for skill in skills_list]
@@ -310,7 +310,7 @@ with app.app_context():
     
         role = Role.query.filter_by(id=role_id).first()
         try:
-            role.isDelete = 1
+            role.isDeleted = 1
             db.session.commit()
             return jsonify(role.to_dict()), 201
         except Exception:
@@ -349,7 +349,7 @@ with app.app_context():
         if search_name:
             roles_list = Role.query.filter(Role.name.contains(search_name))
         else:
-            roles_list = Role.query.all()
+            roles_list = Role.query.filter_by(isDeleted=0).all()
         return jsonify(
             {
                 "data": [role.to_dict() for role in roles_list]
