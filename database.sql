@@ -118,7 +118,8 @@ CREATE TABLE `courses` (
 
 INSERT INTO `courses` (`id`, `name` , `description`, `status`, `type`,   `category`) VALUES
 ('COR001','Systems Thinking and Design','This foundation module aims to introduce students to the fundamental concepts and underlying principles of systems thinking','Active','Internal','Core'),
-('COR002','Lean Six Sigma Green Belt Certification','Apply Lean Six Sigma methodology and statistical tools such as Minitab to be used in process analytics','Active','Internal','Core')
+('COR002','Lean Six Sigma Green Belt Certification','Apply Lean Six Sigma methodology and statistical tools such as Minitab to be used in process analytics','Active','Internal','Core'),
+('SAL001','Risk Management for Smart Business','Apply risk management concepts to digital business','Retired','Internal','Sales')
 ;
 -- ROLE-SKILLS
 
