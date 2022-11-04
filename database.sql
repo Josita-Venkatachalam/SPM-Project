@@ -38,7 +38,8 @@ DROP TABLE IF EXISTS `skill`;
 CREATE TABLE `skill` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` varchar(50) DEFAULT NULL UNIQUE,
-  `description`  varchar(100)  DEFAULT NULL
+  `description`  varchar(100)  DEFAULT NULL,
+  `isDeleted` INT NOT NULL DEFAULT 0
   --  FOREIGN KEY (id) REFERENCES Roles(skillId)
   --  FOREIGN KEY (id) REFERENCES Courses(skillId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -22,6 +22,7 @@ class Skill(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
     description = db.Column(db.String(100))
+    isDeleted = db.Column(db.Integer)
 
     def to_dict(self):
         """
@@ -209,7 +210,7 @@ with app.app_context():
     
         skill = Skill.query.filter_by(id=skill_id).first()
         try:
-            db.session.delete(skill)
+            skill.isDeleted = 1
             db.session.commit()
             return jsonify(skill.to_dict()), 201
         except Exception:
