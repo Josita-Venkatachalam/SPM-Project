@@ -49,6 +49,28 @@ class TestCreateLearningJourney(TestApp):
             
         })
 
+class TestCreateRole(TestApp):
+    def test_create_role(self):
+        role1 = Role(name="Project Manager" ,description="A Project Manager manages a team of people.")
+        db.session.add(role1)
+        db.session.commit()
+
+        request_body = {
+            'id': role1.id,
+        }
+
+        response = self.client.post("/createRole",
+                                    data=json.dumps(request_body),
+                                    content_type='application/json')
+        print(response.json)
+        self.assertEqual(response.json, {
+            
+            "data": {
+                "id": 1,
+            },
+            "message": "Role Created!"
+            
+        })
     # def test_create_consultation_invalid_doctor(self):
     #     p1 = Patient(name='Hyacinth Bucket', title='Mrs',
     #                  contact_num='+65 8888 8888', ewallet_balance=15)
