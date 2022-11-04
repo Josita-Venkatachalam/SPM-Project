@@ -101,6 +101,16 @@ class Course_Skill(db.Model):
     Course_id = db.Column(db.String(50))
     Skill_id = db.Column(db.Integer)
     ID = db.Column(db.Integer, primary_key = True)
+    def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
 
 class LearningJourney(db.Model):
     __tablename__ = 'LearningJourney'
