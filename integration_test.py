@@ -109,6 +109,9 @@ class TestCreateRole(TestApp):
             "code": 400,
             "message": "There are empty fields, please enter the Role Name and Role Description."
         })
+
+
+        
     # def test_create_consultation_invalid_doctor(self):
     #     p1 = Patient(name='Hyacinth Bucket', title='Mrs',
     #                  contact_num='+65 8888 8888', ewallet_balance=15)
