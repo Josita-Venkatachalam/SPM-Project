@@ -151,14 +151,14 @@ class Learning_Journey_Courses(db.Model):
             result[column] = getattr(self, column)
         return result
     
-class registration(db.Model):
+class Registration(db.Model):
      __tablename__ = 'registration'
      
-     id =db.Column(db.Integer, primary_key = True)
-     course_id = db.Column(db.String(50))
-     staff_id = db.Column(db.Integer)
-     reg_status = db.Column(db.String(10))
-     compeletion_status = db.Column(db.String(9))
+     Reg_ID =db.Column(db.Integer, primary_key = True)
+     Course_ID = db.Column(db.String(6))
+     Staff_ID = db.Column(db.Integer)
+     Reg_Status = db.Column(db.String(10))
+     Completion_Status = db.Column(db.String(9))
      
      def to_dict(self):
         """
@@ -814,6 +814,23 @@ with app.app_context():
                 return jsonify({
                 "message": "Role not found."
                 }), 404
+
+    @app.route("/get_completed_courses/<string:staffID>")
+    def get_completed_courses(staffID):
+        print(staffID)
+        records = Registration.query.filter(Registration.Staff_ID == staffID, Registration.Completion_Status == "Completed")
+        print(records)
+        if records:
+            return jsonify(
+                {
+                     "data": [record.to_dict() for record in records]
+                }
+            ), 200
+        else:
+                return jsonify({
+                "message": "CANT retrieve completed courses from registration table."
+                }), 404
+    
 
 
 

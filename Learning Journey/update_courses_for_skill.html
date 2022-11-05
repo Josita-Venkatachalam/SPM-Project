@@ -71,9 +71,11 @@
                 <tr v-for="course in allCourses">
                     <th scope="row">{{course.name}}</th>
                     <td>{{course.description}}</td>
+                    <td v-if ="alrCompletedCourses.includes(course.id)"><bold>Completed</bold></td>
                    
 
-                    <td v-if = "chosenCourses.includes(course.id)" class="text-right"><button type="button" class="btn btn-warning" v-on:click="DropCourse(course.id)">Remove</button></td>
+                    <td v-else-if = "chosenCourses.includes(course.id)" class="text-right"><button type="button" class="btn btn-warning" v-on:click="DropCourse(course.id)">Remove</button></td>
+
                     <td v-else class="text-right"><button type="button" class="btn btn-success" v-on:click="AddCourse(course.id)">Add</button></td>
                 </tr>
             </tbody>
@@ -91,6 +93,7 @@
     var skillsid = url.searchParams.get("skillid");
     var skill_name = url.searchParams.get("skillname");
     var lj_id = url.searchParams.get("LJId");
+    var staff_id = "130001"
     console.log(skillsid)
     console.log(skill_name)
     console.log(lj_id)
@@ -104,7 +107,8 @@
                 error: '',
                 skills_id: skillsid,
                 allCourses: [],
-                chosenCourses: []
+                chosenCourses: [],
+                alrCompletedCourses: []
 
             }
 
@@ -161,6 +165,34 @@
                         console.log("fail! ")
                         console.log(this.error)
                     });
+
+
+            },
+            getAlreadyCompletedCourses(){
+                console.log('getting already completed courses')
+                axios.get(' http://127.0.0.1:5000/get_completed_courses/' + staff_id)
+                    .then(response => {
+
+                        console.log('get already completed courses successful')
+                        console.log(response.data.data)
+                        alrCompletedCourses_records = response.data.data
+                        completedcourseslist = []
+                        for(rec of alrCompletedCourses_records){
+                            console.log(rec.Course_ID)
+                            completedcourseslist.push(rec.Course_ID)
+                        }
+                        console.log('im printing completed courses list')
+                        console.log(completedcourseslist)
+                        this.alrCompletedCourses = completedcourseslist
+                        console.log(this.alrCompletedCourses)
+                        
+                    })
+                    .catch(error => {
+                        this.error = error.response.data.message
+                        console.log("fail! to get already completed courses")
+                        console.log(this.error)
+                    });
+
 
 
             },
@@ -286,7 +318,9 @@
             console.log("im inside b4 mount ")
             // console.log(skillsid)
             this.getAllCourses(skillsid)
+            this.getAlreadyCompletedCourses()
             this.getChosenCourses()
+            
 
             
 

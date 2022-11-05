@@ -76,7 +76,7 @@
                     <td>{{skill.description}}</td>
                     
                    
-                    <td  v-if = "skill.id in alreadyAssignedSkills"  class="text-right"><button type="button" class="btn btn-warning" v-on:click="deassignSkill(skill)">De-Assign</button></td>
+                    <td  v-if = "alreadyAssignedSkills.includes(skill.id)"  class="text-right"><button type="button" class="btn btn-warning" v-on:click="deassignSkill(skill)">De-Assign</button></td>
                     <td  v-else class="text-right"><button type="button" class="btn btn-success" v-on:click="assignSkill(skill)">Assign</button></td>
 
 
@@ -128,9 +128,11 @@
             },
             getStatus(){
                 console.log(this.courseId)
+                console.log('inside getting status')
                 url = "http://127.0.0.1:5000/skillsofcourse/" + this.courseId
                 axios.get(url)
                 .then(response => {
+                        
                         console.log(response.data.data)
                         records = response.data.data
                         already_assigned_skills = []
@@ -178,10 +180,10 @@
                             .then(response => {
                                 
                                 console.log('assigned succesfuly')
-                                this.getSkills()
+                                
 
                                 //window.location.replace("./view-skills.html");
-                                return false;
+                                
                             })
                             .catch(error => {
                                 this.error = error.response.data.message
@@ -193,27 +195,7 @@
 
 
             },
-            // searchSkill() {
-            //     // event.preventDefault
-            //     console.log("search called")
-            //     console.log(this.skillSearch)
-            //     if (this.skillSearch !== '') {
-            //         url = 'http://127.0.0.1:5000/skills?skill=' + this.skillSearch
-
-            //         axios.get(url)
-            //             .then(response => {
-            //                 console.log("i got data")
-            //                 console.log(response.data.data)
-            //                 this.allSkills = response.data.data;
-            //                 return false;
-
-            //             })
-            //             .catch(error => {
-            //                 alert(error)
-            //             });
-            //     }
-
-            // },
+           
             deassignSkill(skill) {
 
                 if (confirm("Would you like to deassign " + skill.name + " ?")) {
@@ -222,7 +204,7 @@
                     axios.delete(url)
                         .then(response => {
                             console.log("Successfully Deleted");
-                            this.getSkills();
+                           
                             // auto reload remaining skills
                             // this.deleteSuccess = skill.name + " sucessfully deleted!"
                         })
