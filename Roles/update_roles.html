@@ -46,7 +46,12 @@
         </div>
     </nav>
     <div id="app" class="container mt-5">
-            <div class=""><h2>Update Role</h2></div>
+            <div v-if="editSuccess !=''" class="alert alert-success" role="alert">
+                {{editSuccess}}
+            </div>
+            <div class=""><h2>Update Role</h2>
+                <p style="font-style: italic;">Enter a unique role name and it's description to update a new role</p>
+            </div>
             <div class="mb-3 mt-5">
                 <label for="exampleFormControlInput1" class="form-label">Update Role Name</label>
                 <input type="text" placeholder="{{role_name}}" class="form-control" id="exampleFormControlInput1" v-model="updated_name">
@@ -59,6 +64,15 @@
                 <button type="button" class="btn btn-secondary" v-on:click="cancel()">Cancel</button>&nbsp;
                 <button type="button" class="btn btn-primary" v-on:click="updaterole()">Update</button> 
             </div>
+
+            <br>
+            <div v-for="issue in missing_datas" class="alert alert-danger" role="alert">
+                {{issue}}
+            </div>
+            <div v-if="success != ''" class="alert alert-success" role="alert">
+                {{ success }}
+            </div>
+            <p><label id="error" class="text-danger">{{ error }}</label></p>  
         
     </div>
 
@@ -80,7 +94,9 @@
                error: '',
               
                updated_name: role_name,
-               updated_desc: role_desc
+               updated_desc: role_desc,
+               editSuccess: "",
+               missing_datas: []
                // roleId: 0,
                // rolename: '',
                // roledesc: '',
@@ -95,25 +111,36 @@
             console.log(this.updated_desc)
             console.log(this.updated_name)
             console.log(typeof role_id)
-            url = "http://127.0.0.1:5000/roles_update/" + role_id + "/" + this.updated_name + '/' + this.updated_desc
-            axios.put(url)
-                    .then(response => {
-                        this.success = "Successfully Retrieved"
-                        console.log("succesfully edited")
-                        window.location.href = "./view_roles.html"
-                        // allRoles = response.data
-                        // this.allRoles= response.data.data
+            if (this.updated_desc == "") {
+                    this.missing_datas.push("Please fill in the Role description.")
+            } 
+            if (this.updated_name == "") {
+                    this.missing_datas.push("Please fill in the Role name.")
+            } 
+            else if (this.rolename != "" && this.roledesc != "") {
 
-                        
-                        return false;
-                    })
-                    .catch(error => {
-                        console.log('update error')
-                        this.error = error.response.data.message
-                       
-                    });
+                url = "http://127.0.0.1:5000/roles_update/" + role_id + "/" + this.updated_name + '/' + this.updated_desc
+                axios.put(url)
+                        .then(response => {
+                            console.log(response)
+                            this.success = "Role sucessfully updated!"
+                            console.log("succesfully edited")
+                            window.location.href = "./view_roles.html"
+                            // allRoles = response.data
+                            // this.allRoles= response.data.data
+                            
 
+                            
+                            return false;
+                        })
+                        .catch(error => {
+                            console.log('update error')
+                            this.error = error.response.data.message
+                            this.issue = "Update not successful. Role's details have not been changed."
 
+                        });
+
+            }
 
         },
         cancel(){
