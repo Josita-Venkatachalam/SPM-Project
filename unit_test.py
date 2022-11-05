@@ -1,6 +1,6 @@
 import unittest
 
-from app import app, db, Skill,Course,Role,Role_Skill,Course_Skill,LearningJourney,Learning_Journey_Courses,registration
+from app import app, db, Skill,Course,Role,Role_Skill,Course_Skill,LearningJourney,Learning_Journey_Courses,Registration
 #Unit tests doesn't consider database 
 #but for this applcation , it involves validating doctor , adding records to db etc , hence we need integration tests too
 
@@ -20,6 +20,7 @@ class TestCourse(unittest.TestCase):
         c1 = Course(name='Problem Solving',description='Solve the problems well by learning this coruse!', status='Active',type='Internal' ,category='Core')
         self.assertEqual(c1.to_dict(), {
             'id': None,
+            'category': 'Core',
             'name': 'Problem Solving',
             'description': 'Solve the problems well by learning this coruse!',
             'status': 'Active',
@@ -75,6 +76,17 @@ class TestLearning_Journey_Courses(unittest.TestCase):
             'Course_id': 'COR002',
             'Skill_id': 2,
             'Learning_Journey_Id': 1}
+        )
+class TestRegistration(unittest.TestCase):
+    
+    def test_to_dict(self):
+        r1 = Registration(Reg_ID= 1, Course_ID = 'COR002',Staff_ID = 130001 , Reg_Status = "Registered",Completion_Status= "Completed")
+        self.assertEqual(r1.to_dict(), {
+            'Reg_ID': 1,
+            'Course_ID': 'COR002',
+            'Staff_ID': 130001,
+            'Reg_Status': "Registered",
+            'Completion_Status': "Completed"}
         )
 
 # class TestDoctor(unittest.TestCase):
