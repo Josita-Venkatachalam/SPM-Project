@@ -74,7 +74,7 @@
                     <td>{{course.status}}</td>
                     <td>{{course.type}}</td>
                     <td>{{course.category}}</td>
-                    <td class="text-right"><button type="button" class="btn btn-success" v-on:click="assignSkill(course)">Assign Skills</button></td>
+                    <td class="text-right"><button type="button" class="btn btn-success" :disabled="isNotactive(course)" v-on:click="assignSkill(course)">Assign Skills</button></td>
 
 
                 </tr>
@@ -126,7 +126,20 @@
                 console.log(course.id)
                 url = "./assign_skills_to_course.html" + "?name=" + course.name + "&id=" + course.id
                 window.location.href = url
-            }
+            },
+            isNotactive(course){
+                console.log('get course status called')
+                console.log(course.name)
+                console.log(course.id)
+                console.log(course.status)
+                course_status = course.status
+                if (course_status != "Active"){
+                    return true
+                }
+                return false;
+            },
+                
+        
             
             // searchSkill() {
             //     // event.preventDefault
