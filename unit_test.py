@@ -41,30 +41,30 @@ class TestRole(unittest.TestCase):
 
 class TestLearningJourney(unittest.TestCase):
     def test_to_dict(self):
-        lj1 = LearningJourney(Completion_Status='In Progress',Role_id=2,Staff_ID=13002 )
+        lj1 = LearningJourney(Completion_Status='In Progress',Roles_id=2,Staff_ID=13002 )
         self.assertEqual(lj1.to_dict(), {
             'id': None,
             'Completion_Status': 'In Progress',
-            'Role_id': 2,
+            'Roles_id': 2,
             'Staff_ID': 13002}
         )
 
 class TestRole_Skill(unittest.TestCase):
     def test_to_dict(self):
-        rs1 =Role_Skill(Roles_id=2,Skills_id=2 )
+        rs1 =Role_Skill(roles_id=2,skills_id=2 )
         self.assertEqual(rs1.to_dict(), {
-            'id': None,
-            'Roles_id': 2,
-            'Skills_id': 13002}
+            'roles_id': 2,
+            'skills_id': 2,
+            'id': None}
         )
 
 class TestCourse_Skill(unittest.TestCase):
     def test_to_dict(self):
         rs1 =Course_Skill(Course_id='COR001',Skill_id=2 )
         self.assertEqual(rs1.to_dict(), {
-            'id': None,
             'Course_id': 'COR001',
-            'Skill_id': 2}
+            'Skill_id': 2,
+            'ID': None,}
         )
         
 class TestLearning_Journey_Courses(unittest.TestCase):
