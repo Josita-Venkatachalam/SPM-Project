@@ -175,33 +175,35 @@
             },
 
             delete_LJ(LJ_id) {
-                url1 = 'http://127.0.0.1:5000/delete_All_LJ_Courses/' + LJ_id
-                axios.delete(url1)
-                    .then(response => {
-                        console.log('deleted success for LJ_Courses DB')
-                        return false;
+                if (confirm("Are you sure you want to delete this Learning Journey?" )) {
+                    url1 = 'http://127.0.0.1:5000/delete_All_LJ_Courses/' + LJ_id
+                    axios.delete(url1)
+                        .then(response => {
+                            console.log('deleted success for LJ_Courses DB')
+                            return false;
 
 
-                    })
-                    .catch(error => {
-                        console.log('cant delete from LJ_Courses DB')
-                        alert(error)
-                    });
-                url2 = 'http://127.0.0.1:5000/deleteLJ/' + LJ_id
-                axios.delete(url2)
-                    .then(response => {
-                        console.log('deleted from LJ DB success')
-                        return false;
+                        })
+                        .catch(error => {
+                            console.log('cant delete from LJ_Courses DB')
+                            alert(error)
+                        });
+                    url2 = 'http://127.0.0.1:5000/deleteLJ/' + LJ_id
+                    axios.delete(url2)
+                        .then(response => {
+                            console.log('deleted from LJ DB success')
+                            return false;
 
 
-                    })
-                    .catch(error => {
-                        console.log('cant delete from LJ DB')
-                        alert(error)
-                    });
+                        })
+                        .catch(error => {
+                            console.log('cant delete from LJ DB')
+                            alert(error)
+                        });
 
 
-                location.reload();
+                    location.reload();
+                }
             },
             Update_LJ(LJ_id) {
                 window.location.href = "./update_skills_courses_LJ.html?LJid=" + LJ_id

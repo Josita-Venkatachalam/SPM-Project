@@ -176,6 +176,7 @@ INSERT INTO `LearningJourney` ( `Completion_Status`,`Roles_id`,`Staff_ID`) VALUE
 ('In progress', 1, 130001),
 ('In progress', 2, 140001),
 ('In progress', 3, 130002);
+('In progress', 3, 130001);
 
 
 -- COURSE-SKILL
