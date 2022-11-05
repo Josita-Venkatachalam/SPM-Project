@@ -57,20 +57,22 @@ class TestCreateRole(TestApp):
 
         request_body = {
             'name': role1.name,
-            'description': role1.description
+            'description': role1.description,
         }
 
-        response = self.client.post("/createRole",
+        response = self.client.post("/roles_add",
                                     data=json.dumps(request_body),
                                     content_type='application/json')
         print(response.json)
         self.assertEqual(response.json, {
             
             "data": {
-                'id': 1,
-                'name': 'Project Manager',
-                'desciption': 'A Project Manager manages a team of people.'
-
+                "role":{
+                    'id': 1,
+                    'name': 'Project Manager',
+                    'description': 'A Project Manager manages a team of people.',
+                    'isDeleted' : None
+                }
             },
             "message": "Role Created!"
             
@@ -81,11 +83,10 @@ class TestCreateRole(TestApp):
         db.session.commit()
 
         request_body = {
-            'id': role1.id,
             'name': role1.name,
             'description': role1.description
         }
-        response = self.client.post("/createRole",
+        response = self.client.post("/roles_add",
                                     data= json.dumps(request_body),
                                     content_type='application/json')
         
@@ -97,11 +98,10 @@ class TestCreateRole(TestApp):
     def test_reject_create_empty_role(self):
 
         request_body = {
-            'id': 1,
             'name': '',
             'description': ''
         }
-        response = self.client.post("/createRole",
+        response = self.client.post("/roles_add",
                                     data= json.dumps(request_body),
                                     content_type='application/json')
         
