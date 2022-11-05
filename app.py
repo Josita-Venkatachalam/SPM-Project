@@ -81,8 +81,6 @@ class Role_Skill(db.Model):
     roles_id = db.Column(db.Integer)
     skills_id = db.Column(db.Integer)
     id = db.Column(db.Integer, primary_key = True)
-
-    
     
     def to_dict(self):
         """
@@ -354,25 +352,23 @@ with app.app_context():
             )
 
     @app.route("/roles")
+
     def roles():
-        search_name = request.args.get('role')
-        if search_name:
-            roles_list = Role.query.filter(Role.name.contains(search_name))
+       
+        roles_list = Role.query.filter_by(isDeleted=0).all()
+        if roles_list:
+            return jsonify(
+                {
+                    "data": [role.to_dict() for role in roles_list]
+                }
+            ), 200
+
         else:
-            roles_list = Role.query.filter_by(isDeleted=0).all()
-        return jsonify(
-            {
-                "data": [role.to_dict() for role in roles_list]
-            }
-        ), 200
-        # roles_list = Role.query.all()
-        # return jsonify(
-        #     {
-        #         "data": [role.to_dict()
-        #                  for role in roles_list]
-        #     }
-        # ), 200
-    @app.route("/roles/<int:role_id>")
+            return jsonify({
+                "message": "Roles don't exist."
+            }), 404
+            
+    @app.route("/role/<int:role_id>")
     def get_role_by_id(role_id):
         role = Role.query.filter(Role.id == role_id).first()
     
@@ -621,7 +617,7 @@ with app.app_context():
             }), 404
 
 
-    @app.route("/LearningJourney/")
+    @app.route("/LearningJourney")
     def getLJ():
         learning_journeys= LearningJourney.query.filter_by(Staff_ID = 130001)
         print(learning_journeys)

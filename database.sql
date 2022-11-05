@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `staff` (
 --  `Password` VARCHAR(45) NOT NULL,
 --  `Position_ID` INT,
   PRIMARY KEY (`Staff_ID`),
-  UNIQUE INDEX `id_UNIQUE` (`Staff_ID` ASC) VISIBLE,
+  UNIQUE INDEX `id_UNIQUE` (`Staff_ID` ASC),
   CONSTRAINT `fk_Roles_Saff_1`
     FOREIGN KEY (`Roles_id`)
     REFERENCES `spmproj`.`role` (`id`)
@@ -131,8 +131,8 @@ CREATE TABLE IF NOT EXISTS `roles_skills` (
   `Skills_id` INT,
   `ID` INT NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`ID`),
-  INDEX `fk_Roles_has_Skills_Skills1_idx` (`Skills_id` ASC) VISIBLE,
-  INDEX `fk_Roles_has_Skills_Roles1_idx` (`Roles_id` ASC) VISIBLE,
+  INDEX `fk_Roles_has_Skills_Skills1_idx` (`Skills_id` ASC),
+  INDEX `fk_Roles_has_Skills_Roles1_idx` (`Roles_id` ASC),
   CONSTRAINT `fk_Roles_has_Skills_Roles1`
     FOREIGN KEY (`Roles_id`)
     REFERENCES `spmproj`.`role` (`id`)
@@ -158,8 +158,8 @@ CREATE TABLE IF NOT EXISTS `LearningJourney` (
   `Roles_id` INT,
   `Staff_ID` INT,
   PRIMARY KEY (`id`),
-  INDEX `fk_Learning Journey_Roles1_idx` (`Roles_id` ASC) VISIBLE,
-  INDEX `fk_Learning Journey_Staff1_idx` (`Staff_ID` ASC) VISIBLE,
+  INDEX `fk_Learning Journey_Roles1_idx` (`Roles_id` ASC),
+  INDEX `fk_Learning Journey_Staff1_idx` (`Staff_ID` ASC),
   CONSTRAINT `fk_Learning Journey_Roles1`
     FOREIGN KEY (`Roles_id`)
     REFERENCES `spmproj`.`role` (`id`)
@@ -175,7 +175,7 @@ ENGINE = InnoDB;
 INSERT INTO `LearningJourney` ( `Completion_Status`,`Roles_id`,`Staff_ID`) VALUES
 ('In progress', 1, 130001),
 ('In progress', 2, 140001),
-('In progress', 3, 130002);
+('In progress', 3, 130002),
 ('In progress', 3, 130001);
 
 
@@ -187,8 +187,8 @@ CREATE TABLE IF NOT EXISTS `courses_skills` (
   `Skill_id` INT,
   `ID` INT NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`ID`),
-  INDEX `fk_Courses_has_Skills_Skills1_idx` (`Skill_id` ASC) VISIBLE,
-  INDEX `fk_Courses_has_Skills_Courses1_idx` (`Course_id` ASC) VISIBLE,
+  INDEX `fk_Courses_has_Skills_Skills1_idx` (`Skill_id` ASC),
+  INDEX `fk_Courses_has_Skills_Courses1_idx` (`Course_id` ASC),
   CONSTRAINT `fk_Courses_has_Skills_Courses1`
     FOREIGN KEY (`Course_id`)
     REFERENCES `spmproj`.`courses` (`id`)

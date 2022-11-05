@@ -1,7 +1,7 @@
 import unittest
 import flask_testing
 import json
-from app import app, db, Skill,Course,Role,Role_Skill,Course_Skill,LearningJourney,Learning_Journey_Courses,registration
+from app import app, db, Skill,Course,Role,Role_Skill,Course_Skill,LearningJourney,Learning_Journey_Courses,Registration
 
 #logic differs , but the assertions and lib we are using for both unit and integration tests is the same
 #only the implementation will vary 
@@ -23,7 +23,7 @@ class TestApp(flask_testing.TestCase):
 
 class TestCreateLearningJourney(TestApp):
     def test_create_learning_Journey(self):
-        lj1 = LearningJourney(Completion_Status="In progress" ,Roles_id=2 ,Staff_ID=130001)
+        lj1 = LearningJourney(Completion_Status="In Progress" ,Roles_id=2 ,Staff_ID=130001)
         db.session.add(lj1)
         db.session.commit()
 
