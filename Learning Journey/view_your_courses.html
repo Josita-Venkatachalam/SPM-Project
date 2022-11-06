@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width">
-    <title>View Learning Journey</title>
+    <title>View All Your Courses</title>
     <link rel="stylesheet" href="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
@@ -38,25 +38,25 @@
 
         <div class="table-title">
             <div class="">
-                <h2>View All Your Learning Journeys</h2>
+                <h2>View All Your Courses</h2>
             </div>
             
         </div>
-        <div v-if="!allLJ.length">
+        <!-- <div v-if="!allLJ.length">
             No Learning Journey Created!
-        </div>
+        </div> -->
         <table v-else class="table table-striped table-hover mt-3">
 
             <thead>
                 <tr>
-                    <th scope="col">Completion Status</th>
-                    <th scope="col">Role</th>
-                    <th scope="col"></th>
-
+                    <th scope="col">Learning Journey (Target Role)</th>
+                    <th scope="col">Skill</th>
+                    <th scope="col">Course ID</th>
+                    <th scope="col">Course Name</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(lj, index) in allLJ" :key="lj.Roles_id">
+                <tr v-for="">
                     <th scope="row">{{lj.Completion_Status}}</th>
                     <td>{{roleNameList[index]}}</td>
                     <td class="select-LJ-list text-right">
@@ -110,7 +110,6 @@
                     .then(response => {
                         // this.success = "Successfully Retrieved"
                         // allRoles = response.data
-                        console.log("axios success")
                         console.log(response.data.data)
                         this.allLJ = response.data.data
                         console.log(this.allLJ)
@@ -136,7 +135,6 @@
                     })
                     .catch(error => {
                         this.error = error.response.data.message
-                        console.log(this.error)
                         console.log("error in getting learnin journeys")
 
                     });

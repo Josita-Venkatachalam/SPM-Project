@@ -619,6 +619,7 @@ with app.app_context():
 
     @app.route("/LearningJourney")
     def getLJ():
+        print("start of getLJ")
         learning_journeys= LearningJourney.query.filter_by(Staff_ID = 130001)
         print(learning_journeys)
         if learning_journeys:
