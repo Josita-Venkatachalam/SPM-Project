@@ -523,7 +523,7 @@ with app.app_context():
     @app.route("/deassignskilltorole/<string:role_id>/<int:skill_id>", methods = ['DELETE'])
     def deassignskilltorole(role_id, skill_id):
         print('im in deassign')
-        role_skill = Role_Skill.query.filter_by(Roles_id = role_id , Skills_id = skill_id).first()
+        role_skill = Role_Skill.query.filter_by(roles_id = role_id , skills_id = skill_id).first()
 
         try:
             db.session.delete(role_skill)
@@ -538,7 +538,7 @@ with app.app_context():
     def skills_of_role(role_id):
         print("im in getting alr assigned skills")
         print(role_id)
-        records = Role_Skill.query.filter(Role_Skill.Roles_id == role_id)
+        records = Role_Skill.query.filter(Role_Skill.roles_id == role_id)
         print(records)
         if records:
             return jsonify({
