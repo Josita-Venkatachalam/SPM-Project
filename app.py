@@ -826,6 +826,21 @@ with app.app_context():
                 return jsonify({
                 "message": "CANT retrieve completed courses from registration table."
                 }), 404
+
+    @app.route("/rolesinLJalr/<string:staff_id>")
+    def rolesinLJalr(staff_id):
+        print("inside getting roles alr in LJ")
+        print(staff_id)
+        records = LearningJourney.query.filter(LearningJourney.Staff_ID == staff_id)
+        print(records)
+        if records:
+            return jsonify({
+                "data": [record.to_dict() for record in records]
+            }), 200
+        else:
+            return jsonify({
+                "message": "cant retrieve records"
+            }), 404
     
 
 

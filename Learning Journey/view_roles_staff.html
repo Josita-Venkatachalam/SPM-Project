@@ -77,8 +77,11 @@
                     <th scope="row">{{role.id}}</th>
                     <td>{{role.name}}</td>
                     <td>{{role.description}}</td>
-                    <td class="select-role-list text-right">
-                        <button type="button" class="select-role-btn btn btn-success" v-on:click="select_role(role)">Select Role</button>
+                    <td  v-if ="alrChosenRoles.includes(role.id)" class="select-role-list text-right">
+                        <button type="button" class="select-role-btn btn btn-success" v-on:click="select_role(role)" disabled>Select Role</button>
+                    </td>
+                    <td  v-else class="select-role-list text-right">
+                        <button type="button" class="select-role-btn btn btn-success" v-on:click="select_role(role)" >Select Role</button>
                     </td>
                 </tr>
             </tbody>
@@ -90,6 +93,11 @@
     </div>
 </body>
 <script>
+     var url_string = window.location;
+    var url = new URL(url_string);
+    var staff_id = url.searchParams.get("staffID")
+    console.log(staff_id)
+    staff_id = "130001"
     Vue.createApp({
 
         data() {
@@ -97,7 +105,8 @@
                 success: '',
                 error: '',
                 allRoles: [],
-                searchRole: ""
+                searchRole: "",
+                alrChosenRoles : []
                     // RoleId: 0,
                     // Rolename: '',
                     // Roledesc: '',
@@ -125,27 +134,44 @@
                     });
             },
 
-            searchRole() {
-                // event.preventDefault
-                console.log("search called")
-                console.log(this.roleSearch)
-                if (this.roleSearch !== '') {
-                    url = 'http://127.0.0.1:5000/roles?role=' + this.roleSearch
+            
 
-                    axios.get(url)
-                        .then(response => {
-                            console.log("i got data")
-                            console.log(response.data.data)
-                            this.allRoles = response.data.data;
-                            return false;
+            getAlrChosenRoles(){
+                console.log(staff_id)
+                console.log('inside getting roles alr in LJ')
+                url = "http://127.0.0.1:5000/rolesinLJalr/" + staff_id
+                axios.get(url)
+                .then(response => {
+                        
+                        console.log(response.data.data)
+                        records = response.data.data
+                        already_chosen_roles = []
+                        for (record of records){
+                            console.log("for loop")
+                            console.log(record.Roles_id)
+                            already_chosen_roles.push(record.Roles_id)
 
-                        })
-                        .catch(error => {
-                            alert(error)
-                        });
-                }
+                        }
+                        console.log(already_chosen_roles)
+                        this.alrChosenRoles = already_chosen_roles
+
+                      
+                       
+
+                        
+                    })
+                    .catch(error => {
+                        this.error = error.response.data.message
+                        console.log('unable to get already chosen roles in LJ database by the staff')
+
+                    });
+                
+
+
 
             },
+
+           
 
             select_role(role) {
 
@@ -167,6 +193,7 @@
         mounted: function() {
                 console.log("im inside b4 mount")
                 this.getRoles()
+                this.getAlrChosenRoles()
             }
             // watch: {
             //         roleSearch: function() {
