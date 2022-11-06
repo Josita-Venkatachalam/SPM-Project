@@ -245,7 +245,6 @@ with app.app_context():
                 {
                     "code":200,
                     # "data":skill
-
                 }  
                 
             )
@@ -520,10 +519,10 @@ with app.app_context():
                 "message": "Unable to commit to database."
             }), 500
 
-    @app.route("/deassignskilltorole/<string:role_id>/<int:skill_id>", methods = ['DELETE'])
+    @app.route("/deassignskilltorole/<int:role_id>/<int:skill_id>", methods = ['DELETE'])
     def deassignskilltorole(role_id, skill_id):
         print('im in deassign')
-        role_skill = Role_Skill.query.filter_by(Roles_id = role_id , Skills_id = skill_id).first()
+        role_skill = Role_Skill.query.filter_by(roles_id = role_id, skills_id = skill_id).first()
 
         try:
             db.session.delete(role_skill)
@@ -536,10 +535,11 @@ with app.app_context():
 
     @app.route("/skillsofrole/<string:role_id>")
     def skills_of_role(role_id):
-        print("im in getting alr assigned skills")
+        print("start of skills_of_role")
         print(role_id)
-        records = Role_Skill.query.filter(Role_Skill.Roles_id == role_id)
+        records = Role_Skill.query.filter(Role_Skill.roles_id == role_id)
         print(records)
+        print("end of skills_of_role")
         if records:
             return jsonify({
                 "data": [record.to_dict() for record in records]

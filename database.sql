@@ -45,7 +45,7 @@ CREATE TABLE `skill` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `skill` (`name`, `description`) VALUES
-('Communication', 'Learn to communicate Well in a team.' ),
+('Communication', 'Learn to communicate well in a team.' ),
 ('Leadership', 'Learn to lead the team well'),
 ('Project Management', 'Learn to manage projects well');
 
@@ -78,15 +78,15 @@ CREATE TABLE IF NOT EXISTS `staff` (
   `Staff_LName` VARCHAR(50) NOT NULL,
   `Dept` VARCHAR(50) NOT NULL,
   `Email` VARCHAR(50) NOT NULL,
-  `Roles_id` INT, 
+  `Staff_group_id` INT, 
 --  `Username` VARCHAR(45) NOT NULL,
 --  `Password` VARCHAR(45) NOT NULL,
 --  `Position_ID` INT,
   PRIMARY KEY (`Staff_ID`),
   UNIQUE INDEX `id_UNIQUE` (`Staff_ID` ASC),
-  CONSTRAINT `fk_Roles_Saff_1`
-    FOREIGN KEY (`Roles_id`)
-    REFERENCES `spmproj`.`role` (`id`)
+  CONSTRAINT `fk_Staff_StaffGroup_1`
+    FOREIGN KEY (`Staff_group_id`)
+    REFERENCES `spmproj`.`staff_group` (`id`)
     ON DELETE SET NULL
     ON UPDATE SET NULL)
 
@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `staff` (
 --    ON UPDATE SET NULL)
 ENGINE = InnoDB;
 
-INSERT INTO `staff` (`Staff_ID`,`Staff_FName`,`Staff_LName`,`Dept`,`Email`,`Roles_id`) VALUES
+INSERT INTO `staff` (`Staff_ID`,`Staff_FName`,`Staff_LName`,`Dept`,`Email`,`Staff_group_id`) VALUES
 (130001	,'John','Sim','Chariman','jack.sim@allinone.com.sg',1),
 (130002,'Jack','Sim','CEO','jack.sim@allinone.com.sg',1),
 (140001,'Derek','Tan','Sales','Derek.Tan@allinone.com.sg',3),

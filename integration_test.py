@@ -110,7 +110,67 @@ class TestCreateRole(TestApp):
             "message": "There are empty fields, please enter the Role Name and Role Description."
         })
 
+class TestCreateSkill(TestApp):
+    def test_create_skill(self):
+        skill_1 = Skill(name = 'Communication', description = 'Learn to communicate well in a team.')
+        db.session.add(skill_1)
+        db.session.commit()
 
+        request_body = {
+            'name': skill_1.name,
+            'description': skill_1.description,
+        }
+
+        response = self.client.post("/skills_add",
+                                    data=json.dumps(request_body),
+                                    content_type='application/json')
+        print(response.json)
+        self.assertEqual(response.json, {
+            
+            "data": {
+                "skill":{
+                    'id': 1,
+                    'name': 'Communication',
+                    'description': 'Learn to communicate well in a team.',
+                    'isDeleted' : None
+                }
+            },
+            "message": "Role Created!"
+            
+        })
+    def test_reject_create_duplicate_skill(self):
+        skill_1 = Skill(name = 'Communication', description = 'Learn to communicate well in a team.')
+        db.session.add(skill_1)
+        db.session.commit()
+
+        request_body = {
+            'name': skill_1.name,
+            'description': skill_1.description,
+        }
+
+        response = self.client.post("/skills_add",
+                                    data= json.dumps(request_body),
+                                    content_type='application/json')
+        
+        self.assertEqual(response.json, {
+            "code": 400,
+            "message": "Skill already exists"
+        })
+
+    def test_reject_create_empty_skill(self):
+
+        request_body = {
+            'name': '',
+            'description': ''
+        }
+        response = self.client.post("/skills_add",
+                                    data= json.dumps(request_body),
+                                    content_type='application/json')
+        
+        self.assertEqual(response.json, {
+            "code": 400,
+            "message": "There are empty fields, please enter the Skill Name and Skill Description."
+        })
         
     # def test_create_consultation_invalid_doctor(self):
     #     p1 = Patient(name='Hyacinth Bucket', title='Mrs',
