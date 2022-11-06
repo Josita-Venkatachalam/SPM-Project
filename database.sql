@@ -47,7 +47,9 @@ CREATE TABLE `skill` (
 INSERT INTO `skill` (`name`, `description`) VALUES
 ('Communication', 'Learn to communicate Well in a team.' ),
 ('Leadership', 'Learn to lead the team well'),
-('Project Management', 'Learn to manage projects well');
+('Project Management', 'Learn to manage projects well'),
+('Critical Thinking', 'Learn to think critically' ),
+('Problem Solving', 'Learn methods to solve problems');
 
 -- ROLES
 DROP TABLE IF EXISTS `role`;
@@ -121,8 +123,11 @@ CREATE TABLE `courses` (
 INSERT INTO `courses` (`id`, `name` , `description`, `status`, `type`,   `category`) VALUES
 ('COR001','Systems Thinking and Design','This foundation module aims to introduce students to the fundamental concepts and underlying principles of systems thinking','Active','Internal','Core'),
 ('COR002','Lean Six Sigma Green Belt Certification','Apply Lean Six Sigma methodology and statistical tools such as Minitab to be used in process analytics','Active','Internal','Core'),
-('SAL001','Risk Management for Smart Business','Apply risk management concepts to digital business','Retired','Internal','Sales')
-;
+('SAL001','Risk Management for Smart Business','Apply risk management concepts to digital business','Retired','Internal','Sales'),
+('COR004','Service Excellence','The programme provides the learner with the key foundations of what builds customer confidence','Pending','Internal','Core'),
+('COR006','Manage Change','Identify risks associated with change and develop risk mitigation plans','Retired','External','Core'),
+('FIN003','Business Continuity Planning','Business continuity planning is essential in any business to minimise loss','Retired','External','Finance'),
+('MGT001','People Management','Enable learners to manage team performance and development through effective communication','Active','Internal','Management');
 -- ROLE-SKILLS
 
 DROP TABLE IF EXISTS `roles_skills`;
@@ -131,8 +136,8 @@ CREATE TABLE IF NOT EXISTS `roles_skills` (
   `Skills_id` INT,
   `ID` INT NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`ID`),
-  INDEX `fk_Roles_has_Skills_Skills1_idx` (`Skills_id` ASC),
-  INDEX `fk_Roles_has_Skills_Roles1_idx` (`Roles_id` ASC),
+  INDEX `fk_Roles_has_Skills_Skills1_idx` (`Skills_id` ASC) VISIBLE,
+  INDEX `fk_Roles_has_Skills_Roles1_idx` (`Roles_id` ASC) VISIBLE,
   CONSTRAINT `fk_Roles_has_Skills_Roles1`
     FOREIGN KEY (`Roles_id`)
     REFERENCES `spmproj`.`role` (`id`)
@@ -147,6 +152,9 @@ ENGINE = InnoDB;
 
 INSERT INTO `roles_skills` (`Roles_id`,`Skills_id`) VALUES (1, 1);
 INSERT INTO `roles_skills` (`Roles_id`,`Skills_id`) VALUES (2, 2);
+INSERT INTO `roles_skills` (`Roles_id`,`Skills_id`) VALUES (3, 3);
+INSERT INTO `roles_skills` (`Roles_id`,`Skills_id`) VALUES (1, 2);
+INSERT INTO `roles_skills` (`Roles_id`,`Skills_id`) VALUES (1, 3);
 
 -- LEARNING JOURNEY
 
@@ -175,6 +183,7 @@ ENGINE = InnoDB;
 INSERT INTO `LearningJourney` ( `Completion_Status`,`Roles_id`,`Staff_ID`) VALUES
 ('In progress', 1, 130001),
 ('In progress', 2, 140001),
+('In progress', 1, 140001),
 ('In progress', 3, 130002),
 ('In progress', 3, 130001);
 
@@ -203,6 +212,13 @@ ENGINE = InnoDB;
 
 INSERT INTO `courses_skills` (`Course_id`,`Skill_id`) VALUES ("COR001", 1);
 INSERT INTO `courses_skills` (`Course_id`,`Skill_id`) VALUES ("COR002", 2);
+INSERT INTO `courses_skills` (`Course_id`,`Skill_id`) VALUES ("COR001", 2);
+INSERT INTO `courses_skills` (`Course_id`,`Skill_id`) VALUES ("COR001", 3);
+INSERT INTO `courses_skills` (`Course_id`,`Skill_id`) VALUES ("COR002", 3);
+INSERT INTO `courses_skills` (`Course_id`,`Skill_id`) VALUES ("COR004", 1);
+INSERT INTO `courses_skills` (`Course_id`,`Skill_id`) VALUES ("COR006", 1);
+INSERT INTO `courses_skills` (`Course_id`,`Skill_id`) VALUES ("FIN003", 3);
+INSERT INTO `courses_skills` (`Course_id`,`Skill_id`) VALUES ("MGT001", 3);
 
 -- LEARNING JOURNEY - COURSE
 
