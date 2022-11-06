@@ -22,7 +22,7 @@ class Skill(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
     description = db.Column(db.String(100))
-    isDeleted = db.Column(db.Integer)
+    isDeleted = db.Column(db.Integer, server_default="0")
 
     def to_dict(self):
         """
@@ -62,7 +62,7 @@ class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
     description = db.Column(db.String(100))
-    isDeleted = db.Column(db.Integer)
+    isDeleted = db.Column(db.Integer, server_default="0")
 
     def to_dict(self):
         """
@@ -192,8 +192,8 @@ with app.app_context():
         data = request.get_json()
         #check if skill alr exist in the DB , if yes don't allow it to add and display error ( name)
         if not all(key in data.keys() for
-                key in ('name',
-                        'description')):
+                key in ('name', 
+                'description')):
             return jsonify({
                 "message": "Incorrect JSON object provided."
             }), 500
