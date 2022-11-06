@@ -80,9 +80,20 @@
                 </tr>
             </tbody>
         </table>
+        <br>
+        <br>
+        <div v-if="successAdd != ''" class="alert alert-success" role="alert">
+            Added Course to Learning Journey Successfully
+        </div>
+        <div v-if="successDrop != ''" class="alert alert-success" role="alert">
+            Dropped Course from Learning Journey Successfully
+        </div>
+        
         <div class="text-center mt-5">
             <button class="btn btn-success" v-on:click="redirect()">Back to View All Learning Journeys</button>
         </div>
+        
+        
 
     </div>
 
@@ -103,12 +114,13 @@
 
         data() {
             return {
-                success: '',
+                successDrop: '',
                 error: '',
                 skills_id: skillsid,
                 allCourses: [],
                 chosenCourses: [],
-                alrCompletedCourses: []
+                alrCompletedCourses: [],
+                successAdd:  ''
 
             }
 
@@ -224,6 +236,8 @@
 
                         console.log('Added succesfuly')
                         // this.getCourses()
+                        this.successAdd = "Added Course to Learning Journey Successfully"
+                        setTimeout(() => {  console.log("World!"); }, 4000);
                         location.reload()
 
                         return false;
@@ -245,6 +259,8 @@
                         .then(response => {
                             console.log("Successfully Dropped");
                             // this.getCourses();
+                            this.successDrop = "Dropped Course from Learning Journey Successfully"
+                            setTimeout(() => {  console.log("World!"); }, 4000);
                             location.reload()
                             // this.deleteSuccess = skill.name + " sucessfully deleted!"
                         })

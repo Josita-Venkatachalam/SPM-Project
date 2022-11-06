@@ -87,7 +87,10 @@
 
         <div class="text-center mt-5">
             <button v-if="!chosenCourses.length" class="btn btn-success" v-on:click="createLJ" disabled>Create Learning Journey</button>
-            <button v-else class="btn btn-success" v-on:click="createLJ">Create Learning Journey</button>
+            <button v-else class="btn btn-success" v-on:click="createLJ">Create Learning Journey</button> &nbsp;&nbsp;
+            
+            <button id="" class="btn btn-secondary" v-on:click="cancel()">Cancel</button>
+            
         </div>
         
         <div v-if="success != ''" class="alert alert-success" role="alert">
@@ -166,6 +169,10 @@
                     });
 
 
+
+            },
+            cancel(){
+                window.location.href = "./view_learning_journey.html"
 
             },
 
