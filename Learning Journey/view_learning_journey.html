@@ -106,7 +106,7 @@
             getLJ() {
                 // event.preventDefault();
                 console.log('get LJ called')
-                axios.get('http://127.0.0.1:5000/LearningJourney')
+                axios.get('http://127.0.0.1:5000/LearningJourney_Test')
                     .then(response => {
                         // this.success = "Successfully Retrieved"
                         // allRoles = response.data
@@ -116,7 +116,7 @@
                         console.log(this.allLJ)
 
                         for (lj of this.allLJ) {
-                            url = 'http://127.0.01:5000/roles/' + lj.Roles_id
+                            url = 'http://127.0.0.1:5000/roles/' + lj.Roles_id
                             axios.get(url)
                                 .then(response => {
                                     console.log(response.data.data.name)

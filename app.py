@@ -617,7 +617,7 @@ with app.app_context():
             }), 404
 
 
-    @app.route("/LearningJourney")
+    @app.route("/LearningJourney_Test")
     def getLJ():
         print("start of getLJ")
         learning_journeys= LearningJourney.query.filter_by(Staff_ID = 130001)
