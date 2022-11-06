@@ -212,6 +212,7 @@
                                     console.log(response)
                                     console.log(response.data.data)
                                     this.success = "Learning Journey is successfully created"
+                                    setTimeout(() => {  console.log("World!"); }, 1000);
                                     window.location.href = "./view_learning_journey.html"
 
 
@@ -232,6 +233,7 @@
                         this.error = error.response.data.message
                         console.log('cannot add')
                     });
+                
 
             }
 
