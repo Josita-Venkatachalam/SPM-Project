@@ -52,27 +52,29 @@ class TestCreateLearningJourney(TestApp):
 
 class TestCreateRole(TestApp):
     def test_create_role(self):
-        role1 = Role(name='PM' ,description='description pm')
-        db.session.add(role1)
-        db.session.commit()
+        role1 = Role(name='Marketing Director' ,description='A Marketing Director is in charge of managing any given campaign.')
+        # db.session.add(role1)
+        # db.session.commit()
 
         request_body = {
             'name': role1.name,
             'description': role1.description,
         }
+        print('response body below')
+        print(request_body)
 
         response = self.client.post("/roles_add",
                                     data=json.dumps(request_body),
                                     content_type='application/json')
-        #print('create role response.json below')
-        #print(response.json)
+        print('create role response.json below')
+        print(response.json)
         self.assertEqual(response.json, {
             
             "data": {
-                'description': 'description pm', 
-                'id': 2, 
+                'description': 'A Marketing Director is in charge of managing any given campaign.', 
+                'id': 1, 
                 'isDeleted': 0, 
-                'name': 'PM'
+                'name': 'Marketing Director'
             },
             "message": "Role Created!"
             
@@ -95,20 +97,62 @@ class TestCreateRole(TestApp):
     #         "message": "Role already exists"
     #     })
 
-    # def test_reject_create_empty_role(self):
+    def test_reject_create_empty_role_name(self):
 
-    #     request_body = {
-    #         'name': '',
-    #         'description': ''
-    #     }
-    #     response = self.client.post("/roles_add",
-    #                                 data= json.dumps(request_body),
-    #                                 content_type='application/json')
+        request_body = {
+            'name': '',
+            'description': 'A Marketing Director is in charge of managing any given campaign.'
+        }
+        response = self.client.post("/roles_add",
+                                    data= json.dumps(request_body),
+                                    content_type='application/json')
         
-    #     self.assertEqual(response.json, {
-    #         "code": 400,
-    #         "message": "There are empty fields, please enter the Role Name and Role Description."
-    #     })
+        self.assertEqual(response.json, {
+            "message": "There are empty fields, please enter the Role Name."
+        })
+
+    def test_reject_create_empty_role_desc(self):
+
+        request_body = {
+            'name': 'Marketing Director',
+            'description': ''
+        }
+        response = self.client.post("/roles_add",
+                                    data= json.dumps(request_body),
+                                    content_type='application/json')
+        
+        self.assertEqual(response.json, {
+            "message": "There are empty fields, please enter the Role Description."
+        })
+
+    def test_reject_create_duplicate_role(self):
+        role_1 = Role(name = 'Marketing Director', description = 'A Marketing Director is in charge of managing any given campaign.')
+        role_2 = Role(name = 'Marketing Director', description = 'A Marketing Director is in charge of managing any given campaign.')
+        db.session.add(role_1)
+        db.session.add(role_2)
+        db.session.commit()
+
+        request_body_1 = {
+            'name': role_1.name,
+            'description': role_1.description,
+        }
+
+        response1 = self.client.post("/roles_add",
+                                    data= json.dumps(request_body_1),
+                                    content_type='application/json')
+
+        request_body_2 = {
+            'name': role_2.name,
+            'description': role_2.description,
+        }
+
+        response = self.client.post("/roles_add",
+                                    data= json.dumps(request_body_2),
+                                    content_type='application/json')
+        
+        self.assertEqual(response.json, {
+            "message": "Role name already exists. Please enter unique role name."
+        })
 
 class TestCreateSkill(TestApp):
     def test_create_skill(self):

@@ -321,6 +321,7 @@ with app.app_context():
 
     @app.route("/roles_add", methods=['POST'])
     def create_role():
+        print ("create role")
         data = request.get_json()
         #Validate if name and description input is filled , if not display error msg
         #check if role alr exist in the DB , if yes don't allow it to add and display error ( name)
@@ -330,6 +331,28 @@ with app.app_context():
             return jsonify({
                 "message": "Incorrect JSON object provided."
             }), 500
+
+        if (data["name"] == ""):
+            return jsonify({
+                "message": "There are empty fields, please enter the Role Name."
+            }), 400
+        elif (data["description"] == ""):
+            return jsonify({
+                "message": "There are empty fields, please enter the Role Description."
+            }), 400
+
+        print("data[name]: " + data["name"])
+
+        exists = db.session.query(db.session.query(Role).filter_by(name=data["name"]).exists()).scalar()
+
+        print("EXISTS: " + str(exists))
+
+        if exists:
+            return jsonify({
+                "message": "Role name already exists. Please enter unique role name."
+            }), 400
+
+
         role = Role(**data)
         
         print(data)
