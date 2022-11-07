@@ -53,8 +53,6 @@ class TestCreateLearningJourney(TestApp):
 class TestCreateRole(TestApp):
     def test_create_role(self):
         role1 = Role(name='Marketing Director' ,description='A Marketing Director is in charge of managing any given campaign.')
-        # db.session.add(role1)
-        # db.session.commit()
 
         request_body = {
             'name': role1.name,
@@ -79,23 +77,6 @@ class TestCreateRole(TestApp):
             "message": "Role Created!"
             
         })
-    # def test_reject_create_role(self):
-    #     role1 = Role(name='Project Manager' ,description='A Project Manager manages a team of people.')
-    #     db.session.add(role1)
-    #     db.session.commit()
-
-    #     request_body = {
-    #         'name': role1.name,
-    #         'description': role1.description
-    #     }
-    #     response = self.client.post("/roles_add",
-    #                                 data= json.dumps(request_body),
-    #                                 content_type='application/json')
-        
-    #     self.assertEqual(response.json, {
-    #         "code": 400,
-    #         "message": "Role already exists"
-    #     })
 
     def test_reject_create_empty_role_name(self):
 
@@ -144,46 +125,61 @@ class TestCreateRole(TestApp):
             "message": "Role name already exists. Please enter unique role name."
         })
 
-    # class TestUpdateSkill(TestApp):
-#     def test_update_skill(self):
-#         existing_skill = Skill(name = 'Leadership', description = 'The key to successful leadership today is influence, not authority')
-#         updated_skill = Skill(name = 'Communication', description = 'Learn to communicate well in a team.')
-#         db.session.add(existing_skill)
-#         db.session.add(updated_skill)
-#         db.session.commit()
+class TestUpdateRole(TestApp):
+    def test_update_role(self):
+        #print ("update role")
+        existing_role = Role(name = 'Marketing Director', description = 'A Marketing Director is in charge of managing any given campaign.')
+        updated_role = Role(name = 'Associate Marketing Director', description = 'An associate Marketing Director is in charge of assisting any given campaign.')
 
-#         request_body = {
-#             'name': existing_skill.name,
-#             'description': existing_skill.description,
-#         }
+        request_body = {
+            'name': existing_role.name,
+            'description': existing_role.description
+        }
 
-#         response = self.client.post("/skills_add",
-#                             data=json.dumps(request_body),
-#                             content_type='application/json')
+        response = self.client.post("/roles_add",
+                            data=json.dumps(request_body),
+                            content_type='application/json')
 
-#         print("RESPONSE")
-#         print(response.json)
-#         skill_id = "0"
+        #print("RESPONSE ID: " + str(response.json['data']['id']))
 
-#         request_body_existing = {
-#             'name': existing_skill.name,
-#             'description': existing_skill.description,
-#         }
+        role_id = str(response.json['data']['id'])
+        role_name = updated_role.name
+        role_description = updated_role.description
 
-#         self.client.post("/skills_update/" + skill_id,
-#                                 content_type='application/json')
+        response_2 = self.client.put("/roles_update/" + role_id + "/" + role_name + "/" + role_description,
+                                content_type='application/json')
         
-#         self.assertEqual(response.json, {
+        self.assertEqual(response_2.json, {
+            "message": "Successfully updated!"          
+        })
+
+    def test_reject_update_duplicate_role(self):
+            role = Role(name = 'Marketing Director', description = 'A Marketing Director is in charge of managing any given campaign.')
+
+            request_body = {
+                'name': role.name,
+                'description': role.description
+            }
+
+            response = self.client.post("/roles_add",
+                                data=json.dumps(request_body),
+                                content_type='application/json')
+
+            print('responseid below:')
+            print("RESPONSE ID: " + str(response.json['data']['id']))
+
+            role_id = str(response.json['data']['id'])
+            role_name = role.name
+            role_description = role.description
+
+            response_2 = self.client.put("/roles_update/" + role_id + "/" + role_name + "/" + role_description,
+                                    content_type='application/json')
             
-#             "data": {
-#                     'description': 'Learn to communicate well in a team.',
-#                     'id': 2,
-#                     'isDeleted' : 0,
-#                     'name': 'Communication'
-#             },
-#             "message": "Skill Created!"
-            
-#         })
+            print('response_2 below:')
+            print(response_2)
+            self.assertEqual(response_2.json, {
+                "message": "Role name already exists. Please enter unique role name."        
+            })
 
 class TestCreateSkill(TestApp):
     def test_create_skill(self):

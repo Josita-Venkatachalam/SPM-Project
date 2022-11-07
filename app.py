@@ -273,11 +273,11 @@ with app.app_context():
 
         if (name == ""):
             return jsonify({
-                "message": "There are empty fields, please enter the Skill Name."
+                "message": "Please fill in the Skill name."
             }), 400
         elif (description == ""):
             return jsonify({
-                "message": "There are empty fields, please enter the Skill Description."
+                "message": "Please fill in the Skill description."
             }), 400
 
         exists = db.session.query(db.session.query(Skill).filter_by(name=name).exists()).scalar()
@@ -412,28 +412,49 @@ with app.app_context():
             # name = request.args.get('name')
             # description = request.args.get('description')
             # role_id = request.args.get('id')
-            print(name)
-            print(id)
+            
             role = Role.query.filter_by(id=int(id)).first()
             # data=request.get_json()
-            
-            print(role)
+
+            print("Start Update Role app.py")
+            print ("App ID: " + id)
+            print("App Name: " + name)
+            print("App Desc: " + description)
+            print("End Update Role app.py")
+
+            if (name == ""):
+                return jsonify({
+                    "message": "Please fill in the Role name."
+                }), 400
+            elif (description == ""):
+                return jsonify({
+                    "message": "Please fill in the Role description."
+                }), 400
+
+            exists = db.session.query(db.session.query(Role).filter_by(name=name).exists()).scalar()
+
+            #print("EXISTS: " + str(exists))
+
+            if exists:
+                return jsonify({
+                    "message": "Role name already exists. Please enter unique role name."
+                }), 400
             
             role.name = name
             role.description = description
-            db.session.commit()
-            #retrive the data from the request to update the data in the database
-            return jsonify(
-                {
-                    "code":200,
-                    # "data":role
-
-                }  
-                
-            )
+            try:
+                db.session.commit()
+                return jsonify(
+                    {
+                        "message" : "Successfully updated!"
+                    }   
+                )
+            except Exception:
+                return jsonify({
+                    "message": "Unable to commit to database."
+                }), 500
 
     @app.route("/roles")
-
     def roles():
        
         roles_list = Role.query.filter_by(isDeleted=0).all()
