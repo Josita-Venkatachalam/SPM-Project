@@ -829,6 +829,54 @@ with app.app_context():
             return jsonify({
             "message": "Role not found."
             }), 404
+
+    @app.route("/get_course_LJ/")
+    def get_your_lj_courses():
+        #lj_course = Learning_Journey_Courses.query.all()
+
+        # ljIDs = [item.to_dict() for item in lj_course]
+
+        # lj = LearningJourney.query.filter(LearningJourney.id.in_(ljIDs))
+
+        #lj_Role_ID = [item.to_dict() for item in lj]
+
+        #target_role = Role.query.filter(Role.id.in_(lj_Role_ID))
+
+        #lj_course = Learning_Journey_Courses.query.all()
+        lj_course = (
+            db.session.query(Learning_Journey_Courses)
+            .all()
+        )
+
+        lj = (
+            db.session.query(LearningJourney)
+            .select_from(Learning_Journey_Courses)
+            .join(LearningJourney, Learning_Journey_Courses.Learning_Journey_Id == LearningJourney.id)
+            .all()
+        )
+
+        role = (
+            db.session.query(Role)
+            .select_from(Learning_Journey_Courses, LearningJourney)
+            .join(LearningJourney, Learning_Journey_Courses.Learning_Journey_Id == LearningJourney.id)
+            .join(Role, LearningJourney.Roles_id == Role.id)
+            .all()
+        )
+
+        if lj_course:
+            return jsonify(
+                {
+                    "data": [
+                        [item.to_dict() for item in lj_course],
+                        [item.to_dict() for item in lj],
+                        [item.to_dict() for item in role]
+                    ]
+                }
+            ), 200
+        else:
+            return jsonify({
+            "message": "Role not found."
+            }), 404
             
         # @app.route("/roles_add", methods=['POST'])
         # def create_role():
@@ -868,6 +916,7 @@ with app.app_context():
             return jsonify({
             "message": "chosen courses not found."
             }), 404
+
     @app.route("/get_roleid_LJ/<int:LearningJourneyID>")
     def get_roleid_LJ(LearningJourneyID):
         print(LearningJourneyID)
