@@ -127,9 +127,7 @@ class TestCreateRole(TestApp):
 
     def test_reject_create_duplicate_role(self):
         role_1 = Role(name = 'Marketing Director', description = 'A Marketing Director is in charge of managing any given campaign.')
-        role_2 = Role(name = 'Marketing Director', description = 'A Marketing Director is in charge of managing any given campaign.')
         db.session.add(role_1)
-        db.session.add(role_2)
         db.session.commit()
 
         request_body_1 = {
@@ -141,16 +139,8 @@ class TestCreateRole(TestApp):
                                     data= json.dumps(request_body_1),
                                     content_type='application/json')
 
-        request_body_2 = {
-            'name': role_2.name,
-            'description': role_2.description,
-        }
-
-        response = self.client.post("/roles_add",
-                                    data= json.dumps(request_body_2),
-                                    content_type='application/json')
         
-        self.assertEqual(response.json, {
+        self.assertEqual(response1.json, {
             "message": "Role name already exists. Please enter unique role name."
         })
 
@@ -198,8 +188,6 @@ class TestCreateRole(TestApp):
 class TestCreateSkill(TestApp):
     def test_create_skill(self):
         skill_1 = Skill(name = 'Test Skill Name', description = 'Test Skill Description')
-        #db.session.add(skill_1)
-        #db.session.commit()
 
         request_body = {
             'name': skill_1.name,
@@ -300,7 +288,7 @@ class TestUpdateSkill(TestApp):
     #when valid_update is NOT commented out
     #self.client.put takes its input rather than the new input
     # def test_reject_update_empty_skill_name(self):
-    #     #print ("update skill")
+    #     print ("update skill")
     #     existing_skill = Skill(name = 'Leadership', description = 'The key to successful leadership today is influence, not authority')
     #     updated_skill = Skill(name = '', description = 'Test desc')
 
@@ -317,9 +305,9 @@ class TestUpdateSkill(TestApp):
     #     skill_name = updated_skill.name
     #     skill_description = updated_skill.description
 
-    #     #print("Skill ID: " + skill_id)
-    #     #print("Skill Name: " + skill_name)
-    #     #print("Skill Desc: " + skill_description)
+    #     print("Skill ID: " + skill_id)
+    #     print("Skill Name: " + skill_name)
+    #     print("Skill Desc: " + skill_description)
 
     #     response_2 = self.client.put("/skills_update/" + skill_id + "/" + skill_name + "/" + skill_description,
     #                         content_type='application/json')
