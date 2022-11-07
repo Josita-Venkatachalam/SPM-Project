@@ -111,7 +111,7 @@ DROP TABLE IF EXISTS `courses`;
 CREATE TABLE `courses` (
   `id` varchar(50) NOT NULL PRIMARY KEY,
   `name` varchar(50) DEFAULT NULL UNIQUE,
-  `description`  varchar(100)  DEFAULT NULL,
+  `description`  varchar(300)  DEFAULT NULL,
   `status` varchar(50) DEFAULT NULL,
   `type`  varchar(50) DEFAULT NULL,
   `category`varchar(50) DEFAULT NULL
