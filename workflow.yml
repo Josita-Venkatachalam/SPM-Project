@@ -39,6 +39,9 @@ jobs:
           #TODO: Install flake8 using pip command here
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
+          #mysql connector
+          pip3 install mysql-connector
+          
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
 
