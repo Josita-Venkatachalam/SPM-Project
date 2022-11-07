@@ -36,8 +36,8 @@ class TestCreateLearningJourney(TestApp):
         response = self.client.post("/createLJ",
                                     data=json.dumps(request_body),
                                     content_type='application/json')
-        print("LJ response.json")
-        print(response.json)
+        #print("LJ response.json")
+        #print(response.json)
         self.assertEqual(response.json, {
             
             "data": {
@@ -52,14 +52,16 @@ class TestCreateLearningJourney(TestApp):
 
 class TestCreateRole(TestApp):
     def test_create_role(self):
-        role1 = Role(name='PM' ,description='description pm')
-        db.session.add(role1)
-        db.session.commit()
+        role1 = Role(name='Marketing Director' ,description='A Marketing Director is in charge of managing any given campaign.')
+        # db.session.add(role1)
+        # db.session.commit()
 
         request_body = {
             'name': role1.name,
             'description': role1.description,
         }
+        print('response body below')
+        print(request_body)
 
         response = self.client.post("/roles_add",
                                     data=json.dumps(request_body),
@@ -69,10 +71,10 @@ class TestCreateRole(TestApp):
         self.assertEqual(response.json, {
             
             "data": {
-                'description': 'description pm', 
-                'id': 2, 
+                'description': 'A Marketing Director is in charge of managing any given campaign.', 
+                'id': 1, 
                 'isDeleted': 0, 
-                'name': 'PM'
+                'name': 'Marketing Director'
             },
             "message": "Role Created!"
             
@@ -95,82 +97,296 @@ class TestCreateRole(TestApp):
     #         "message": "Role already exists"
     #     })
 
-    # def test_reject_create_empty_role(self):
+    def test_reject_create_empty_role_name(self):
 
-    #     request_body = {
-    #         'name': '',
-    #         'description': ''
-    #     }
-    #     response = self.client.post("/roles_add",
-    #                                 data= json.dumps(request_body),
-    #                                 content_type='application/json')
+        request_body = {
+            'name': '',
+            'description': 'A Marketing Director is in charge of managing any given campaign.'
+        }
+        response = self.client.post("/roles_add",
+                                    data= json.dumps(request_body),
+                                    content_type='application/json')
         
-    #     self.assertEqual(response.json, {
-    #         "code": 400,
-    #         "message": "There are empty fields, please enter the Role Name and Role Description."
-    #     })
+        self.assertEqual(response.json, {
+            "message": "Please fill in the Role name."
+        })
+
+    def test_reject_create_empty_role_desc(self):
+
+        request_body = {
+            'name': 'Marketing Director',
+            'description': ''
+        }
+        response = self.client.post("/roles_add",
+                                    data= json.dumps(request_body),
+                                    content_type='application/json')
+        
+        self.assertEqual(response.json, {
+            "message": "Please fill in the Role description."
+        })
+
+    def test_reject_create_duplicate_role(self):
+        role_1 = Role(name = 'Marketing Director', description = 'A Marketing Director is in charge of managing any given campaign.')
+        role_2 = Role(name = 'Marketing Director', description = 'A Marketing Director is in charge of managing any given campaign.')
+        db.session.add(role_1)
+        db.session.add(role_2)
+        db.session.commit()
+
+        request_body_1 = {
+            'name': role_1.name,
+            'description': role_1.description,
+        }
+
+        response1 = self.client.post("/roles_add",
+                                    data= json.dumps(request_body_1),
+                                    content_type='application/json')
+
+        request_body_2 = {
+            'name': role_2.name,
+            'description': role_2.description,
+        }
+
+        response = self.client.post("/roles_add",
+                                    data= json.dumps(request_body_2),
+                                    content_type='application/json')
+        
+        self.assertEqual(response.json, {
+            "message": "Role name already exists. Please enter unique role name."
+        })
+
+    # class TestUpdateSkill(TestApp):
+#     def test_update_skill(self):
+#         existing_skill = Skill(name = 'Leadership', description = 'The key to successful leadership today is influence, not authority')
+#         updated_skill = Skill(name = 'Communication', description = 'Learn to communicate well in a team.')
+#         db.session.add(existing_skill)
+#         db.session.add(updated_skill)
+#         db.session.commit()
+
+#         request_body = {
+#             'name': existing_skill.name,
+#             'description': existing_skill.description,
+#         }
+
+#         response = self.client.post("/skills_add",
+#                             data=json.dumps(request_body),
+#                             content_type='application/json')
+
+#         print("RESPONSE")
+#         print(response.json)
+#         skill_id = "0"
+
+#         request_body_existing = {
+#             'name': existing_skill.name,
+#             'description': existing_skill.description,
+#         }
+
+#         self.client.post("/skills_update/" + skill_id,
+#                                 content_type='application/json')
+        
+#         self.assertEqual(response.json, {
+            
+#             "data": {
+#                     'description': 'Learn to communicate well in a team.',
+#                     'id': 2,
+#                     'isDeleted' : 0,
+#                     'name': 'Communication'
+#             },
+#             "message": "Skill Created!"
+            
+#         })
 
 class TestCreateSkill(TestApp):
     def test_create_skill(self):
-        skill_1 = Skill(name = 'Communication', description = 'Learn to communicate well in a team.')
-        db.session.add(skill_1)
-        db.session.commit()
+        skill_1 = Skill(name = 'Test Skill Name', description = 'Test Skill Description')
+        #db.session.add(skill_1)
+        #db.session.commit()
 
         request_body = {
             'name': skill_1.name,
             'description': skill_1.description,
         }
 
+        #print(request_body)
+
         response = self.client.post("/skills_add",
                                     data=json.dumps(request_body),
                                     content_type='application/json')
-        print(response.json)
+        #print(response.json)
         self.assertEqual(response.json, {
-            
             "data": {
-                    'description': 'Learn to communicate well in a team.',
-                    'id': 2,
+                    'description': 'Test Skill Description',
+                    'id': 1,
                     'isDeleted' : 0,
-                    'name': 'Communication'
+                    'name': 'Test Skill Name'
             },
             "message": "Skill Created!"
-            
         })
-    # def test_reject_create_duplicate_skill(self):
-    #     skill_1 = Skill(name = 'Communication', description = 'Learn to communicate well in a team.')
-    #     db.session.add(skill_1)
-    #     db.session.commit()
+
+    def test_reject_create_empty_skill_name(self):
+        request_body = {
+            'name': '',
+            'description': 'Learn to communicate well in a team.'
+        }
+        response = self.client.post("/skills_add",
+                                    data= json.dumps(request_body),
+                                    content_type='application/json')
+        
+        self.assertEqual(response.json, {
+            "message": "Please fill in the Skill name."
+        })
+
+    def test_reject_create_empty_skill_desc(self):
+        request_body = {
+            'name': 'Communication',
+            'description': ''
+        }
+        response = self.client.post("/skills_add",
+                                    data= json.dumps(request_body),
+                                    content_type='application/json')
+        
+        self.assertEqual(response.json, {
+            "message": "Please fill in the Skill description."
+        })
+
+    def test_reject_create_duplicate_skill(self):
+        skill = Skill(name = 'Communication', description = 'Learn to communicate well in a team.')
+        db.session.add(skill)
+        db.session.commit()
+
+        request_body = {
+            'name': skill.name,
+            'description': skill.description,
+        }
+
+        response = self.client.post("/skills_add",
+                                    data= json.dumps(request_body),
+                                    content_type='application/json')
+        
+        self.assertEqual(response.json, {
+            "message": "Skill name already exists. Please enter unique skill name."
+        })
+
+class TestUpdateSkill(TestApp):
+    def test_update_skill(self):
+        #print ("update skill")
+        existing_skill = Skill(name = 'Leadership', description = 'The key to successful leadership today is influence, not authority')
+        updated_skill = Skill(name = 'Communication', description = 'Learn to communicate well in a team.')
+
+        request_body = {
+            'name': existing_skill.name,
+            'description': existing_skill.description
+        }
+
+        response = self.client.post("/skills_add",
+                            data=json.dumps(request_body),
+                            content_type='application/json')
+
+        #print("RESPONSE ID: " + str(response.json['data']['id']))
+
+        skill_id = str(response.json['data']['id'])
+        skill_name = updated_skill.name
+        skill_description = updated_skill.description
+
+        response_2 = self.client.put("/skills_update/" + skill_id + "/" + skill_name + "/" + skill_description,
+                                content_type='application/json')
+        
+        self.assertEqual(response_2.json, {
+            "message": "Successfully updated!"          
+        })
+
+    #when valid_update is commented out
+    #self.client.put just not routing to our app.py update function when skill name is empty
+
+    #when valid_update is NOT commented out
+    #self.client.put takes its input rather than the new input
+    # def test_reject_update_empty_skill_name(self):
+    #     #print ("update skill")
+    #     existing_skill = Skill(name = 'Leadership', description = 'The key to successful leadership today is influence, not authority')
+    #     updated_skill = Skill(name = '', description = 'Test desc')
 
     #     request_body = {
-    #         'name': skill_1.name,
-    #         'description': skill_1.description,
+    #         'name': existing_skill.name,
+    #         'description': existing_skill.description
     #     }
 
     #     response = self.client.post("/skills_add",
-    #                                 data= json.dumps(request_body),
-    #                                 content_type='application/json')
+    #                         data=json.dumps(request_body),
+    #                         content_type='application/json')
+
+    #     skill_id = str(response.json['data']['id'])
+    #     skill_name = updated_skill.name
+    #     skill_description = updated_skill.description
+
+    #     #print("Skill ID: " + skill_id)
+    #     #print("Skill Name: " + skill_name)
+    #     #print("Skill Desc: " + skill_description)
+
+    #     response_2 = self.client.put("/skills_update/" + skill_id + "/" + skill_name + "/" + skill_description,
+    #                         content_type='application/json')
         
-    #     self.assertEqual(response.json, {
-    #         "code": 400,
-    #         "message": "Skill already exists"
+    #     self.assertEqual(response_2.json, {
+    #         "message": "There are empty fields, please enter the Skill Name."          
     #     })
 
-    # def test_reject_create_empty_skill(self):
+
+    #when valid_update is commented out
+    #self.client.put just not routing to our app.py update function when skill name is empty
+
+    #when valid_update is NOT commented out
+    #self.client.put takes its input rather than the new input
+    # def test_reject_update_empty_skill_desc(self):
+    #     print ("update skill")
+    #     existing_skill = Skill(name = 'Leadership', description = 'The key to successful leadership today is influence, not authority')
+    #     updated_skill = Skill(name = 'Test name', description = '')
 
     #     request_body = {
-    #         'name': '',
-    #         'description': ''
+    #         'name': existing_skill.name,
+    #         'description': existing_skill.description
     #     }
-    #     response = self.client.post("/skills_add",
-    #                                 data= json.dumps(request_body),
-    #                                 content_type='application/json')
-        
-    #     self.assertEqual(response.json, {
-    #         "code": 400,
-    #         "message": "There are empty fields, please enter the Skill Name and Skill Description."
-    #     })
-        
 
+    #     response = self.client.post("/skills_add",
+    #                         data=json.dumps(request_body),
+    #                         content_type='application/json')
+
+    #     skill_id = str(response.json['data']['id'])
+    #     skill_name = updated_skill.name
+    #     skill_description = updated_skill.description
+
+    #     print("Skill ID: " + skill_id)
+    #     print("Skill Name: " + skill_name)
+    #     print("Skill Desc: " + skill_description)
+
+    #     response_2 = self.client.put("/skills_update/" + skill_id + "/" + skill_name + "/" + skill_description,
+    #                         content_type='application/json')
+        
+    #     self.assertEqual(response_2.json, {
+    #         "message": "There are empty fields, please enter the Skill Description."          
+    #     })
+
+    def test_reject_update_duplicate_skill(self):
+        skill = Skill(name = 'Leadership', description = 'The key to successful leadership today is influence, not authority')
+
+        request_body = {
+            'name': skill.name,
+            'description': skill.description
+        }
+
+        response = self.client.post("/skills_add",
+                            data=json.dumps(request_body),
+                            content_type='application/json')
+
+        #print("RESPONSE ID: " + str(response.json['data']['id']))
+
+        skill_id = str(response.json['data']['id'])
+        skill_name = skill.name
+        skill_description = skill.description
+
+        response_2 = self.client.put("/skills_update/" + skill_id + "/" + skill_name + "/" + skill_description,
+                                content_type='application/json')
+        
+        self.assertEqual(response_2.json, {
+            "message": "Skill name already exists. Please enter unique skill name."        
+        })
         
     # def test_create_consultation_invalid_doctor(self):
     #     p1 = Patient(name='Hyacinth Bucket', title='Mrs',
