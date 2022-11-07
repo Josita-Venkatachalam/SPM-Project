@@ -189,7 +189,7 @@ with app.app_context():
 
     @app.route("/skills_add", methods=['POST'])
     def create_skill():
-        print ("create skill")
+        #print ("create skill")
 
         data = request.get_json()
 
@@ -209,7 +209,7 @@ with app.app_context():
                 "message": "Please fill in the Skill description."
             }), 400
 
-        print("data[name]: " + data["name"])
+        #print("data[name]: " + data["name"])
 
         # skills_list = Skill.query.filter_by(isDeleted=0).all()
         # return jsonify(
@@ -220,7 +220,7 @@ with app.app_context():
 
         exists = db.session.query(db.session.query(Skill).filter_by(name=data["name"]).exists()).scalar()
 
-        print("EXISTS: " + str(exists))
+        #print("EXISTS: " + str(exists))
 
         if exists:
             return jsonify({
@@ -229,8 +229,6 @@ with app.app_context():
         
         skill = Skill(**data)
         
-        print(skill)
-        print(data)
         skill_name = data["name"].lower()
         skill_description = data["description"].lower()
         
@@ -258,29 +256,53 @@ with app.app_context():
             return jsonify({
                 "message": "Unable to commit to database."
             }), 500
+
     @app.route("/skills_update/<string:id>/<string:name>/<string:description>", methods=['PUT'])
     def update_skill(id, name ,description):
-            # name = request.args.get('name')
-            # description = request.args.get('description')
-            # skill_id = request.args.get('id')
-            print(name)
-            print(id)
-            skill = Skill.query.filter_by(id=int(id)).first()
-            # data=request.get_json()
-            
-            print(skill)
-            
-            skill.name = name
-            skill.description = description
+        # name = request.args.get('name')
+        # description = request.args.get('description')
+        # skill_id = request.args.get('id')
+
+        skill = Skill.query.filter_by(id=int(id)).first()
+        
+        print("Start Update Skill app.py")
+        print ("App ID: " + id)
+        print("App Name: " + name)
+        print("App Desc: " + description)
+        print("End Update Skill app.py")
+
+        if (name == ""):
+            return jsonify({
+                "message": "There are empty fields, please enter the Skill Name."
+            }), 400
+        elif (description == ""):
+            return jsonify({
+                "message": "There are empty fields, please enter the Skill Description."
+            }), 400
+
+        exists = db.session.query(db.session.query(Skill).filter_by(name=name).exists()).scalar()
+
+        #print("EXISTS: " + str(exists))
+
+        if exists:
+            return jsonify({
+                "message": "Skill name already exists. Please enter unique skill name."
+            }), 400
+        
+        skill.name = name
+        skill.description = description
+        try:
             db.session.commit()
-            #retrive the data from the request to update the data in the database
             return jsonify(
                 {
-                    "code":200,
-                    # "data":skill
-                }  
-                
+                    "message" : "Successfully updated!"
+                }   
             )
+        except Exception:
+            return jsonify({
+                "message": "Unable to commit to database."
+            }), 500
+
 
 
 
@@ -355,7 +377,7 @@ with app.app_context():
 
         role = Role(**data)
         
-        print(data)
+        #print(data)
         role_name = data["name"].lower()
         role_description = data["description"].lower()
         
@@ -696,7 +718,7 @@ with app.app_context():
     def create_LJ():
         data = request.get_json()
         #check if skill alr exist in the DB , if yes don't allow it to add and display error ( name)
-        print("Hi I am inside")
+        #print("Hi I am inside")
         if not all(key in data.keys() for
                 key in ('Completion_Status','Roles_id',
                         'Staff_ID')):
@@ -707,7 +729,7 @@ with app.app_context():
         LJ = LearningJourney(**data)
     
         
-        print(LJ)
+        #print(LJ)
         try:
             db.session.add(LJ)
             db.session.commit()
