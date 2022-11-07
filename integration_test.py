@@ -128,12 +128,10 @@ class TestCreateSkill(TestApp):
         self.assertEqual(response.json, {
             
             "data": {
-                "skill":{
-                    'id': 1,
-                    'name': 'Communication',
                     'description': 'Learn to communicate well in a team.',
-                    'isDeleted' : None
-                }
+                    'id': 2,
+                    'isDeleted' : 0,
+                    'name': 'Communication'
             },
             "message": "Skill Created!"
             

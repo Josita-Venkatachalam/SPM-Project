@@ -207,7 +207,10 @@ with app.app_context():
         try:
             db.session.add(skill)
             db.session.commit()
-            return jsonify({"data": skill.to_dict()}), 201
+            return jsonify({
+                    "data": skill.to_dict(),
+                    "message": "Skill Created!"
+            }), 201
         except Exception:
             return jsonify({
                 "message": "Unable to commit to database."
