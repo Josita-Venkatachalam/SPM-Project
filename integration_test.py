@@ -36,8 +36,8 @@ class TestCreateLearningJourney(TestApp):
         response = self.client.post("/createLJ",
                                     data=json.dumps(request_body),
                                     content_type='application/json')
-        print("LJ response.json")
-        print(response.json)
+        #print("LJ response.json")
+        #print(response.json)
         self.assertEqual(response.json, {
             
             "data": {
@@ -64,8 +64,8 @@ class TestCreateRole(TestApp):
         response = self.client.post("/roles_add",
                                     data=json.dumps(request_body),
                                     content_type='application/json')
-        print('create role response.json below')
-        print(response.json)
+        #print('create role response.json below')
+        #print(response.json)
         self.assertEqual(response.json, {
             
             "data": {
@@ -112,29 +112,29 @@ class TestCreateRole(TestApp):
 
 class TestCreateSkill(TestApp):
     def test_create_skill(self):
-        skill_1 = Skill(name = 'Communication', description = 'Learn to communicate well in a team.')
-        db.session.add(skill_1)
-        db.session.commit()
+        skill_1 = Skill(name = 'Test Skill Name', description = 'Test Skill Description')
+        #db.session.add(skill_1)
+        #db.session.commit()
 
         request_body = {
             'name': skill_1.name,
             'description': skill_1.description,
         }
 
+        print(request_body)
+
         response = self.client.post("/skills_add",
                                     data=json.dumps(request_body),
                                     content_type='application/json')
         print(response.json)
         self.assertEqual(response.json, {
-            
             "data": {
-                    'description': 'Learn to communicate well in a team.',
-                    'id': 2,
+                    'description': 'Test Skill Description',
+                    'id': 1,
                     'isDeleted' : 0,
-                    'name': 'Communication'
+                    'name': 'Test Skill Name'
             },
             "message": "Skill Created!"
-            
         })
 
     def test_reject_create_empty_skill_name(self):
@@ -163,7 +163,6 @@ class TestCreateSkill(TestApp):
             "message": "There are empty fields, please enter the Skill Description."
         })
 
-    #test reject create duplicate skill is not working as our app.py doesnt
     def test_reject_create_duplicate_skill(self):
         skill_1 = Skill(name = 'Communication', description = 'Learn to communicate well in a team.')
         skill_2 = Skill(name = 'Communication', description = 'Learn to communicate well in a team.')
@@ -179,8 +178,6 @@ class TestCreateSkill(TestApp):
         response1 = self.client.post("/skills_add",
                                     data= json.dumps(request_body_1),
                                     content_type='application/json')
-
-        print(response1.json)
 
         request_body_2 = {
             'name': skill_2.name,
@@ -199,16 +196,29 @@ class TestCreateSkill(TestApp):
 #     def test_update_skill(self):
 #         existing_skill = Skill(name = 'Leadership', description = 'The key to successful leadership today is influence, not authority')
 #         updated_skill = Skill(name = 'Communication', description = 'Learn to communicate well in a team.')
-#         db.session.add(skill_1)
+#         db.session.add(existing_skill)
+#         db.session.add(updated_skill)
 #         db.session.commit()
 
 #         request_body = {
-#             'name': skill_1.name,
-#             'description': skill_1.description,
+#             'name': existing_skill.name,
+#             'description': existing_skill.description,
 #         }
 
-#         self.client.post("/skills_add",
-#                                 data=json.dumps(request_body),
+#         response = self.client.post("/skills_add",
+#                             data=json.dumps(request_body),
+#                             content_type='application/json')
+
+#         print("RESPONSE")
+#         print(response.json)
+#         skill_id = "0"
+
+#         request_body_existing = {
+#             'name': existing_skill.name,
+#             'description': existing_skill.description,
+#         }
+
+#         self.client.post("/skills_update/" + skill_id,
 #                                 content_type='application/json')
         
 #         self.assertEqual(response.json, {

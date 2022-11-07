@@ -189,6 +189,8 @@ with app.app_context():
 
     @app.route("/skills_add", methods=['POST'])
     def create_skill():
+        print ("create skill")
+
         data = request.get_json()
 
         if not all(key in data.keys() for
@@ -207,7 +209,18 @@ with app.app_context():
                 "message": "There are empty fields, please enter the Skill Description."
             }), 400
 
-        exists = db.session.query(db.exists().where(Skill.name == data["name"])).scalar()
+        print("data[name]: " + data["name"])
+
+        # skills_list = Skill.query.filter_by(isDeleted=0).all()
+        # return jsonify(
+        #     {
+        #         "data": [skill.to_dict() for skill in skills_list]
+        #     }
+        # )
+
+        exists = db.session.query(db.session.query(Skill).filter_by(name=data["name"]).exists()).scalar()
+
+        print("EXISTS: " + str(exists))
 
         if exists:
             return jsonify({
