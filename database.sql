@@ -68,7 +68,7 @@ CREATE TABLE `role` (
 
 INSERT INTO `role` (`name`, `description`) VALUES
 ('Project Manager', 'A Project Manager manages a team of people.' ),
-('Data analyst', 'A Data Analyst reviews data to identify key insights.'),
+('Data Analyst', 'A Data Analyst reviews data to identify key insights.'),
 ('Data Scientist', 'A Data Scientist analyze data for actionable insights.');
 
 -- STAFF

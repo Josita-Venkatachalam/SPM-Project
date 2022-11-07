@@ -173,6 +173,14 @@ class Registration(db.Model):
 with app.app_context():
     db.create_all()
 
+    @app.route("/skills/")
+    def skills():
+        skills_list = Skill.query.filter_by(isDeleted=0).all()
+        return jsonify(
+            {
+                "data": [skill.to_dict() for skill in skills_list]
+            }
+        ), 200
 
     @app.route("/skills/<int:skill_id>")
     def skill_by_id(skill_id):
@@ -189,8 +197,6 @@ with app.app_context():
 
     @app.route("/skills_add", methods=['POST'])
     def create_skill():
-        #print ("create skill")
-
         data = request.get_json()
 
         if not all(key in data.keys() for
@@ -209,18 +215,7 @@ with app.app_context():
                 "message": "Please fill in the Skill description."
             }), 400
 
-        #print("data[name]: " + data["name"])
-
-        # skills_list = Skill.query.filter_by(isDeleted=0).all()
-        # return jsonify(
-        #     {
-        #         "data": [skill.to_dict() for skill in skills_list]
-        #     }
-        # )
-
         exists = db.session.query(db.session.query(Skill).filter_by(name=data["name"]).exists()).scalar()
-
-        #print("EXISTS: " + str(exists))
 
         if exists:
             return jsonify({
@@ -244,19 +239,6 @@ with app.app_context():
                 "message": "Unable to commit to database."
             }), 500
 
-    @app.route("/skill_delete/<int:skill_id>", methods=['DELETE'])
-    def delete_skill(skill_id):
-    
-        skill = Skill.query.filter_by(id=skill_id).first()
-        try:
-            skill.isDeleted = 1
-            db.session.commit()
-            return jsonify(skill.to_dict()), 201
-        except Exception:
-            return jsonify({
-                "message": "Unable to commit to database."
-            }), 500
-
     @app.route("/skills_update/<string:id>/<string:name>/<string:description>", methods=['PUT'])
     def update_skill(id, name ,description):
         # name = request.args.get('name')
@@ -265,11 +247,11 @@ with app.app_context():
 
         skill = Skill.query.filter_by(id=int(id)).first()
         
-        print("Start Update Skill app.py")
-        print ("App ID: " + id)
-        print("App Name: " + name)
-        print("App Desc: " + description)
-        print("End Update Skill app.py")
+        # print("Start Update Skill app.py")
+        # print ("App ID: " + id)
+        # print("App Name: " + name)
+        # print("App Desc: " + description)
+        # print("End Update Skill app.py")
 
         if (name == ""):
             return jsonify({
@@ -303,30 +285,21 @@ with app.app_context():
                 "message": "Unable to commit to database."
             }), 500
 
+    @app.route("/skill_delete/<int:skill_id>", methods=['DELETE'])
+    def delete_skill(skill_id):
+        skill = Skill.query.filter_by(id=skill_id).first()
 
-
-
-    @app.route("/skills/")
-    def skills():
-        # search_name = request.args.get('skill')
-        # print(searchname)
-        # if searchname:
-        #     # skills_list = Skill.query.filter(Skill.name.contains(search_name))
-        #     skill = Skill.query.filter_by(name=searchname).first()
-        #     print(skill.to_dict())
-        #     return jsonify({
-        #         "data": skill.to_dict()
-        #     }), 200
-            
-        # else:
-        skills_list = Skill.query.filter_by(isDeleted=0).all()
-        return jsonify(
-            {
-                "data": [skill.to_dict() for skill in skills_list]
-            }
-        ), 200
-
-
+        try:
+            skill.isDeleted = 1
+            db.session.commit()
+            return jsonify({
+                "data": skill.to_dict(),
+                "message": "Skill successfully deleted."
+            }), 201
+        except Exception:
+            return jsonify({
+                "message": "Unable to commit to database."
+            }), 500
 
     @app.route("/roles/<int:role_id>")
     def role_by_id(role_id):
@@ -343,7 +316,6 @@ with app.app_context():
 
     @app.route("/roles_add", methods=['POST'])
     def create_role():
-        print ("create role")
         data = request.get_json()
         #Validate if name and description input is filled , if not display error msg
         #check if role alr exist in the DB , if yes don't allow it to add and display error ( name)
@@ -363,11 +335,11 @@ with app.app_context():
                 "message": "Please fill in the Role description."
             }), 400
 
-        print("data[name]: " + data["name"])
+        #print("data[name]: " + data["name"])
 
         exists = db.session.query(db.session.query(Role).filter_by(name=data["name"]).exists()).scalar()
 
-        print("EXISTS: " + str(exists))
+        #print("EXISTS: " + str(exists))
 
         if exists:
             return jsonify({
@@ -401,7 +373,10 @@ with app.app_context():
         try:
             role.isDeleted = 1
             db.session.commit()
-            return jsonify(role.to_dict()), 201
+            return jsonify({
+                "data": role.to_dict(),
+                "message": "Role successfully deleted."
+            }), 201
         except Exception:
             return jsonify({
                 "message": "Unable to commit to database."
@@ -416,11 +391,11 @@ with app.app_context():
             role = Role.query.filter_by(id=int(id)).first()
             # data=request.get_json()
 
-            print("Start Update Role app.py")
-            print ("App ID: " + id)
-            print("App Name: " + name)
-            print("App Desc: " + description)
-            print("End Update Role app.py")
+            # print("Start Update Role app.py")
+            # print ("App ID: " + id)
+            # print("App Name: " + name)
+            # print("App Desc: " + description)
+            # print("End Update Role app.py")
 
             if (name == ""):
                 return jsonify({
@@ -456,7 +431,6 @@ with app.app_context():
 
     @app.route("/roles")
     def roles():
-       
         roles_list = Role.query.filter_by(isDeleted=0).all()
         if roles_list:
             return jsonify(
@@ -483,11 +457,7 @@ with app.app_context():
         else:
             return jsonify({
                 "message": "Role not found."
-            }), 404
-
-
-    
-        
+            }), 404   
 
     @app.route("/skillsearch/<string:searchname>")
     def search_skill(searchname):
@@ -510,7 +480,6 @@ with app.app_context():
                     "data": []
                 }
             ), 500
-        
 
     @app.route("/roles_skills/<int:RoleID>")
     def get_skills():
