@@ -22,7 +22,7 @@ class Skill(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
     description = db.Column(db.String(100))
-    isDeleted = db.Column(db.Integer)
+    isDeleted = db.Column(db.Integer, server_default="0")
 
     def to_dict(self):
         """
@@ -62,7 +62,7 @@ class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
     description = db.Column(db.String(100))
-    isDeleted = db.Column(db.Integer)
+    isDeleted = db.Column(db.Integer, server_default="0")
 
     def to_dict(self):
         """
@@ -192,8 +192,8 @@ with app.app_context():
         data = request.get_json()
         #check if skill alr exist in the DB , if yes don't allow it to add and display error ( name)
         if not all(key in data.keys() for
-                key in ('name',
-                        'description')):
+                key in ('name', 
+                'description')):
             return jsonify({
                 "message": "Incorrect JSON object provided."
             }), 500
@@ -207,7 +207,10 @@ with app.app_context():
         try:
             db.session.add(skill)
             db.session.commit()
-            return jsonify({"data": skill.to_dict()}), 201
+            return jsonify({
+                    "data": skill.to_dict(),
+                    "message": "Skill Created!"
+            }), 201
         except Exception:
             return jsonify({
                 "message": "Unable to commit to database."
@@ -245,7 +248,6 @@ with app.app_context():
                 {
                     "code":200,
                     # "data":skill
-
                 }  
                 
             )
@@ -307,7 +309,11 @@ with app.app_context():
         try:
             db.session.add(role)
             db.session.commit()
-            return jsonify(role.to_dict()), 201
+            return jsonify(
+                {
+                    "data": role.to_dict(),
+                    "message": "Role Created!"
+            }), 201
         except Exception:
             return jsonify({
                 "message": "Unable to commit to database."
@@ -520,10 +526,10 @@ with app.app_context():
                 "message": "Unable to commit to database."
             }), 500
 
-    @app.route("/deassignskilltorole/<string:role_id>/<int:skill_id>", methods = ['DELETE'])
+    @app.route("/deassignskilltorole/<int:role_id>/<int:skill_id>", methods = ['DELETE'])
     def deassignskilltorole(role_id, skill_id):
         print('im in deassign')
-        role_skill = Role_Skill.query.filter_by(roles_id = role_id , skills_id = skill_id).first()
+        role_skill = Role_Skill.query.filter_by(roles_id = role_id, skills_id = skill_id).first()
 
         try:
             db.session.delete(role_skill)
@@ -536,10 +542,11 @@ with app.app_context():
 
     @app.route("/skillsofrole/<string:role_id>")
     def skills_of_role(role_id):
-        print("im in getting alr assigned skills")
+        print("start of skills_of_role")
         print(role_id)
         records = Role_Skill.query.filter(Role_Skill.roles_id == role_id)
         print(records)
+        print("end of skills_of_role")
         if records:
             return jsonify({
                 "data": [record.to_dict() for record in records]
@@ -617,8 +624,9 @@ with app.app_context():
             }), 404
 
 
-    @app.route("/LearningJourney")
+    @app.route("/LearningJourney_Test")
     def getLJ():
+        print("start of getLJ")
         learning_journeys= LearningJourney.query.filter_by(Staff_ID = 130001)
         print(learning_journeys)
         if learning_journeys:

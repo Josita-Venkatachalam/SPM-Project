@@ -138,70 +138,7 @@
                 }
                 return false;
             },
-                
         
-            
-            // searchSkill() {
-            //     // event.preventDefault
-            //     console.log("search called")
-            //     console.log(this.skillSearch)
-            //     if (this.skillSearch !== '') {
-            //         url = 'http://127.0.0.1:5000/skills?skill=' + this.skillSearch
-
-            //         axios.get(url)
-            //             .then(response => {
-            //                 console.log("i got data")
-            //                 console.log(response.data.data)
-            //                 this.allSkills = response.data.data;
-            //                 return false;
-
-            //             })
-            //             .catch(error => {
-            //                 alert(error)
-            //             });
-            //     }
-
-            // },
-            // deleteSkill(skill) {
-
-            //     if (confirm("Would you like to delete " + skill.name + " ?")) {
-            //         console.log(skill.id)
-            //         axios.delete('http://127.0.0.1:5000/skill_delete/' + skill.id)
-            //             .then(response => {
-            //                 console.log("Successfully Deleted");
-            //                 this.getSkills();
-            //                 // auto reload remaining skills
-            //                 this.deleteSuccess = skill.name + " sucessfully deleted!"
-            //             })
-            //             .catch(error => {
-            //                 alert(error)
-            //             });
-            //     }
-            // },
-            // searchSkill(){
-            //         event.preventDefault
-            //         console.log("search called")
-            //         console.log(this.skillSearch)
-            //         if (this.skillSearch !== '') {
-            //             url = 'http://127.0.0.1:5000/skillsearch/' + this.skillSearch
-                    
-            //             axios.get(url)
-            //                 .then(response => {
-            //                     console.log("i got data")
-            //                     console.log(response.data.data)
-            //                     this.allSkills = response.data.data;
-            //                     return false;
-                                
-            //                 })
-            //                 .catch(error => {alert(error)
-            //                     console.log("error in seach skill")
-            //                 });
-            //         }
-
-            // },
-
-            
-
         },
         mounted: function(){
             console.log("im inside b4 mount")

@@ -124,7 +124,8 @@
                         })
                         .catch(error => {
                             // this.error = error.response.data.message
-                            this.missing_datas.push("Skill name already exists. Please input a unique skill name.")
+                            console.log(error.response.data.message)
+                            this.missing_datas.push("Creation not successful. Please enter a unique skill name.")
                         });
                 }
             }

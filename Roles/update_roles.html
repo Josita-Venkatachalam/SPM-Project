@@ -72,7 +72,10 @@
             <div v-if="success != ''" class="alert alert-success" role="alert">
                 {{ success }}
             </div>
-            <p><label id="error" class="text-danger">{{ error }}</label></p>  
+            <div v-else-if="error != ''" class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+            <!-- <p><label id="error" v-if="error != ''" class="text-danger">{{ error }}</label></p>   -->
         
     </div>
 
@@ -92,7 +95,6 @@
            return{
                success: '',
                error: '',
-              
                updated_name: role_name,
                updated_desc: role_desc,
                editSuccess: "",
@@ -129,14 +131,12 @@
                             // allRoles = response.data
                             // this.allRoles= response.data.data
                             
-
-                            
                             return false;
                         })
                         .catch(error => {
                             console.log('update error')
-                            this.error = error.response.data.message
-                            this.issue = "Update not successful. Role's details have not been changed."
+                            //this.error = error.response.data.message
+                            this.error = "Update not successful. Please enter a unique role name."
 
                         });
 

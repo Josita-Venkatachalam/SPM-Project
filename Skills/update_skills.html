@@ -64,6 +64,18 @@
             <button type="button" class="btn btn-secondary" v-on:click="cancel()">Cancel</button>&nbsp;<button type="button" class="btn btn-primary" v-on:click="updateskill()">Update</button>
         </div>
 
+        <br>
+        <div v-for="issue in missing_datas" class="alert alert-danger" role="alert">
+            {{issue}}
+        </div>
+        <div v-if="success != ''" class="alert alert-success" role="alert">
+            {{ success }}
+        </div>
+        <div v-else-if="error != ''" class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        <!-- <p><label id="error" class="text-danger">{{ error }}</label></p>   -->
+
     </div>
 
 
@@ -82,55 +94,39 @@
             return {
                 success: '',
                 error: '',
-
-
                 updated_name: skill_name,
-                updated_desc: skill_desc
-                    // skillId: 0,
-                    // skillname: '',
-                    // skilldesc: '',
-
+                updated_desc: skill_desc,
+                missing_datas: []
             }
-
-
-
         },
         methods: {
             updateskill() {
-                console.log(this.updated_desc)
-                console.log(this.updated_name)
-                console.log(typeof skill_id)
-                url = "http://127.0.0.1:5000/skills_update/" + skill_id + "/" + this.updated_name + '/' + this.updated_desc
-                axios.put(url)
-                    .then(response => {
-                        this.success = "Successfully Retrieved"
-                        console.log("succesfully edited")
-                            // allSkills = response.data
-                            // this.allSkills= response.data.data
-                        window.location.href = "./view_skills.html"
+                if (this.updated_desc == "") {
+                    this.missing_datas.push("Please fill in the Skill description.")
+                } 
+                if (this.updated_name == "") {
+                    this.missing_datas.push("Please fill in the Skill name.")
+                }
+                else if (this.skill_name != "" && this.skill_desc != "") {
 
-
-                        return false;
-                    })
-                    .catch(error => {
-                        console.log('update error')
-                        this.error = error.response.data.message
-
-                    });
-
-
-
+                    url = "http://127.0.0.1:5000/skills_update/" + skill_id + "/" + this.updated_name + '/' + this.updated_desc
+                    axios.put(url)
+                        .then(response => {
+                            this.success = "Skill sucessfully updated!"
+                            window.location.href = "./view_skills.html"
+                            return false;
+                        })
+                        .catch(error => {
+                            console.log('update error')
+                            //this.error = error.response.data.message
+                            this.error = "Update not successful. Please enter a unique skill name."
+                        });
+                    }
             },
             cancel() {
                 window.location.href = "./view_skills.html"
-
             }
-
-
         },
-
-        
-
     }).mount("#app")
 </script>
 
