@@ -190,13 +190,30 @@ with app.app_context():
     @app.route("/skills_add", methods=['POST'])
     def create_skill():
         data = request.get_json()
-        #check if skill alr exist in the DB , if yes don't allow it to add and display error ( name)
+
         if not all(key in data.keys() for
                 key in ('name', 
                 'description')):
             return jsonify({
                 "message": "Incorrect JSON object provided."
             }), 500
+
+        if (data["name"] == ""):
+            return jsonify({
+                "message": "There are empty fields, please enter the Skill Name."
+            }), 400
+        elif (data["description"] == ""):
+            return jsonify({
+                "message": "There are empty fields, please enter the Skill Description."
+            }), 400
+
+        exists = db.session.query(db.exists().where(Skill.name == data["name"])).scalar()
+
+        if exists:
+            return jsonify({
+                "message": "Skill name already exists. Please enter unique skill name."
+            }), 400
+        
         skill = Skill(**data)
         
         print(skill)
