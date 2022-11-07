@@ -306,7 +306,11 @@ with app.app_context():
         try:
             db.session.add(role)
             db.session.commit()
-            return jsonify(role.to_dict()), 201
+            return jsonify(
+                {
+                    "data": role.to_dict(),
+                    "message": "Role Created!"
+            }), 201
         except Exception:
             return jsonify({
                 "message": "Unable to commit to database."
