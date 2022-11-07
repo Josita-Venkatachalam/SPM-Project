@@ -108,7 +108,7 @@ class TestCreateRole(TestApp):
                                     content_type='application/json')
         
         self.assertEqual(response.json, {
-            "message": "There are empty fields, please enter the Role Name."
+            "message": "Please fill in the Role name."
         })
 
     def test_reject_create_empty_role_desc(self):
@@ -122,7 +122,7 @@ class TestCreateRole(TestApp):
                                     content_type='application/json')
         
         self.assertEqual(response.json, {
-            "message": "There are empty fields, please enter the Role Description."
+            "message": "Please fill in the Role description."
         })
 
     def test_reject_create_duplicate_role(self):
@@ -153,6 +153,47 @@ class TestCreateRole(TestApp):
         self.assertEqual(response.json, {
             "message": "Role name already exists. Please enter unique role name."
         })
+
+    # class TestUpdateSkill(TestApp):
+#     def test_update_skill(self):
+#         existing_skill = Skill(name = 'Leadership', description = 'The key to successful leadership today is influence, not authority')
+#         updated_skill = Skill(name = 'Communication', description = 'Learn to communicate well in a team.')
+#         db.session.add(existing_skill)
+#         db.session.add(updated_skill)
+#         db.session.commit()
+
+#         request_body = {
+#             'name': existing_skill.name,
+#             'description': existing_skill.description,
+#         }
+
+#         response = self.client.post("/skills_add",
+#                             data=json.dumps(request_body),
+#                             content_type='application/json')
+
+#         print("RESPONSE")
+#         print(response.json)
+#         skill_id = "0"
+
+#         request_body_existing = {
+#             'name': existing_skill.name,
+#             'description': existing_skill.description,
+#         }
+
+#         self.client.post("/skills_update/" + skill_id,
+#                                 content_type='application/json')
+        
+#         self.assertEqual(response.json, {
+            
+#             "data": {
+#                     'description': 'Learn to communicate well in a team.',
+#                     'id': 2,
+#                     'isDeleted' : 0,
+#                     'name': 'Communication'
+#             },
+#             "message": "Skill Created!"
+            
+#         })
 
 class TestCreateSkill(TestApp):
     def test_create_skill(self):
@@ -191,7 +232,7 @@ class TestCreateSkill(TestApp):
                                     content_type='application/json')
         
         self.assertEqual(response.json, {
-            "message": "There are empty fields, please enter the Skill Name."
+            "message": "Please fill in the Skill name."
         })
 
     def test_reject_create_empty_skill_desc(self):
@@ -204,7 +245,7 @@ class TestCreateSkill(TestApp):
                                     content_type='application/json')
         
         self.assertEqual(response.json, {
-            "message": "There are empty fields, please enter the Skill Description."
+            "message": "Please fill in the Skill description."
         })
 
     def test_reject_create_duplicate_skill(self):

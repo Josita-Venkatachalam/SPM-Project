@@ -202,11 +202,11 @@ with app.app_context():
 
         if (data["name"] == ""):
             return jsonify({
-                "message": "There are empty fields, please enter the Skill Name."
+                "message": "Please fill in the Skill name."
             }), 400
         elif (data["description"] == ""):
             return jsonify({
-                "message": "There are empty fields, please enter the Skill Description."
+                "message": "Please fill in the Skill description."
             }), 400
 
         print("data[name]: " + data["name"])
@@ -334,11 +334,11 @@ with app.app_context():
 
         if (data["name"] == ""):
             return jsonify({
-                "message": "There are empty fields, please enter the Role Name."
+                "message": "Please fill in the Role name."
             }), 400
         elif (data["description"] == ""):
             return jsonify({
-                "message": "There are empty fields, please enter the Role Description."
+                "message": "Please fill in the Role description."
             }), 400
 
         print("data[name]: " + data["name"])
