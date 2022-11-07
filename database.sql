@@ -241,6 +241,11 @@ CREATE TABLE IF NOT EXISTS `learning_journey_courses` (
     FOREIGN KEY (`Course_id`)
     REFERENCES `spmproj`.`courses` (`id`)
     ON DELETE SET NULL
+    ON UPDATE SET NULL,
+  CONSTRAINT `fk_Skills_is_in_LJ1`
+    FOREIGN KEY (`Skill_id`)
+    REFERENCES `spmproj`.`skill` (`id`)
+    ON DELETE SET NULL
     ON UPDATE SET NULL)
 ENGINE = InnoDB;
 
