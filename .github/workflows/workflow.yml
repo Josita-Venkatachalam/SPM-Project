@@ -19,9 +19,9 @@ jobs:
     services:
       mysql:
           image: mysql:5.7
-#           env:
-#               MYSQL_ALLOW_EMPTY_PASSWORD: yes
-#               # MYSQL_DATABASE: laravel_tags
+          env:
+              MYSQL_ALLOW_EMPTY_PASSWORD: yes
+              # MYSQL_DATABASE: laravel_tags
           ports:
               - 3306
           env:
@@ -30,7 +30,7 @@ jobs:
               MYSQL_PASSWORD: ${{env.MYSQL_PASSWORD}}
               MYSQL_ROOT_PASSWORD: ${{env.MYSQL_PASSWORD}}
 
-          options: --name=mysql --health-cmd="mysqladmin ping\" --health-interval=10s --health-timeout=5s --health-retries=3
+          options:  --health-cmd="mysqladmin ping\" --health-interval=10s --health-timeout=5s --health-retries=3
 
 
     #Groups together all the steps that run in the check-bats-version job. 
