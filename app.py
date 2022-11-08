@@ -530,6 +530,15 @@ with app.app_context():
             }
         ), 200
 
+    @app.route("/courses/<course_id>")
+    def course_by_id(course_id):
+        course = Course.query.filter_by(id = course_id).first()
+        return jsonify(
+            {
+                "data": course.to_dict()
+            }
+        ), 200
+
     @app.route("/assignskilltocourse/", methods = ['POST'])
     def assignskilltocourse():
         print('im in assign course')
