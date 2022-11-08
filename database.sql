@@ -68,7 +68,7 @@ CREATE TABLE `role` (
 
 INSERT INTO `role` (`name`, `description`) VALUES
 ('Project Manager', 'A Project Manager manages a team of people.' ),
-('Data analyst', 'A Data Analyst reviews data to identify key insights.'),
+('Data Analyst', 'A Data Analyst reviews data to identify key insights.'),
 ('Data Scientist', 'A Data Scientist analyze data for actionable insights.');
 
 -- STAFF
@@ -240,6 +240,11 @@ CREATE TABLE IF NOT EXISTS `learning_journey_courses` (
   CONSTRAINT `fk_Courses_is_in_LJ1`
     FOREIGN KEY (`Course_id`)
     REFERENCES `spmproj`.`courses` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE SET NULL,
+  CONSTRAINT `fk_Skills_is_in_LJ1`
+    FOREIGN KEY (`Skill_id`)
+    REFERENCES `spmproj`.`skill` (`id`)
     ON DELETE SET NULL
     ON UPDATE SET NULL)
 ENGINE = InnoDB;

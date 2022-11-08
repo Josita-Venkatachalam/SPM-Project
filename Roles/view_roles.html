@@ -52,9 +52,7 @@
     </nav>
     
     <div id="app" class="container mt-5">
-        <div v-if="deleteSuccess !=''" class="alert alert-success" role="alert">
-            {{deleteSuccess}}
-        </div>
+        
         
 
         <div class="table-title">
@@ -88,9 +86,13 @@
                 </tr>
             </tbody>
         </table>
+        <div v-if="deleteSuccess !=''" class="alert alert-success" role="alert">
+            {{deleteSuccess}}
+        </div>
         <div class="mt-3 text-center">
             <button type="button" class="btn btn-info" v-on:click="create()">Create Role</button>
-        </div>         
+        </div> 
+
 
     </div>
 </body>
@@ -173,7 +175,7 @@
                             console.log("Successfully Deleted");
                             this.getRoles();
                             // auto reload remaining roles
-                            this.deleteSuccess = role.name + " sucessfully deleted!"
+                            this.deleteSuccess = "Role successfully deleted."
                         })
                         .catch(error => {
                             alert(error)

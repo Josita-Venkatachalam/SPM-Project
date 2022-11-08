@@ -173,6 +173,14 @@ class Registration(db.Model):
 with app.app_context():
     db.create_all()
 
+    @app.route("/skills/")
+    def skills():
+        skills_list = Skill.query.filter_by(isDeleted=0).all()
+        return jsonify(
+            {
+                "data": [skill.to_dict() for skill in skills_list]
+            }
+        ), 200
 
     @app.route("/skills/<int:skill_id>")
     def skill_by_id(skill_id):
@@ -189,8 +197,6 @@ with app.app_context():
 
     @app.route("/skills_add", methods=['POST'])
     def create_skill():
-        #print ("create skill")
-
         data = request.get_json()
 
         if not all(key in data.keys() for
@@ -209,18 +215,7 @@ with app.app_context():
                 "message": "Please fill in the Skill description."
             }), 400
 
-        #print("data[name]: " + data["name"])
-
-        # skills_list = Skill.query.filter_by(isDeleted=0).all()
-        # return jsonify(
-        #     {
-        #         "data": [skill.to_dict() for skill in skills_list]
-        #     }
-        # )
-
         exists = db.session.query(db.session.query(Skill).filter_by(name=data["name"]).exists()).scalar()
-
-        #print("EXISTS: " + str(exists))
 
         if exists:
             return jsonify({
@@ -244,19 +239,6 @@ with app.app_context():
                 "message": "Unable to commit to database."
             }), 500
 
-    @app.route("/skill_delete/<int:skill_id>", methods=['DELETE'])
-    def delete_skill(skill_id):
-    
-        skill = Skill.query.filter_by(id=skill_id).first()
-        try:
-            skill.isDeleted = 1
-            db.session.commit()
-            return jsonify(skill.to_dict()), 201
-        except Exception:
-            return jsonify({
-                "message": "Unable to commit to database."
-            }), 500
-
     @app.route("/skills_update/<string:id>/<string:name>/<string:description>", methods=['PUT'])
     def update_skill(id, name ,description):
         # name = request.args.get('name')
@@ -265,19 +247,19 @@ with app.app_context():
 
         skill = Skill.query.filter_by(id=int(id)).first()
         
-        print("Start Update Skill app.py")
-        print ("App ID: " + id)
-        print("App Name: " + name)
-        print("App Desc: " + description)
-        print("End Update Skill app.py")
+        # print("Start Update Skill app.py")
+        # print ("App ID: " + id)
+        # print("App Name: " + name)
+        # print("App Desc: " + description)
+        # print("End Update Skill app.py")
 
         if (name == ""):
             return jsonify({
-                "message": "There are empty fields, please enter the Skill Name."
+                "message": "Please fill in the Skill name."
             }), 400
         elif (description == ""):
             return jsonify({
-                "message": "There are empty fields, please enter the Skill Description."
+                "message": "Please fill in the Skill description."
             }), 400
 
         exists = db.session.query(db.session.query(Skill).filter_by(name=name).exists()).scalar()
@@ -303,30 +285,21 @@ with app.app_context():
                 "message": "Unable to commit to database."
             }), 500
 
+    @app.route("/skill_delete/<int:skill_id>", methods=['DELETE'])
+    def delete_skill(skill_id):
+        skill = Skill.query.filter_by(id=skill_id).first()
 
-
-
-    @app.route("/skills/")
-    def skills():
-        # search_name = request.args.get('skill')
-        # print(searchname)
-        # if searchname:
-        #     # skills_list = Skill.query.filter(Skill.name.contains(search_name))
-        #     skill = Skill.query.filter_by(name=searchname).first()
-        #     print(skill.to_dict())
-        #     return jsonify({
-        #         "data": skill.to_dict()
-        #     }), 200
-            
-        # else:
-        skills_list = Skill.query.filter_by(isDeleted=0).all()
-        return jsonify(
-            {
-                "data": [skill.to_dict() for skill in skills_list]
-            }
-        ), 200
-
-
+        try:
+            skill.isDeleted = 1
+            db.session.commit()
+            return jsonify({
+                "data": skill.to_dict(),
+                "message": "Skill successfully deleted."
+            }), 201
+        except Exception:
+            return jsonify({
+                "message": "Unable to commit to database."
+            }), 500
 
     @app.route("/roles/<int:role_id>")
     def role_by_id(role_id):
@@ -343,7 +316,6 @@ with app.app_context():
 
     @app.route("/roles_add", methods=['POST'])
     def create_role():
-        print ("create role")
         data = request.get_json()
         #Validate if name and description input is filled , if not display error msg
         #check if role alr exist in the DB , if yes don't allow it to add and display error ( name)
@@ -363,11 +335,11 @@ with app.app_context():
                 "message": "Please fill in the Role description."
             }), 400
 
-        print("data[name]: " + data["name"])
+        #print("data[name]: " + data["name"])
 
         exists = db.session.query(db.session.query(Role).filter_by(name=data["name"]).exists()).scalar()
 
-        print("EXISTS: " + str(exists))
+        #print("EXISTS: " + str(exists))
 
         if exists:
             return jsonify({
@@ -401,7 +373,10 @@ with app.app_context():
         try:
             role.isDeleted = 1
             db.session.commit()
-            return jsonify(role.to_dict()), 201
+            return jsonify({
+                "data": role.to_dict(),
+                "message": "Role successfully deleted."
+            }), 201
         except Exception:
             return jsonify({
                 "message": "Unable to commit to database."
@@ -412,30 +387,50 @@ with app.app_context():
             # name = request.args.get('name')
             # description = request.args.get('description')
             # role_id = request.args.get('id')
-            print(name)
-            print(id)
+            
             role = Role.query.filter_by(id=int(id)).first()
             # data=request.get_json()
-            
-            print(role)
+
+            # print("Start Update Role app.py")
+            # print ("App ID: " + id)
+            # print("App Name: " + name)
+            # print("App Desc: " + description)
+            # print("End Update Role app.py")
+
+            if (name == ""):
+                return jsonify({
+                    "message": "Please fill in the Role name."
+                }), 400
+            elif (description == ""):
+                return jsonify({
+                    "message": "Please fill in the Role description."
+                }), 400
+
+            exists = db.session.query(db.session.query(Role).filter_by(name=name).exists()).scalar()
+
+            #print("EXISTS: " + str(exists))
+
+            if exists:
+                return jsonify({
+                    "message": "Role name already exists. Please enter unique role name."
+                }), 400
             
             role.name = name
             role.description = description
-            db.session.commit()
-            #retrive the data from the request to update the data in the database
-            return jsonify(
-                {
-                    "code":200,
-                    # "data":role
-
-                }  
-                
-            )
+            try:
+                db.session.commit()
+                return jsonify(
+                    {
+                        "message" : "Successfully updated!"
+                    }   
+                )
+            except Exception:
+                return jsonify({
+                    "message": "Unable to commit to database."
+                }), 500
 
     @app.route("/roles")
-
     def roles():
-       
         roles_list = Role.query.filter_by(isDeleted=0).all()
         if roles_list:
             return jsonify(
@@ -462,11 +457,7 @@ with app.app_context():
         else:
             return jsonify({
                 "message": "Role not found."
-            }), 404
-
-
-    
-        
+            }), 404   
 
     @app.route("/skillsearch/<string:searchname>")
     def search_skill(searchname):
@@ -489,7 +480,6 @@ with app.app_context():
                     "data": []
                 }
             ), 500
-        
 
     @app.route("/roles_skills/<int:RoleID>")
     def get_skills():
@@ -839,6 +829,54 @@ with app.app_context():
             return jsonify({
             "message": "Role not found."
             }), 404
+
+    @app.route("/get_course_LJ/")
+    def get_your_lj_courses():
+        #lj_course = Learning_Journey_Courses.query.all()
+
+        # ljIDs = [item.to_dict() for item in lj_course]
+
+        # lj = LearningJourney.query.filter(LearningJourney.id.in_(ljIDs))
+
+        #lj_Role_ID = [item.to_dict() for item in lj]
+
+        #target_role = Role.query.filter(Role.id.in_(lj_Role_ID))
+
+        #lj_course = Learning_Journey_Courses.query.all()
+        lj_course = (
+            db.session.query(Learning_Journey_Courses)
+            .all()
+        )
+
+        lj = (
+            db.session.query(LearningJourney)
+            .select_from(Learning_Journey_Courses)
+            .join(LearningJourney, Learning_Journey_Courses.Learning_Journey_Id == LearningJourney.id)
+            .all()
+        )
+
+        role = (
+            db.session.query(Role)
+            .select_from(Learning_Journey_Courses, LearningJourney)
+            .join(LearningJourney, Learning_Journey_Courses.Learning_Journey_Id == LearningJourney.id)
+            .join(Role, LearningJourney.Roles_id == Role.id)
+            .all()
+        )
+
+        if lj_course:
+            return jsonify(
+                {
+                    "data": [
+                        [item.to_dict() for item in lj_course],
+                        [item.to_dict() for item in lj],
+                        [item.to_dict() for item in role]
+                    ]
+                }
+            ), 200
+        else:
+            return jsonify({
+            "message": "Role not found."
+            }), 404
             
         # @app.route("/roles_add", methods=['POST'])
         # def create_role():
@@ -878,6 +916,7 @@ with app.app_context():
             return jsonify({
             "message": "chosen courses not found."
             }), 404
+
     @app.route("/get_roleid_LJ/<int:LearningJourneyID>")
     def get_roleid_LJ(LearningJourneyID):
         print(LearningJourneyID)
