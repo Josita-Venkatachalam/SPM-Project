@@ -72,7 +72,6 @@
                     <th scope="row">{{course.name}}</th>
                     <td>{{course.description}}</td>
                     <td v-if ="alrCompletedCourses.includes(course.id)"><bold>Completed</bold></td>
-                   
 
                     <td v-else-if = "chosenCourses.includes(course.id)" class="text-right"><button type="button" class="btn btn-warning" v-on:click="DropCourse(course.id)">Remove</button></td>
 
