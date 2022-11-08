@@ -7,14 +7,7 @@ name: Demo Workflow
 #pushes to specific branches, paths, or tags, see "Workflow syntax for GitHub Actions."
 on: [push]
 
-# services:
-#     mysql:
-#         image: mysql:5.7
-#         env:
-#             MYSQL_ALLOW_EMPTY_PASSWORD: yes
-#             # MYSQL_DATABASE: laravel_tags
-#         ports:
-#             - 3306
+
        
 
 #Groups together all the jobs that run in the Demo Workflow workflow.
@@ -23,6 +16,15 @@ jobs:
   build:
     #Configures the job to run on the latest version of an Ubuntu Linux runner.
     runs-on: ubuntu-latest
+    services:
+      mysql:
+          image: mysql:5.7
+          env:
+              MYSQL_ALLOW_EMPTY_PASSWORD: yes
+              # MYSQL_DATABASE: laravel_tags
+          ports:
+              - 3306
+          options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     #Groups together all the steps that run in the check-bats-version job. 
     #Each item nested under this section is a separate action or shell script.
