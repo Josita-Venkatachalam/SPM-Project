@@ -136,8 +136,8 @@ CREATE TABLE IF NOT EXISTS `roles_skills` (
   `Skills_id` INT,
   `ID` INT NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`ID`),
-  INDEX `fk_Roles_has_Skills_Skills1_idx` (`Skills_id` ASC) VISIBLE,
-  INDEX `fk_Roles_has_Skills_Roles1_idx` (`Roles_id` ASC) VISIBLE,
+  INDEX `fk_Roles_has_Skills_Skills1_idx` (`Skills_id` ASC),
+  INDEX `fk_Roles_has_Skills_Roles1_idx` (`Roles_id` ASC),
   CONSTRAINT `fk_Roles_has_Skills_Roles1`
     FOREIGN KEY (`Roles_id`)
     REFERENCES `spmproj`.`role` (`id`)
