@@ -70,8 +70,7 @@ jobs:
         run: |
           #TODO: Add the command to run all the unittest here.
           python unit_test.py
-        env:
-          DB_PORT: ${{ job.services.mysql.ports[3306] }}
+        
 
       - name: Test Integration tests
         #runs the integration test
