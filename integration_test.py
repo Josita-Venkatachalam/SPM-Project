@@ -778,16 +778,6 @@ class TestDeleteSkill(TestApp):
         })       
 
 
-
-        # "data": {
-        #             'description': 'Test Skill Description',
-        #             'id': 1,
-        #             'isDeleted' : 0,
-        #             'name': 'Test Skill Name'
-        #     },
-        #     "message": "Skill Created!"
-
-
 class TestAssignSkillToCourse(TestApp):
     def test_assign_skill_to_course(self):
         course_skill = Course_Skill(Course_id = 'MGT001', Skill_id = 1)
