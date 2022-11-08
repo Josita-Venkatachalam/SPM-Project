@@ -41,6 +41,11 @@ jobs:
           #mysql connector
           pip3 install mysql-connector
 
+          #app.py installations
+          from flask import Flask, request, jsonify
+          from flask_sqlalchemy import SQLAlchemy
+          from flask_cors import CORS, cross_origin
+
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
 
