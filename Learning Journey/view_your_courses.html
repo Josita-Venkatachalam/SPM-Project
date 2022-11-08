@@ -34,34 +34,39 @@
             </div>
         </div>
     </nav>
-    <div id="app" class="container mt-5">
 
+    <div style="margin-left: 50px; margin-top: 30px; margin-bottom: -30px;">
+        <button class="btn btn-outline-primary" onclick="history.back()"> < Back</button>
+    </div>
+
+    <div id="app" class="container mt-5">
         <div class="table-title">
             <div class="">
                 <h2>View All Your Courses</h2>
+                <p style="font-style: italic;">View <strong>all</strong> the courses that you have added. Click on the "Remove" button to remove the course from that particular Learning Journey.</p>
             </div>
             
         </div>
 
         <table v-else class="table table-striped table-hover mt-3">
             <thead>
-                <tr>
-                    <th scope="col">LJ ID</th>
+                <tr class="text-center">
                     <th scope="col">Learning Journey (Target Role)</th>
-                    <th scope="col">Skill ID</th>
                     <th scope="col">Skill Name</th>
                     <th scope="col">Course ID</th>
                     <th scope="col">Course Name</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(item, index) in allLJ" :key="item.Roles_id">
-                    <td scope="col">{{item.Learning_Journey_Id}}</td>
+                <tr v-for="(item, index) in allLJ" :key="item" class="text-center">
                     <td scope="col">{{roleNameList[index]}}</td>
-                    <td scope="col">{{item.Skill_id}}</td>
-                    <td scope="col">Skill Name</td>
+                    <td scope="col">{{skillNameList[index]}}</td>
                     <td scope="col">{{item.Course_id}}</td>
-                    <td scope="col">Course Name</td>
+                    <td scope="col">{{courseNameList[index]}}</td>
+                    <td>
+                        <button type="button" class="btn btn-warning" v-on:click="DropCourse(item)">Remove</button>
+                    </td>
                     <!-- <td class="select-LJ-list text-right">
                         <button type="button" class="select-role-btn btn btn-warning" v-on:click="Update_LJ(lj.id)">Update</button>&nbsp;&nbsp;
                         <button type="button" class="select-role-btn btn btn-danger" v-on:click="delete_LJ(lj.id)">Delete</button>
@@ -69,6 +74,9 @@
                 </tr>
             </tbody>
         </table>
+        <div v-if="successDrop != ''" class="alert alert-success" role="alert">
+            Dropped Course from Learning Journey Successfully
+        </div>
     </div>
 
 </body>
@@ -77,11 +85,13 @@
     Vue.createApp({
         data() {
             return {
-                success: '',
+                successDrop: '',
                 error: '',
                 allLJ: [],
                 roleNameList: [],
-
+                skillNameList: [],
+                courseNameList: [],
+                LJList: {}
             }
         },
         methods: {
@@ -92,33 +102,80 @@
                         this.allLJ = response.data.data[0]
                         //json_role_id = response.data.data[1]
                         //json_role_names = response.data.data[2]
-                        console.log(this.allLJ)
+
+                        //Get Target Role Names
+                        let promises = []
                         for (item of this.allLJ) {
                             url = 'http://127.0.0.1:5000/LearningJourney/' + item.Learning_Journey_Id
-                            axios.get(url)
-                                .then(response => {
-                                    url2 = 'http://127.0.0.1:5000/roles/' + response.data.data.Roles_id
-                                    axios.get(url2)
-                                        .then(response => {
-                                            console.log("success")
-                                            this.roleNameList.push(response.data.data.name)
-                                        })
-                                        .catch(error => {
-                                            console.log("error in getting role name")
-                                            this.error = error.response.data.message
-                                        })
-                                })
-                                .catch(error => {
-                                    console.log(error.response.data.message)
-                                })
-                            
-                                
+                            promises.push(axios.get(url))
                         }
+
+                        Promise.all(promises)
+                            .then(responses => {
+                                let promises_1 = []
+                                for (item of responses){
+                                    url2 = 'http://127.0.0.1:5000/roles/' + item.data.data.Roles_id
+                                    promises_1.push(axios.get(url2))
+                                }
+                                Promise.all(promises_1)
+                                    .then(responses_1 => {
+                                        for (item of responses_1){
+                                            this.roleNameList.push(item.data.data.name)
+                                        }
+                                    })
+                            }
+                        )
+                        
+                        //Get Skill Name
+                        let promises_2 = []
+                        for (item of this.allLJ) {
+                            url = 'http://127.0.0.1:5000/skills/' + item.Skill_id
+                            promises_2.push(axios.get(url))
+                        }
+
+                        Promise.all(promises_2)
+                            .then(responses_2 => {
+                                for (item of responses_2){
+                                    this.skillNameList.push(item.data.data.name)
+                                }
+                            })
+
+                        //Get Course Name
+                        let promises_3 = []
+                        for (item of this.allLJ) {
+                            url = 'http://127.0.0.1:5000/courses/' + item.Course_id
+                            promises_3.push(axios.get(url))
+                        }
+
+                        Promise.all(promises_3)
+                            .then(responses_3 => {
+                                for (item of responses_3){
+                                    this.courseNameList.push(item.data.data.name)
+                                }
+                            })
+                        
                         return false;
                     })
                     .catch(error => {
                         this.error = error.response.data.message
                     });
+            },
+            DropCourse(item) {
+                if (confirm("Would you like to drop " + item.Course_id + "?")) {
+                    console.log(item)
+                    url = 'http://127.0.0.1:5000/delete_LJ_course/' + item.Learning_Journey_Id + "/" + item.Skill_id + "/"+ item.Course_id
+                    axios.delete(url)
+                        .then(response => {
+                            console.log("Successfully Dropped");
+                            this.successDrop = "Dropped Course from Learning Journey Successfully"
+                            setTimeout(() => {  console.log("World!"); }, 6000);
+                            location.reload()
+                        })
+                        .catch(error => {
+                            alert(error)
+                            console.log('error in dropping')
+                        });
+                }
             }
         },
         mounted: function() {

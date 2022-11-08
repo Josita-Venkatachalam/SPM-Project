@@ -788,5 +788,81 @@ class TestDeleteSkill(TestApp):
         #     "message": "Skill Created!"
 
 
+class TestAssignSkillToCourse(TestApp):
+    def test_assign_skill_to_course(self):
+        course_skill = Course_Skill(Course_id = 'MGT001', Skill_id = 1)
+        db.session.add(course_skill)
+        db.session.commit()
+
+        request_body = {
+            'Course_id': course_skill.Course_id,
+            'Skill_id': course_skill.Skill_id,
+        }
+        # print('b4 assign skill to course')
+        
+        response = self.client.post("/assignskilltocourse/",
+                                    data=json.dumps(request_body),
+                                    content_type='application/json')
+
+        # print ("Response: " + str(response.json))
+
+        self.assertEqual(response.json, {
+            
+            "message": "added successfully"
+        })
+
+class TestAssignSkillToRole(TestApp):
+    def test_assign_skill_to_role(self):
+        role_skill = Role_Skill(roles_id = 3, skills_id = 2)
+        db.session.add(role_skill)
+        db.session.commit()
+
+        request_body = {
+            'roles_id': 3,
+            'skills_id': 2,
+        }
+        # print('b4 assign skill to role')
+        
+        response = self.client.post("/assignskilltorole/",
+                                    data=json.dumps(request_body),
+                                    content_type='application/json')
+        # print ("Response: " + str(response.json))
+
+        self.assertEqual(response.json, {
+            
+            "message": "added successfully"
+        })
+
+class TestDeassignSkillToCourse(TestApp):
+    def test_deassign_skill_to_course(self):
+        course_skill = Course_Skill(Course_id = 'MGT001', Skill_id = 3)
+        db.session.add(course_skill)
+        db.session.commit()
+        
+        response = self.client.delete("/deassignskilltocourse/" + 'MGT001' + '/'  + '3' , content_type='application/json') 
+
+        self.assertEqual(response.json, {
+            
+            "message": "deleted successfully"
+        })      
+class TestDeassignSkillToRole(TestApp):
+    def test_deassign_skill_to_role(self):
+        
+        role_skill = Role_Skill(roles_id = 3, skills_id = 3)
+        db.session.add(role_skill)
+        db.session.commit()
+        
+
+        response = self.client.delete("/deassignskilltorole/" + '3' + '/'  + '3' , content_type='application/json') 
+
+        self.assertEqual(response.json, {
+            
+            "message": "deleted successfully"
+        })      
+
+
+
+
+
 if __name__ == '__main__':
     unittest.main()
