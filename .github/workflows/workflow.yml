@@ -41,13 +41,13 @@ jobs:
       #allowing you to run scripts or other actions against your code (such as build and test tools). 
       #You should use the checkout action any time your workflow will run against the repository's code.
       - uses: actions/checkout@v3
-      - name: Set up Python 3.10.1
+      - name: Set up Python 3.10.0
         #This step uses the actions/setup-python@v4 action to install the 
         #specified version of the python (this example uses v3.x which is the latest minor version in 3.x series). 
         #This puts both the python commands in your PATH.
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10.1'
+          python-version: '3.10.0'
 
       - name: Install dependencies
         #The run keyword tells the job to execute a command on the runner.
