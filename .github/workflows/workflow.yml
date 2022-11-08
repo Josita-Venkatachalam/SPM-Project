@@ -36,6 +36,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install flake8
+          pip install mysql-connector-python
           #TODO: Install flake8 using pip command here
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
@@ -55,7 +56,7 @@ jobs:
         run: |
           #TODO: Add the command to run all the unittest here.
           python unit_test.py
-          
+
       - name: Test Integration tests
         #runs the integration test
         run: |
