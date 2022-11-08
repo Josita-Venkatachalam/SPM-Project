@@ -21,7 +21,7 @@ jobs:
           image: mysql:latest
           env:
               MYSQL_ALLOW_EMPTY_PASSWORD: yes
-              MYSQL_DATABASE: ${{env.MYSQL_DATABASE}}
+#               MYSQL_DATABASE: ${{env.MYSQL_DATABASE}}
               MYSQL_ROOT_PASSWORD: ${{env.MYSQL_PASSWORD}}
               MYSQL_DATABASE: laravel_tags
           ports:
