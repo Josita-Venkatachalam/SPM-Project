@@ -7,14 +7,14 @@ name: Demo Workflow
 #pushes to specific branches, paths, or tags, see "Workflow syntax for GitHub Actions."
 on: [push]
 
-services:
-    mysql:
-        
-        env:
-            MYSQL_ALLOW_EMPTY_PASSWORD: yes
-            # MYSQL_DATABASE: laravel_tags
-        ports:
-            - 3306
+# services:
+#     mysql:
+#         image: mysql:5.7
+#         env:
+#             MYSQL_ALLOW_EMPTY_PASSWORD: yes
+#             # MYSQL_DATABASE: laravel_tags
+#         ports:
+#             - 3306
        
 
 #Groups together all the jobs that run in the Demo Workflow workflow.
@@ -47,6 +47,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install flake8
           pip install mysql-connector-python
+          pip install flask_mysqldb
           #TODO: Install flake8 using pip command here
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
