@@ -16,21 +16,21 @@ jobs:
   build:
     #Configures the job to run on the latest version of an Ubuntu Linux runner.
     runs-on: ubuntu-latest
-    services:
-      mysql:
-          image: mysql:5.7
-          # env:
-          #     MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          #     # MYSQL_DATABASE: laravel_tags
-          ports:
-              - 3306
-          env:
-              MYSQL_DATABASE: ${{env.MYSQL_DATABASE}}
-              MYSQL_USER: ${{env.MYSQL_USER}}
-              MYSQL_PASSWORD: ${{env.MYSQL_PASSWORD}}
-              MYSQL_ROOT_PASSWORD: ${{env.MYSQL_PASSWORD}}
+    # services:
+    #   mysql:
+    #       image: mysql:5.7
+    #       # env:
+    #       #     MYSQL_ALLOW_EMPTY_PASSWORD: yes
+    #       #     # MYSQL_DATABASE: laravel_tags
+    #       ports:
+    #           - 3306
+    #       env:
+    #           MYSQL_DATABASE: ${{env.MYSQL_DATABASE}}
+    #           MYSQL_USER: ${{env.MYSQL_USER}}
+    #           MYSQL_PASSWORD: ${{env.MYSQL_PASSWORD}}
+    #           MYSQL_ROOT_PASSWORD: ${{env.MYSQL_PASSWORD}}
 
-          options:  --health-cmd="mysqladmin ping\" --health-interval=10s --health-timeout=5s --health-retries=3
+    #       options:  --health-cmd="mysqladmin ping\" --health-interval=10s --health-timeout=5s --health-retries=3
 
 
     #Groups together all the steps that run in the check-bats-version job. 
@@ -57,6 +57,8 @@ jobs:
           pip install flake8
           pip install mysql-connector-python
           pip install flask_mysqldb
+          pip install Flask-Testing
+          pip install flask-cors
           #TODO: Install flake8 using pip command here
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
