@@ -72,10 +72,10 @@ jobs:
           python unit_test.py
         
 
-      - name: Test Integration tests
-        #runs the integration test
-        run: |
-          #TODO: Add the command to run all the integration test here.
-          python integration_test.py    
-        env:
-          DB_PORT: ${{ job.services.mysql.ports[3306] }}
+      # - name: Test Integration tests
+      #   #runs the integration test
+      #   run: |
+      #     #TODO: Add the command to run all the integration test here.
+      #     python integration_test.py    
+      #   env:
+      #     DB_PORT: ${{ job.services.mysql.ports[3306] }}
