@@ -107,6 +107,23 @@ jobs:
           # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
+      - run:
+          name: Starting up MySQL
+          command: |
+            for i in `seq 1 10`;
+            do
+              nc -z 127.0.0.1 3306 && echo Success && exit 0
+              echo -n .
+              sleep 1
+            done
+            echo Failed waiting for MySQL && exit 1
+
+      - run:
+          name: Install MySQL CLI, Dependencies and Run Script
+          command: |
+            sudo apt-get install default-mysql-client
+
+
       - name: Test with unittest
         #runs the unittest
         run: |
