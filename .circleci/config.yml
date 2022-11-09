@@ -5,7 +5,7 @@ jobs:
   build_and_test:
 
     docker:
-      - image: circleci/python:3.8
+      - image: spm_proj/python:3.8
 
     steps:
       - checkout
