@@ -50,6 +50,203 @@ class TestCreateLearningJourney(TestApp):
             
         })
 
+class TestGetLearningJourney(TestApp):
+    def test_get_lj_by_staffID(self):
+        lj_1 = LearningJourney(Completion_Status="In progress", Roles_id=2 , Staff_ID = 130001)
+        lj_2 = LearningJourney(Completion_Status="In progress", Roles_id=3 , Staff_ID = 130001)
+        db.session.add(lj_1)
+        db.session.add(lj_2)
+        db.session.commit()
+        
+        Staff_ID = 130001
+
+        response = self.client.get("/LearningJourney_Test/" + str(Staff_ID),
+                                    content_type='application/json')
+        print("Hi I am here!!")
+        print(response.json)
+        self.assertEqual(response.json, {
+           
+            "data": [
+                    {
+                    "Completion_Status": "In progress", 
+                    "Roles_id": 2, 
+                    "Staff_ID": 130001, 
+                    "id": 1
+                    }, 
+                    {
+                    "Completion_Status": "In progress", 
+                    "Roles_id": 3, 
+                    "Staff_ID": 130001, 
+                    "id": 2
+                    }
+            ]
+            
+        })
+    def test_get_lj_by_ljID(self):
+        
+        learningjourney = LearningJourney(Completion_Status="In progress", Roles_id=2 , Staff_ID = 140002)
+
+        db.session.add(learningjourney)
+        db.session.commit()
+
+        request_body = {
+            'Completion_Status': learningjourney.Completion_Status,
+            'Roles_id': learningjourney.Roles_id,
+            'Staff_ID': learningjourney.Staff_ID
+        }
+
+        response = self.client.post("/createLJ",
+                                    data=json.dumps(request_body),
+                                    content_type='application/json')
+
+        lj_id = str(response.json['data']['id'])
+
+        response_2 = self.client.get("/LearningJourney/" + lj_id,
+                                    content_type='application/json')
+        print("LOOK HERE!")
+        print(response_2)
+        self.assertEqual(response_2.json, {
+                    
+            "data": {
+                "Completion_Status": "In progress", 
+                "Roles_id": 2, 
+                "Staff_ID": 140002, 
+                "id": 2
+            }
+                
+        })
+            
+class TestDeleteLearningJourney(TestApp):
+    def test_delete_lj(self):
+        learningjourney = LearningJourney(Completion_Status="In progress", Roles_id=3 , Staff_ID = 140002)
+
+        db.session.add(learningjourney)
+        db.session.commit()
+
+        request_body = {
+            'Completion_Status': learningjourney.Completion_Status,
+            'Roles_id': learningjourney.Roles_id,
+            'Staff_ID': learningjourney.Staff_ID
+        }
+
+        response = self.client.post("/createLJ",
+                                    data=json.dumps(request_body),
+                                    content_type='application/json')
+        lj_id = str(response.json['data']['id'])
+
+        response_2 = self.client.delete("/deleteLJ/" + lj_id, content_type='application/json') 
+
+        self.assertEqual(response_2.json, {
+            
+            "Completion_Status": "In progress",
+            "Roles_id": 3,
+            "Staff_ID": 140002,
+            "id": 2
+            
+                      
+        }) 
+
+class TestcreateCourseInLJ(TestApp):
+    def test_create_course_LJ(self):
+        ljc1 = Learning_Journey_Courses(Course_id="FIN003" ,Skill_id = 3 ,Learning_Journey_Id=1)
+        db.session.add(ljc1)
+        db.session.commit()
+
+        request_body = {
+            'Course_id': ljc1.Course_id,
+            'Skill_id': ljc1.Skill_id,
+            'Learning_Journey_Id': ljc1.Learning_Journey_Id
+        }
+
+        response = self.client.post("/create_LJ_course",
+                                    data=json.dumps(request_body),
+                                    content_type='application/json')
+        #print(response.json)
+        self.assertEqual(response.json, {
+            
+            "data": 
+                {
+                    "Course_id": "FIN003",
+                    "Learning_Journey_Id": 1,
+                    "Skill_id": 3,
+                    "id": 2
+                }
+            ,
+            "message": "Successfully Created!"
+            
+        })
+class TestdeleteCoursesLearningJourney(TestApp):
+    def test_delete_Course_In_lj(self):
+        ljc1 = Learning_Journey_Courses(Course_id="COR006" ,Skill_id = 1 ,Learning_Journey_Id=1)
+       
+        db.session.add(ljc1)
+        db.session.commit()
+
+        request_body = {
+            'Course_id': ljc1.Course_id,
+            'Skill_id': ljc1.Skill_id,
+            'Learning_Journey_Id': ljc1.Learning_Journey_Id    
+        }
+        
+
+        response = self.client.post("/create_LJ_course",
+                                    data=json.dumps(request_body),
+                                    content_type='application/json')
+        
+        lj_id = str(response.json['data']['Learning_Journey_Id'])
+        skill_id=str(response.json['data']['Skill_id'])
+        course_id=str(response.json['data']['Course_id'])
+
+        response_2 = self.client.delete("/delete_LJ_course/" + lj_id + "/" + skill_id+ "/" + course_id, content_type='application/json') 
+
+        self.assertEqual(response_2.json, {
+            
+           "Course_id": "COR006",
+           "Learning_Journey_Id": 1,
+           "Skill_id": 1,
+           "id": 1
+                      
+        }) 
+    def test_delete_ALL_Courses_In_lj(self):
+        ljc1 = Learning_Journey_Courses(Course_id="COR006" ,Skill_id = 1 ,Learning_Journey_Id=1)
+        ljc2 = Learning_Journey_Courses(Course_id="FIN003" ,Skill_id = 3 ,Learning_Journey_Id=1)
+        db.session.add(ljc1)
+        db.session.add(ljc2)
+        db.session.commit()
+
+        request_body = {
+            'Course_id': ljc1.Course_id,
+            'Skill_id': ljc1.Skill_id,
+            'Learning_Journey_Id': ljc1.Learning_Journey_Id    
+        }
+        
+        request_body_2 = {
+            'Course_id': ljc2.Course_id,
+            'Skill_id': ljc2.Skill_id,
+            'Learning_Journey_Id': ljc2.Learning_Journey_Id    
+        }
+        
+
+        response = self.client.post("/create_LJ_course",
+                                    data=json.dumps(request_body),
+                                    content_type='application/json')
+        response_2 = self.client.post("/create_LJ_course",
+                                    data=json.dumps(request_body_2),
+                                    content_type='application/json')
+        
+        
+        lj_id = str(response.json['data']['Learning_Journey_Id'])
+
+        response_3 = self.client.delete("/delete_All_LJ_Courses/" + lj_id , content_type='application/json') 
+
+        self.assertEqual(response_3.json, {
+            
+          "Message":"deleted"
+                      
+        }) 
+  
+       
+       
 class TestGetRole(TestApp):
     def test_get_all_roles(self):
         role_1 = Role(name = 'Project Manager', description = 'A Project Manager manages a team of people.')
@@ -579,16 +776,6 @@ class TestDeleteSkill(TestApp):
             },
                 'message': "Skill successfully deleted."       
         })       
-
-
-
-        # "data": {
-        #             'description': 'Test Skill Description',
-        #             'id': 1,
-        #             'isDeleted' : 0,
-        #             'name': 'Test Skill Name'
-        #     },
-        #     "message": "Skill Created!"
 
 
 class TestAssignSkillToCourse(TestApp):

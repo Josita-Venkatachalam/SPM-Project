@@ -698,10 +698,10 @@ with app.app_context():
             }), 404
 
 
-    @app.route("/LearningJourney_Test")
-    def getLJ():
+    @app.route("/LearningJourney_Test/<int:Staff_ID>" )
+    def getLJ(Staff_ID):
         print("start of getLJ")
-        learning_journeys= LearningJourney.query.filter_by(Staff_ID = 130001)
+        learning_journeys= LearningJourney.query.filter_by(Staff_ID = Staff_ID)
         print(learning_journeys)
         if learning_journeys:
             return jsonify(
@@ -771,15 +771,6 @@ with app.app_context():
                 "message": "Unable to commit to database."
             }), 500
 
-
-        # try:
-        #     db.session.delete(LJ_query)
-        #     db.session.commit()
-        #     return jsonify(LJ.to_dict()), 201
-        # except Exception:
-        #     return jsonify({
-        #         "message": "Unable to commit to database."
-        #     }), 500
         
     @app.route("/create_LJ_course", methods=['POST'])
     def create_LJ_course():
@@ -804,8 +795,9 @@ with app.app_context():
             print(LJ_Course.to_dict())
             return jsonify(
                 {
-                    "data": [LJ_Course.to_dict()],
-                    "message": "Hi there!"
+                    "data": LJ_Course.to_dict(),
+                    "message": "Successfully Created!"
+    
             }), 201
         except Exception:
             return jsonify({
@@ -836,22 +828,12 @@ with app.app_context():
             ), 200
         else:
             return jsonify({
-            "message": "Role not found."
+            "message": "Skill not found."
             }), 404
 
     @app.route("/get_course_LJ/")
     def get_your_lj_courses():
-        #lj_course = Learning_Journey_Courses.query.all()
-
-        # ljIDs = [item.to_dict() for item in lj_course]
-
-        # lj = LearningJourney.query.filter(LearningJourney.id.in_(ljIDs))
-
-        #lj_Role_ID = [item.to_dict() for item in lj]
-
-        #target_role = Role.query.filter(Role.id.in_(lj_Role_ID))
-
-        #lj_course = Learning_Journey_Courses.query.all()
+        
         lj_course = (
             db.session.query(Learning_Journey_Courses)
             .all()

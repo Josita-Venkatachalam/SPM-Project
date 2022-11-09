@@ -34,13 +34,16 @@
             </div>
         </div>
     </nav>
+    <div style="margin-left: 50px; margin-top: 30px; margin-bottom: -30px;">
+        <button class="btn btn-outline-primary" onclick="history.back()"> < Back</button>
+    </div>
     <div id="app" class="container mt-5">
 
         <div class="table-title">
             <div class="">
                 <h2>View All Your Learning Journeys</h2>
             </div>
-            
+
         </div>
         <div v-if="!allLJ.length">
             No Learning Journey Created!
@@ -87,7 +90,7 @@
     var staff_id = url.searchParams.get("staffId")
     staff_id = '130001'
     console.log(staff_id)
-    
+
     Vue.createApp({
 
         data() {
@@ -111,7 +114,7 @@
             getLJ() {
                 // event.preventDefault();
                 console.log('get LJ called')
-                axios.get('http://127.0.0.1:5000/LearningJourney_Test')
+                axios.get('http://127.0.0.1:5000/LearningJourney_Test/' + staff_id)
                     .then(response => {
                         // this.success = "Successfully Retrieved"
                         // allRoles = response.data
@@ -185,7 +188,7 @@
             },
 
             delete_LJ(LJ_id) {
-                if (confirm("Are you sure you want to delete this Learning Journey?" )) {
+                if (confirm("Are you sure you want to delete this Learning Journey?")) {
                     url1 = 'http://127.0.0.1:5000/delete_All_LJ_Courses/' + LJ_id
                     axios.delete(url1)
                         .then(response => {
