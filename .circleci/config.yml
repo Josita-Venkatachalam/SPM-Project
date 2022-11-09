@@ -35,9 +35,13 @@ jobs:
             mysql -u root -h localhost --execute="CREATE DATABASE `spmProj`"
             mysql -u root -h localhost  database.sql
       - run:
-          name: Testing
+          name: Unit Testing
           command: |
             python unit_test.py
+      - run:
+          name: Integration Testing
+          command: |
+            python integration_test.py
       - store_test_results:
           path: test-reports
 
