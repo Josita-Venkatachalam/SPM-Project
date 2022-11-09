@@ -89,6 +89,9 @@ Database Setup
 - Once you have made all the updates you wanted to, you may click on the "Back to View All Learning Journeys" button.
 - Your changes to course selection will also be updated on the View Your Courses summary table which you can access from the homepage that you will see post login with an icon named " View Your Courses"
 
+7) To run our unit tests simply run python unit_test.py in terminal
+8) To run our integration tests simply run python integration_test.py in terminal
+
 
 
 
