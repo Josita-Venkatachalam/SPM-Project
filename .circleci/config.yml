@@ -1,0 +1,62 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/2.0/configuration-reference
+# Created docker container following the instructions in this website: https://hevodata.com/learn/docker-mysql/
+
+version: 2.1
+jobs:
+  build_and_test:
+
+    docker:
+      - image: spm_proj/python:3.8
+
+    steps:
+      - checkout
+
+      - run: 
+          name: Install Python, Flask and other Dependencies
+          # echo 'export PATH=~$PATH:~/.local/bin' >> $BASH_ENV && source $BASH_ENV
+          command: |
+            pip install -r requirements.txt
+
+      - run:
+          name: Starting up MySQL
+          command: |
+            for i in `seq 1 10`;
+            do
+              nc -z 127.0.0.1 3306 && echo Success && exit 0
+              echo -n .
+              sleep 1
+              
+            done
+
+      - run:
+          name: Install MySQL CLI, Dependencies and Run Script
+          command: |
+            sudo apt-get install default-mysql-client
+            mysql -u root -h localhost --execute="DROP DATABASE IF EXISTS `spmProj`"
+            mysql -u root -h localhost --execute="CREATE DATABASE `spmProj`"
+            mysql -u root -h localhost  SPM_Project_New < database.sql
+      - run:
+          name: Unit Testing
+          command: |
+            python unit_test.py
+      - run:
+          name: Integration Testing
+          command: |
+            python integration_test.py
+      - store_test_results:
+          path: test-reports
+
+      - store_artifacts:
+          path: test-reports
+
+workflows:
+  build_test:
+    jobs:
+      - build_and_test  
+
+
+
+
+
+     
