@@ -1,6 +1,6 @@
 import unittest
 
-from app import app, db, Skill,Course,Role,Role_Skill,Course_Skill,LearningJourney,Learning_Journey_Courses,Registration
+from app import Skill,Course,Role,Role_Skill,Course_Skill,LearningJourney,Learning_Journey_Courses,Registration
 #Unit tests doesn't consider database 
 #but for this applcation , it involves validating doctor , adding records to db etc , hence we need integration tests too
 
