@@ -24,6 +24,7 @@ jobs:
               nc -z 127.0.0.1 3306 && echo Success && exit 0
               echo -n .
               sleep 1
+              
             done
 
       - run:
