@@ -91,6 +91,8 @@
         <div v-if="successDrop != ''" class="alert alert-success" role="alert">
             Dropped Course from Learning Journey Successfully
         </div>
+        <br>
+        
         
         <div class="text-center mt-5">
             <button class="btn btn-success" v-on:click="redirect()">Back to View All Learning Journeys</button>
@@ -240,8 +242,10 @@
                         console.log('Added succesfuly')
                         // this.getCourses()
                         this.successAdd = "Added Course to Learning Journey Successfully"
-                        setTimeout(() => {  console.log("World!"); }, 4000);
+                        setTimeout(() => {  console.log("World!"); }, 10000);
+                      
                         location.reload()
+                        
 
                         return false;
                     })
@@ -249,6 +253,8 @@
                         this.error = error.response.data.message
                         console.log('cannot add course to LJ')
                     });
+
+                   
 
 
             },
@@ -262,10 +268,11 @@
                         .then(response => {
                             console.log("Successfully Dropped");
                             // this.getCourses();
+                           
+                            // location.reload()
                             this.successDrop = "Dropped Course from Learning Journey Successfully"
-                            setTimeout(() => {  console.log("World!"); }, 4000);
+                            setTimeout(() => {  console.log("World!"); }, 10000);
                             location.reload()
-                            // this.deleteSuccess = skill.name + " sucessfully deleted!"
                         })
                         .catch(error => {
                             alert(error)
