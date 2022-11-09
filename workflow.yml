@@ -56,15 +56,16 @@
 #           #TODO: Add the command to run all the integration test here.
 #           python integration_test.py    
 
-appearing on the Actions tab of your git repo
 name: Test Workflow
 
 on: [push]
 
- Workflow workflow.
 jobs:
 
   build:
+
+    docker: 
+      -image: spm_proj/python3.8
 
     runs-on: ubuntu-latest
  
