@@ -1,6 +1,3 @@
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
-
 USE `spmProj`;
 
 INSERT INTO `courses_skills` (`Course_id`,`Skill_id`) VALUES ("COR001", 1);

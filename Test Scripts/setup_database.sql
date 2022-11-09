@@ -26,6 +26,11 @@ CREATE TABLE `staff_group` (
   --  FOREIGN KEY (id) REFERENCES Courses(skillId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+INSERT INTO `staff_group` (`name`) VALUES
+('Admin'),
+('User'),
+('Manager'),
+('Trainer');
 
 -- SKILLS
 
@@ -77,13 +82,13 @@ CREATE TABLE IF NOT EXISTS `staff` (
     ON DELETE SET NULL
     ON UPDATE SET NULL)
 
---  INDEX `fk_Staff_Position_idx` (`Position_ID` ASC) VISIBLE,
---  CONSTRAINT `fk_Staff_Position`
---    FOREIGN KEY (`Position_ID`)
---    REFERENCES `spmproj`.`Staff_Group` (`Staff_Group_ID`)
---    ON DELETE SET NULL
---    ON UPDATE SET NULL)
 ENGINE = InnoDB;
+
+INSERT INTO `staff` (`Staff_ID`,`Staff_FName`,`Staff_LName`,`Dept`,`Email`,`Staff_group_id`) VALUES
+(130001	,'John','Sim','Chariman','jack.sim@allinone.com.sg',1),
+(130002,'Jack','Sim','CEO','jack.sim@allinone.com.sg',1),
+(140001,'Derek','Tan','Sales','Derek.Tan@allinone.com.sg',3),
+(140002, 'Susan', 'Goh', 'Sales', 'Susan.Goh@allinone.com.sg', 2);
 
 
 -- COURSES
