@@ -33,6 +33,7 @@ jobs:
             sudo apt-get install default-mysql-client
             mysql -u root -h localhost --execute="DROP DATABASE IF EXISTS `spmProj`"
             mysql -u root -h localhost --execute="CREATE DATABASE `spmProj`"
+        
             mysql -u root -h localhost   database.sql
       - run:
           name: Testing
