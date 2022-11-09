@@ -43,7 +43,7 @@ jobs:
         #This puts both the python commands in your PATH.
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10.1'
+          python-version: '3.x'
 
       - name: Install dependencies
         #The run keyword tells the job to execute a command on the runner.
@@ -59,26 +59,11 @@ jobs:
 
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
-      - services:
-          mysql:
-              image: mysql:5.7
-              env:
-                  MYSQL_ALLOW_EMPTY_PASSWORD: yes
-                  # MYSQL_DATABASE: laravel_tags
-              ports:
-                  - 3306
-              options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
+     
       - name: Test with unittest
         #runs the unittest
         run: |
           #TODO: Add the command to run all the unittest here.
           python unit_test.py
-          
-      - name: Test Integration tests
-        #runs the integration test
-        run: |
-          #TODO: Add the command to run all the integration test here.
-          python integration_test.py    
-
+    
           
